@@ -35,8 +35,10 @@ all.sims <- rbind(
 #Positive RN = Correlated
 for (sim.name in rownames(all.sims)) {
   cat("Setting up simulation", sim.name, "...\n")
-  RNslope <- runif(1,0.5,1)
-  RNintercept <- runif(1, 0, 1-RNslope )
+  # RNslope <- runif(1,0.5,1)
+  # RNintercept <- runif(1, 0, 1-RNslope )
+  RNslope <- runif(1,0.5718,1.4282)
+  if(RNslope > 1) RNintercept <- runif(1, 1-RNslope, 0) else RNintercept <- runif(1, 0, 1-RNslope )
   pars <- create.paramseries(
     file.path(param.dir, all.sims[sim.name, 1]), 
     file.path(param.dir, all.sims[sim.name, 2]), 
@@ -55,8 +57,10 @@ all.sims <- rbind(
 #Negative RN = Anticorrelated
 for (sim.name in rownames(all.sims)) {
   cat("Setting up simulation", sim.name, "...\n")
-  RNslope <- runif(1,-1,-0.5)
-  RNintercept <- runif(1, -RNslope, 1) 
+  # RNslope <- runif(1,-1,-0.5)
+  # RNintercept <- runif(1, -RNslope, 1) 
+  RNslope <- runif(1,-1.4282,-0.5718)
+  if(RNslope < -1) RNintercept <- runif(1, 1, -RNslope) else RNintercept <- runif(1, -RNslope, 1)
   pars <- create.paramseries(
     file.path(param.dir, all.sims[sim.name, 1]), 
     file.path(param.dir, all.sims[sim.name, 2]), 
@@ -101,8 +105,10 @@ all.sims <- rbind(
 #Positive RN = Correlated
 for (sim.name in rownames(all.sims)) {
   cat("Setting up simulation", sim.name, "...\n")
-  RNslope <- runif(1,0.5,1)
-  RNintercept <- runif(1, 0, 1-RNslope )
+  # RNslope <- runif(1,0.5,1)
+  # RNintercept <- runif(1, 0, 1-RNslope )
+  RNslope <- runif(1,0.5718,1.4282)
+  if(RNslope > 1) RNintercept <- runif(1, 1-RNslope, 0) else RNintercept <- runif(1, 0, 1-RNslope )
   pars <- create.paramseries(
     file.path(param.dir, all.sims[sim.name, 1]), 
     file.path(param.dir, all.sims[sim.name, 2]), 
@@ -120,8 +126,10 @@ all.sims <- rbind(
 #Negative RN = Anticorrelated
 for (sim.name in rownames(all.sims)) {
   cat("Setting up simulation", sim.name, "...\n")
-  RNslope <- runif(1,-1,-0.5)
-  RNintercept <- runif(1, -RNslope, 1) 
+  # RNslope <- runif(1,-1,-0.5)
+  # RNintercept <- runif(1, -RNslope, 1) 
+  RNslope <- runif(1,-1.4282,-0.5718)
+  if(RNslope < -1) RNintercept <- runif(1, 1, -RNslope) else RNintercept <- runif(1, -RNslope, 1)
   pars <- create.paramseries(
     file.path(param.dir, all.sims[sim.name, 1]), 
     file.path(param.dir, all.sims[sim.name, 2]), 
@@ -132,3 +140,21 @@ for (sim.name in rownames(all.sims)) {
                         oldpop="none", file.path(launchfilename), prevpop=FALSE)
 }
 
+
+
+
+# x <- runif(1000, 0.10, 0.9)
+# layout(matrix(c(1:9), 3, 3, byrow = TRUE))
+# for (i in 1:9) {
+#   RNslope <- runif(1,0.5718,1.4282)
+#   if(RNslope > 1) RNintercept <- runif(1, 1-RNslope, 0) else RNintercept <- runif(1, 0, 1-RNslope )
+#   
+#   plot(x, x*RNslope+RNintercept, xlim=c(0.15,0.85), ylim=c(0,1), asp = 1, type = "l")
+# }
+# 
+# for (i in 1:9) {
+#   RNslope <- runif(1,-1.4282,-0.5718)
+#   if(RNslope < -1) RNintercept <- runif(1, 1, -RNslope) else RNintercept <- runif(1, -RNslope, 1)
+#   
+#   plot(x, x*RNslope+RNintercept, xlim=c(0.15,0.85), ylim=c(0,1), asp = 1, type = "l")
+# }

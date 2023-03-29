@@ -38,6 +38,27 @@ treshold_og <- 0.001    # difference accepted in the RN linear regression interc
 #Necessary for the core_topo.alt algo to function correctly !
 #Can be put in core_topo.alt ! in a lapply
 
+anticor_UD4 <- essential.topo(df=subset(df.4, Gen==max(df.4$Gen) & envir=="Anticorrelated_UD" & Fitness >= 0.98),
+                              treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3:4), min=min, max=max)
+G_AUD4 <- core_topo.alt(anticor_UD4, sorting_4g = TRUE)
+
+corr_UD4 <- essential.topo(df=subset(df.4, Gen==max(df.4$Gen) & envir=="Correlated_UD" & Fitness >= 0.98),
+                           treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3:4), min=min, max=max)
+G_CUD4 <- core_topo.alt(corr_UD4, sorting_4g = TRUE)
+
+
+pdf(pdfname, width=6, height=3)
+layout(matrix(c(1:2), 1, 2, byrow = TRUE))
+par(mar=c(2, 2, 2, 2), mgp = c(1.75, 0.75, 0), las=0)
+grid <- matrix(c( 1,1,4,4,1,4,4,1),ncol=2,byrow=TRUE)
+#
+plot(G_AUD4, layout=grid, edge.color=ifelse(E(G_AUD4)$weight > .8, "black",ifelse(E(G_AUD4)$weight < -.8, "red","grey")), vertex.size=30, main="AUD", vertex.color=c("green","orange", "yellow", "yellow"))
+plot(G_CUD4, layout=grid, edge.color=ifelse(E(G_CUD4)$weight > .8, "black",ifelse(E(G_CUD4)$weight < -.8, "red","grey")), vertex.size=30, main="CUD", vertex.color=c("green","orange", "yellow", "yellow"))
+# 
+dev.off()
+
+
+
 anticor_down4 <- essential.topo(df=subset(df.4, Gen==max(df.4$Gen) & envir=="Anticorrelated_Down" & Fitness >= 0.98),
                                 treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3:4), min=min, max=max)
 G_AD4 <- core_topo.alt(anticor_down4, sorting_4g = TRUE)
@@ -46,9 +67,6 @@ anticor_up4 <- essential.topo(df=subset(df.4, Gen==max(df.4$Gen) & envir=="Antic
                               treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3:4), min=min, max=max)
 G_AU4 <- core_topo.alt(anticor_up4, sorting_4g = TRUE)
 
-anticor_UD4 <- essential.topo(df=subset(df.4, Gen==max(df.4$Gen) & envir=="Anticorrelated_UD" & Fitness >= 0.98),
-                              treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3:4), min=min, max=max)
-G_AUD4 <- core_topo.alt(anticor_UD4, sorting_4g = TRUE)
 
 #
 noncor_down4 <- essential.topo(df=subset(df.4, Gen==max(df.4$Gen) & envir=="Noncorrelated_UD" & Fitness >= 0.98 & P_mean_2 <= 0.35),
@@ -72,9 +90,6 @@ corr_up4 <- essential.topo(df=subset(df.4, Gen==max(df.4$Gen) & envir=="Correlat
                            treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3:4), min=min, max=max)
 G_CU4 <- core_topo.alt(corr_up4, sorting_4g = TRUE)
 
-corr_UD4 <- essential.topo(df=subset(df.4, Gen==max(df.4$Gen) & envir=="Correlated_UD" & Fitness >= 0.98),
-                           treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3:4), min=min, max=max)
-G_CUD4 <- core_topo.alt(corr_UD4, sorting_4g = TRUE)
 
 
 
@@ -99,16 +114,7 @@ grid <- matrix(c( 1,1,4,4,1,4,4,1),ncol=2,byrow=TRUE)
 dev.off()
 
 
-pdf(pdfname, width=6, height=3)
-layout(matrix(c(1:2), 1, 2, byrow = TRUE))
-par(mar=c(2, 2, 2, 2), mgp = c(1.75, 0.75, 0), las=0)
-grid <- matrix(c( 1,1,4,4,1,4,4,1),ncol=2,byrow=TRUE)
-  #
-  plot(G_AUD4, layout=grid, edge.color=ifelse(E(G_AUD4)$weight > .8, "black",ifelse(E(G_AUD4)$weight < -.8, "red","grey")), vertex.size=30, main="AUD", vertex.color=c("green","orange", "yellow", "yellow"))
-  #
-  plot(G_CUD4, layout=grid, edge.color=ifelse(E(G_CUD4)$weight > .8, "black",ifelse(E(G_CUD4)$weight < -.8, "red","grey")), vertex.size=30, main="CUD", vertex.color=c("green","orange", "yellow", "yellow"))
-  # 
-dev.off()
+
 
 
 # pdf("../figures/4g_noncorr.pdf", width=6, height=6)
