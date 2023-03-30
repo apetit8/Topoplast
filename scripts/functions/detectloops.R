@@ -1,4 +1,5 @@
 library(igraph)
+library(signnet)
 
 my_all_simple_paths <- function(graph, from, to=igraph::V(graph), mode=c("out", "in", "all", "total"),  cutoff = -1) {
 	# Technical function to deal with old versions of igraph::all_simple_paths that does not have the cutoff argument
@@ -57,3 +58,21 @@ feedforward.to <- function(graph, to, cutoff.max = -1, cutoff.min = 1) {
 }
 
 
+#gives a table with count of coherence and incoherence loop
+coherence_count <- function(list.w, cutoff.max=3, cutoff.min=1, target=2){
+  results <- sapply(list.w, function(w){
+    g <- graph.adjacency(abs(t(w)), mode="directed")
+    E(g)$sign <- t(w)[t(w) != 0] #Signs
+    # ff <- feedforward.to(g, to=2, cutoff.max=3, cutoff.min=1)
+    ff <- ifelse(!is.null(feedforward.to(g, to=target, cutoff.max=cutoff.max, cutoff.min=cutoff.min)), feedforward.to(g, to=target, cutoff.max=cutoff.max, cutoff.min=cutoff.min), "no_ff")
+    #Coherence or incoherence of FF loops
+    coherence <- sapply(ff, function(n){
+      if(n[1]=="no_ff") return("No_FF") else{
+        reg1 <- E(g, path=n[[1]])$sign[length(E(g, path=n[[1]])$sign)] #Take the last sign since it's the x -> Target
+        reg2 <- E(g, path=n[[2]])$sign[length(E(g, path=n[[2]])$sign)] #Take the last sign since it's the x -> Target
+        return(ifelse(reg1==reg2, c("FF_Coherent"), c("FF_Incoherent")))
+      }})
+    return(coherence)
+  })
+  return(table(results))
+}

@@ -1,11 +1,12 @@
 source("scripts/functions/functions.R")
+source("scripts/functions/detectloops.R")
 #####################
-sims.dirs1 <- list.dirs("simul/3_random_RN", recursive = TRUE)
+sims.dirs1 <- list.dirs("simul/3g", recursive = TRUE)
 genes <- 3
 min <- 0.15
 max <- 0.85
 target <- 2 # Target gene in the network
-pdfname <- "figures/3g_core_topo.connect.pdf"
+pdfname <- "figures/3g.pdf"
 #####################
 #DATA
 ##################
@@ -28,90 +29,57 @@ treshold_coeff <- 0.001 # difference accepted in the Reaction Norm linear regres
 treshold_og <- 0.001    # difference accepted in the RN linear regression intercept
 #############
 
-anticor_UD3 <- essential.topo(df=subset(df.3, Gen==max(df.3$Gen) & envir=="Anticorrelated_UD"),
+topo.anticor3 <- essential.topo(df=subset(df.3, Gen==max(df.3$Gen) & envir=="Anticorrelated"),
                               treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3))
-G_AUD3 <- core_topo.alt(anticor_UD3)
+core.anticor3 <- core_topo.alt(topo.anticor3)
 
-corr_UD3 <- essential.topo(df=subset(df.3, Gen==max(df.3$Gen) & envir=="Correlated_UD"),
+topo.corr3 <- essential.topo(df=subset(df.3, Gen==max(df.3$Gen) & envir=="Correlated"),
                            treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3))
-G_CUD3 <- core_topo.alt(corr_UD3)
+core.corr3 <- core_topo.alt(topo.corr3)
 
-pdf(pdfname, width=6, height=3)
-layout(matrix(c(1:2), 1, 2, byrow = TRUE))
+topo.no_sel3 <- essential.topo(df=subset(df.3, Gen==max(df.3$Gen) & envir=="Control_no_sel"),
+                              treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3))
+core.no_sel3 <- core_topo.alt(topo.no_sel3)
+
+topo.sel3 <- essential.topo(df=subset(df.3, Gen==max(df.3$Gen) & envir=="Control_sel"),
+                           treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3))
+core.sel3 <- core_topo.alt(topo.sel3)
+
+pdf(pdfname, width=6, height=6)
+layout(matrix(c(1:4), 2, 2, byrow = TRUE))
   par(mar=c(2, 2, 2, 2), mgp = c(1.75, 0.75, 0), las=0)
   #
-  plot(G_AUD3, layout=layout_in_circle, edge.color=ifelse(E(G_AUD3)$weight > .8, "black",ifelse(E(G_AUD3)$weight < -.8, "red","grey")), vertex.size=30, main="AUD", vertex.color=c("green","orange", "yellow"))
+  plot(core.anticor3, layout=layout_in_circle, edge.color=ifelse(E(core.anticor3)$weight > .8, "black",ifelse(E(core.anticor3)$weight < -.8, "red","grey")), vertex.size=30, main="Anticor", vertex.color=c("green","orange", "yellow"))
   #
-  plot(G_CUD3, layout=layout_in_circle, edge.color=ifelse(E(G_CUD3)$weight > .8, "black",ifelse(E(G_CUD3)$weight < -.8, "red","grey")), vertex.size=30, main="CUD", vertex.color=c("green","orange", "yellow"))
+  plot(core.corr3, layout=layout_in_circle, edge.color=ifelse(E(core.corr3)$weight > .8, "black",ifelse(E(core.corr3)$weight < -.8, "red","grey")), vertex.size=30, main="Corr", vertex.color=c("green","orange", "yellow"))
+  # 
+  plot(core.no_sel3, layout=layout_in_circle, edge.color=ifelse(E(core.no_sel3)$weight > .8, "black",ifelse(E(core.no_sel3)$weight < -.8, "red","grey")), vertex.size=30, main="No_sel", vertex.color=c("green","orange", "yellow"))
+  #
+  plot(core.sel3, layout=layout_in_circle, edge.color=ifelse(E(core.sel3)$weight > .8, "black",ifelse(E(core.sel3)$weight < -.8, "red","grey")), vertex.size=30, main="Sel", vertex.color=c("green","orange", "yellow"))
   # 
 dev.off()
 
 
-
-anticor_down3 <- essential.topo(df=subset(df.3, Gen==max(df.3$Gen) & envir=="Anticorrelated_Down"),
-                                treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3))
-G_AD3 <- core_topo.alt(anticor_down3)
-
-anticor_up3 <- essential.topo(df=subset(df.3, Gen==max(df.3$Gen) & envir=="Anticorrelated_Up"),
-                              treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3))
-G_AU3 <- core_topo.alt(anticor_up3)
-
-#
-noncor_down3 <- essential.topo(df=subset(df.3, Gen==max(df.3$Gen) & envir=="Noncorrelated_UD" & P_mean_2 <= 0.35),
-                                treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3))
-G_ND3 <- core_topo.alt(noncor_down3)
-
-noncor_up3 <- essential.topo(df=subset(df.3, Gen==max(df.3$Gen) & envir=="Noncorrelated_UD"& P_mean_2 >= 0.6),
-                              treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3))
-G_NU3 <- core_topo.alt(noncor_up3)
-
-noncor_UD3 <- essential.topo(df=subset(df.3, Gen==max(df.3$Gen) & envir=="Noncorrelated_UD"),
-                              treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3))
-G_NUD3 <- core_topo.alt(noncor_UD3)
-
-#
-corr_down3 <- essential.topo(df=subset(df.3, Gen==max(df.3$Gen) & envir=="Correlated_Down"),
-                                treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3))
-G_CD3 <- core_topo.alt(corr_down3 )
-
-corr_up3 <- essential.topo(df=subset(df.3, Gen==max(df.3$Gen) & envir=="Correlated_Up"),
-                              treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3))
-G_CU3 <- core_topo.alt(corr_up3)
-
-
-pdf(pdfname, width=6, height=6)
+pdf("figures/3g_anticorr.pdf", width=6, height=6)
 layout(matrix(c(1:9), 3, 3, byrow = TRUE))
-par(mar=c(2, 2, 2, 2), mgp = c(1.75, 0.75, 0), las=0)
-  #
-  plot(G_AD3, layout=layout_in_circle, edge.color=ifelse(E(G_AD3)$weight > 0.75, "black",ifelse(E(G_AD3)$weight < -0.75, "red","grey")), vertex.size=30, main="AD", vertex.color=c("green","orange", "yellow"))
-  plot(G_AU3, layout=layout_in_circle, edge.color=ifelse(E(G_AU3)$weight > 0.75, "black",ifelse(E(G_AU3)$weight < -0.75, "red","grey")), vertex.size=30, main="AU", vertex.color=c("green","orange", "yellow"))
-  plot(G_AUD3, layout=layout_in_circle, edge.color=ifelse(E(G_AUD3)$weight > 0.75, "black",ifelse(E(G_AUD3)$weight < -0.75, "red","grey")), vertex.size=30, main="AUD", vertex.color=c("green","orange", "yellow"))
-  #
-  plot(G_ND3, layout=layout_in_circle, edge.color=ifelse(E(G_ND3)$weight > 0.75, "black",ifelse(E(G_ND3)$weight < -0.75, "red","grey")), vertex.size=30, main="ND", vertex.color=c("green","orange", "yellow"))
-  plot(G_NU3, layout=layout_in_circle, edge.color=ifelse(E(G_NU3)$weight > 0.75, "black",ifelse(E(G_NU3)$weight < -0.75, "red","grey")), vertex.size=30, main="NU", vertex.color=c("green","orange", "yellow"))
-  plot(G_NUD3, layout=layout_in_circle, edge.color=ifelse(E(G_NUD3)$weight > 0.75, "black",ifelse(E(G_NUD3)$weight < -0.75, "red","grey")), vertex.size=30, main="NUD", vertex.color=c("green","orange", "yellow"))
-  #
-  plot(G_CD3, layout=layout_in_circle, edge.color=ifelse(E(G_CD3)$weight > 0.75, "black",ifelse(E(G_CD3)$weight < -0.75, "red","grey")), vertex.size=30, main="CD", vertex.color=c("green","orange", "yellow"))
-  plot(G_CU3, layout=layout_in_circle, edge.color=ifelse(E(G_CU3)$weight > 0.75, "black",ifelse(E(G_CU3)$weight < -0.75, "red","grey")), vertex.size=30, main="CU", vertex.color=c("green","orange", "yellow"))
-  plot(G_CUD3, layout=layout_in_circle, edge.color=ifelse(E(G_CUD3)$weight > 0.75, "black",ifelse(E(G_CUD3)$weight < -0.75, "red","grey")), vertex.size=30, main="CUD", vertex.color=c("green","orange", "yellow"))
-  #
-dev.off()
-
-
-
-
-
-pdf("figures/3g_AU_connect.pdf", width=6, height=6)
-layout(matrix(c(1:9), 3, 3, byrow = TRUE))
-par(mar=c(0.5, 0.5, 0.5, 0), mgp = c(1.75, 0.75, 0), las=0)
-for (i in anticor_down3) {
+par(mar=c(0.5, 0.5, 1, 0), mgp = c(1.75, 0.75, 0), las=0)
+j<-1
+for (i in unique(topo.anticor3)) {
+  mainT <- length(which(sapply(1:length(topo.anticor3),function(x) length(which(paste0(topo.anticor3[[x]],
+            collapse = "") == paste0(unique(topo.anticor3)[[j]], collapse = "")))) == 1))/length(topo.anticor3)*100
   #W matrix as a graph :
   G <- as.directed(graph.adjacency(t(i), weighted = T))
   V(G)$color <- c("green","orange", "yellow", "yellow")
-  plot(G, layout=layout_in_circle, edge.color=ifelse(E(G)$weight > 0, "black","red" ), vertex.size=30) #, layout=layout_in_circle
+  plot(G, layout=layout_in_circle, edge.color=ifelse(E(G)$weight > 0, "black","red" ), vertex.size=30, main=round(mainT, 3)) #, layout=layout_in_circle
+  j <- j+1
 }
 dev.off()
 
 
+
+coherence_count(topo.anticor3, cutoff.max = 3, cutoff.min = 2)
+coherence_count(topo.corr3, cutoff.max = 3, cutoff.min = 1)
+coherence_count(topo.no_sel3, cutoff.max = 3, cutoff.min = 2)
+coherence_count(topo.sel3, cutoff.max = 3, cutoff.min = 1)
 
 
