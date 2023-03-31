@@ -74,11 +74,25 @@ for (i in unique(topo.anticor3)) {
   j <- j+1
 }
 dev.off()
-
+pdf("figures/3g_cor.pdf", width=6, height=6)
+layout(matrix(c(1:9), 3, 3, byrow = TRUE))
+par(mar=c(0.5, 0.5, 1, 0), mgp = c(1.75, 0.75, 0), las=0)
+j<-1
+for (i in unique(topo.corr3)) {
+  mainT <- length(which(sapply(1:length(topo.corr3),function(x) length(which(paste0(topo.corr3[[x]],
+                                                                                       collapse = "") == paste0(unique(topo.corr3)[[j]], collapse = "")))) == 1))/length(topo.corr3)*100
+  #W matrix as a graph :
+  G <- as.directed(graph.adjacency(t(i), weighted = T))
+  V(G)$color <- c("green","orange", "yellow", "yellow")
+  plot(G, layout=layout_in_circle, edge.color=ifelse(E(G)$weight > 0, "black","red" ), vertex.size=30, main=round(mainT, 3)) #, layout=layout_in_circle
+  j <- j+1
+}
+dev.off()
 
 
 coherence_count(topo.anticor3, cutoff.max = 3, cutoff.min = 2)
 coherence_count(topo.corr3, cutoff.max = 3, cutoff.min = 1)
+#Enrichment in incoherent FFL when selected for plasticity !
 coherence_count(topo.no_sel3, cutoff.max = 3, cutoff.min = 2)
 coherence_count(topo.sel3, cutoff.max = 3, cutoff.min = 1)
 
