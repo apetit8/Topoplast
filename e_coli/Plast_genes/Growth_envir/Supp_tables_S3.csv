@@ -1,0 +1,888 @@
+"""strain"" genes"	p value	FDR	CFT073	IAI1	K12	Sakai	Product
+ydcZ	4.5E-08	1.0E-04	11.6	11.5	9.5	11.5	conserved hypothetical protein; putative inner membrane protein
+yecD	6.2E-08	1.0E-04	11.9	11.2	9.4	11.5	putative hydrolase
+yhbW	1.7E-07	1.9E-04	12.0	9.7	11.6	10.6	putative enzyme
+ypdG	2.7E-07	2.2E-04	12.6	10.7	10.5	10.2	putative enzyme IIC component of PTS
+yhiM	6.2E-07	4.0E-04	12.5	10.7	10.9	9.9	conserved hypothetical protein; putative inner membrane protein
+qseC	7.3E-07	4.0E-04	11.1	10.5	9.9	12.5	sensory histidine kinase in two-component regulatory system with QseB
+yibQ	9.2E-07	4.3E-04	11.9	11.4	9.5	11.2	putative polysaccharide deacetylase
+rutE	1.1E-06	4.6E-04	12.1	11.5	10.8	9.6	oxidoreductase subunit of the alternative pyrimidine degradation pathway
+yaaI	1.4E-06	5.0E-04	11.8	11.0	11.7	9.4	conserved hypothetical protein
+mdtC	1.6E-06	5.2E-04	12.1	10.2	11.7	10.0	multidrug efflux system, subunit C
+ypfI	1.9E-06	5.7E-04	11.3	11.9	11.4	9.4	putative hydrolase
+ggt	2.4E-06	6.6E-04	11.8	9.4	11.7	11.1	fragment of gamma-glutamyltranspeptidase (partial)
+rsxE	3.7E-06	8.7E-04	10.2	11.5	10.2	12.1	putative inner membrane NADH-quinone reductase
+yfcJ	3.9E-06	8.7E-04	10.9	11.6	12.0	9.5	fragment of putative transporter; UPF0226 family (part 2)
+eutT	4.0E-06	8.7E-04	11.8	11.4	11.4	9.4	putative cobalamin adenosyltransferase in ethanolamine utilization
+yoaA	4.6E-06	8.7E-04	10.9	12.0	9.5	11.6	putative ATP-dependent helicase
+baeS	4.8E-06	8.7E-04	11.9	10.2	9.9	12.0	sensory histidine kinase in two-component regulatory system with BaeR
+yhjC	4.8E-06	8.7E-04	10.7	10.6	10.1	12.6	putative DNA-binding transcriptional regulator
+frmC	5.2E-06	9.0E-04	10.7	11.7	11.9	9.8	S-formylglutathione hydrolase
+cusR	6.3E-06	1.0E-03	11.2	9.5	11.9	11.4	DNA-binding response regulator in two-component regulatory system with CusS
+eutC	6.7E-06	1.0E-03	11.6	11.1	11.9	9.5	ethanolamine ammonia-lyase, small subunit (light chain)
+dinG	6.7E-06	1.0E-03	12.5	11.0	10.4	10.1	ATP-dependent DNA helicase
+creC	7.9E-06	1.1E-03	11.3	11.1	12.1	9.5	sensory histidine kinase in two-component regulatory system with CreB or PhoB, regulator of the CreBC regulon
+recD	8.6E-06	1.1E-03	10.9	11.4	9.6	12.2	exonuclease V (RecBCD complex), alpha chain
+yehD	8.7E-06	1.1E-03	11.2	11.5	11.8	9.4	putative fimbrial-like adhesin protein
+pabA	8.8E-06	1.1E-03	11.6	11.7	11.3	9.4	aminodeoxychorismate synthase, subunit II
+yjgN	9.0E-06	1.1E-03	12.4	9.9	11.2	10.5	fragment of conserved hypothetical protein; putative inner membrane protein (part 1)
+fadD	9.2E-06	1.1E-03	10.6	9.7	11.4	12.3	acyl-CoA synthetase (long-chain-fatty-acid--CoA ligase)
+yfhB	9.9E-06	1.1E-03	11.5	11.2	11.9	9.4	conserved hypothetical protein
+ydiP	1.0E-05	1.1E-03	11.1	11.7	11.8	9.5	putative DNA-binding transcriptional regulator
+yhjK	1.1E-05	1.2E-03	11.9	11.2	11.4	9.5	putative diguanylate cyclase
+wcaL	1.3E-05	1.3E-03	12.4	10.3	10.0	11.3	putative glycosyl transferase
+yqhC	1.4E-05	1.3E-03	12.6	10.1	10.5	10.7	putative DNA-binding transcriptional regulator
+gmd	1.4E-05	1.3E-03	10.7	10.3	10.4	12.6	GDP-D-mannose dehydratase, NAD(P)-binding
+sgrR	1.4E-05	1.3E-03	11.4	12.3	9.7	10.6	DNA-binding transcriptional regulator
+ubiX	1.6E-05	1.4E-03	12.0	11.5	9.5	10.9	3-octaprenyl-4-hydroxybenzoate carboxy-lyase
+yccX	2.0E-05	1.7E-03	12.0	11.8	10.4	9.8	fragment of acylphosphatase (partial)
+gudX	2.2E-05	1.7E-03	11.1	9.5	11.6	11.9	glucarate dehydratase
+ylbF	2.3E-05	1.7E-03	11.3	9.4	11.9	11.4	conserved hypothetical protein
+smpB	2.3E-05	1.7E-03	11.1	11.8	11.6	9.4	trans-translation protein
+phpB	2.3E-05	1.7E-03	12.5	10.2	10.4	10.9	putative phosphatase with phosphoglycerate mutase domain
+cutC	2.4E-05	1.7E-03	10.4	10.9	10.1	12.5	copper homeostasis protein
+yjbN	2.4E-05	1.7E-03	12.6	10.5	10.3	10.6	tRNA-dihydrouridine synthase A
+yjjV	2.4E-05	1.7E-03	11.3	12.0	9.4	11.3	putative DNase
+ydfU	2.5E-05	1.7E-03	11.5	10.0	10.2	12.3	conserved hypothetical protein; Qin prophage
+ade	2.5E-05	1.7E-03	11.5	9.7	11.1	11.8	cryptic adenine deaminase
+yeaZ	2.6E-05	1.7E-03	10.2	10.8	12.5	10.4	putative peptidase
+phnD	2.6E-05	1.7E-03	12.3	10.4	11.5	9.9	phosphonate/organophosphate ester transporter subunit ; periplasmic binding component of ABC superfamily
+emrK	2.6E-05	1.7E-03	10.9	10.8	12.5	9.9	EmrKY-TolC multidrug resistance efflux pump, membrane fusion protein component
+hybG	2.7E-05	1.8E-03	12.4	10.8	10.4	10.4	hydrogenase 2 accessory protein
+fhiA	2.8E-05	1.8E-03	12.5	11.0	10.6	9.9	flagellar system protein
+yehU	2.8E-05	1.8E-03	11.5	11.5	9.4	11.6	sensory kinase in two-component system with YehT
+phnJ	3.0E-05	1.8E-03	12.2	9.6	11.1	11.1	carbon-phosphorus lyase complex subunit
+citB	3.1E-05	1.8E-03	11.6	9.5	11.6	11.2	DNA-binding response regulator in two-component regulatory system with citA
+ydiT	3.1E-05	1.8E-03	11.8	9.4	11.4	11.3	putative 4Fe-4S ferredoxin-type oxidoreductase subunit
+kdpE	3.2E-05	1.8E-03	10.9	11.4	12.1	9.5	DNA-binding response regulator in two-component regulatory system with KdpD
+ycbW	3.2E-05	1.8E-03	10.1	12.0	11.8	10.1	conserved hypothetical protein
+ymdC	3.2E-05	1.8E-03	12.5	10.5	11.0	10.0	putative hydrolase
+yrdB	3.2E-05	1.8E-03	11.5	11.6	11.4	9.4	conserved hypothetical protein
+kbaZ	3.3E-05	1.8E-03	12.1	9.5	11.4	11.0	tagatose 6-phosphate aldolase 1, kbaZ subunit
+ugpQ	3.5E-05	1.9E-03	11.7	11.3	9.4	11.6	glycerophosphodiester phosphodiesterase, cytosolic
+yjgB	3.6E-05	1.9E-03	11.1	9.5	12.1	11.3	putative alcohol dehydrogenase, Zn-dependent and NAD(P)-binding
+ilvY	3.6E-05	1.9E-03	9.5	11.2	11.8	11.6	DNA-binding transcriptional dual regulator
+gatY	3.7E-05	1.9E-03	10.9	10.3	12.6	10.2	D-tagatose 1,6-bisphosphate aldolase 2, catalytic subunit
+ybaM	3.7E-05	1.9E-03	11.4	10.9	12.1	9.6	conserved hypothetical protein
+priC	3.8E-05	1.9E-03	10.2	12.6	10.6	10.5	primosomal replication protein N
+recB	3.9E-05	1.9E-03	12.4	10.2	10.2	11.2	exonuclease V (RecBCD complex), beta subunit
+mtgA	4.1E-05	2.0E-03	11.5	10.3	9.9	12.3	biosynthetic peptidoglycan transglycosylase
+yrfG	4.2E-05	2.0E-03	9.4	11.6	11.3	11.7	putative hydrolase
+nhaR	4.2E-05	2.0E-03	10.7	10.4	10.2	12.6	DNA-binding transcriptional activator
+rffM	4.4E-05	2.1E-03	11.3	12.1	9.5	11.2	UDP-N-acetyl-D-mannosaminuronic acid transferase
+yedR	4.6E-05	2.1E-03	12.2	10.1	11.5	10.2	conserved hypothetical protein; putative inner membrane protein
+yehL	4.6E-05	2.1E-03	11.1	9.4	11.9	11.6	putative ABC superfamily protein
+yfhK	4.7E-05	2.1E-03	12.0	10.4	11.8	9.8	putative sensory kinase in two-component system
+cueR	4.7E-05	2.1E-03	9.5	11.6	11.8	11.2	DNA-binding transcriptional activator of copper-responsive regulon genes
+yedQ	4.8E-05	2.1E-03	11.9	9.5	11.1	11.6	putative diguanylate cyclase
+ycgM	4.9E-05	2.1E-03	10.8	12.3	10.8	10.1	putative isomerase/hydrolase
+eutG	4.9E-05	2.1E-03	11.9	9.5	11.7	10.9	putative alcohol dehydrogenase in ethanolamine utilization; ethanolaminosome
+yjbC	5.1E-05	2.1E-03	11.6	11.9	9.5	11.0	23S rRNA pseudouridine synthase
+slt	5.3E-05	2.2E-03	11.6	9.4	11.4	11.6	lytic murein transglycosylase, soluble
+rumB	5.6E-05	2.3E-03	11.6	11.5	11.4	9.4	23S rRNA m(5)U747 methyltransferase
+fcl	5.8E-05	2.3E-03	10.5	10.6	12.6	10.3	bifunctional GDP-fucose synthetase: GDP-4-dehydro-6-deoxy-D-mannose epimerase and GDP-4-dehydro-6-L-deoxygalactose reductase
+ybfN	5.9E-05	2.3E-03	11.4	11.2	11.9	9.4	putative lipoprotein
+ulaC	6.1E-05	2.4E-03	10.9	9.8	11.6	11.7	L-ascorbate-specific enzyme IIA component of PTS
+yaeJ	6.2E-05	2.4E-03	11.9	10.8	9.7	11.6	conserved hypothetical protein
+yoaB	6.3E-05	2.4E-03	9.7	11.7	11.5	11.1	conserved hypothetical protein
+phnL	6.3E-05	2.4E-03	11.0	9.6	12.2	11.1	carbon-phosphorus lyase complex subunit
+wcaM	6.7E-05	2.5E-03	11.4	10.0	12.3	10.3	putative colanic acid biosynthesis protein
+yadG	7.0E-05	2.5E-03	10.4	10.5	12.6	10.5	putative transporter subunit: ATP-binding component of ABC superfamily
+yneJ	7.0E-05	2.5E-03	11.8	11.7	10.9	9.6	putative DNA-binding transcriptional regulator
+ldcA	7.1E-05	2.6E-03	12.0	11.7	10.7	9.6	L,D-carboxypeptidase A
+ydjA	7.2E-05	2.6E-03	10.3	11.6	11.8	10.2	putative oxidoreductase
+dusC	7.6E-05	2.6E-03	11.0	12.1	11.4	9.5	tRNA-dihydrouridine synthase C
+pfkA	7.6E-05	2.6E-03	9.4	11.2	11.7	11.7	6-phosphofructokinase I
+yegV	7.7E-05	2.7E-03	10.9	10.0	10.6	12.5	putative kinase
+ubiG	7.9E-05	2.7E-03	10.6	10.5	12.6	10.3	bifunctional 3-demethylubiquinone-9 3-methyltransferase and 2-octaprenyl-6-hydroxy phenol methylase
+rcsB	7.9E-05	2.7E-03	9.5	11.3	11.4	11.7	DNA-binding response regulator in two-component regulatory system with RcsC and YojN
+queC	8.1E-05	2.7E-03	10.8	10.4	10.2	12.6	queuosine biosynthesis protein
+yfgH	8.2E-05	2.7E-03	11.3	9.4	11.4	11.9	putative outer membrane lipoprotein
+abrB	9.0E-05	2.9E-03	11.7	9.4	11.2	11.7	putative membrane protein
+yjjX	9.0E-05	2.9E-03	11.8	11.1	9.5	11.7	thiamin metabolism associated protein
+cbrA	9.0E-05	2.9E-03	10.5	10.0	11.2	12.4	putative oxidoreductase with FAD/NAD(P)-binding domain
+prpC	9.6E-05	3.1E-03	11.9	9.4	11.4	11.3	2-methylcitrate synthase
+rsuA	9.7E-05	3.1E-03	11.9	11.6	11.1	9.5	16S rRNA pseudouridylate 516 synthase
+fpr	9.8E-05	3.1E-03	11.5	10.8	12.1	9.6	ferredoxin-NADP reductase
+agaS	9.9E-05	3.1E-03	10.7	10.4	10.3	12.6	tagatose-6-phosphate ketose/aldose isomerase
+agaA	1.0E-04	3.1E-03	10.7	10.1	12.5	10.7	N-acetylglucosamine-6-phosphate deacetylase (EC 3.5.1.25) (GlcNAc 6-P deacetylase)
+csdA	1.1E-04	3.1E-03	10.2	10.6	12.6	10.6	cysteine sulfinate desulfinase
+yrbF	1.1E-04	3.1E-03	9.5	11.3	11.4	11.8	toluene transporter subunit: ATP-binding component of ABC superfamily
+ynfC	1.1E-04	3.1E-03	12.1	11.1	11.2	9.6	conserved hypothetical protein
+phnM	1.1E-04	3.1E-03	11.0	12.0	11.4	9.5	carbon-phosphorus lyase complex subunit
+xerD	1.1E-04	3.1E-03	10.8	12.5	10.2	10.5	site-specific tyrosine recombinase
+yicN	1.1E-04	3.1E-03	11.0	12.2	9.6	11.1	conserved hypothetical protein
+uvrD	1.1E-04	3.2E-03	11.2	11.7	9.4	11.7	DNA-dependent ATPase I and helicase II
+ssuC	1.1E-04	3.2E-03	11.2	10.5	12.4	9.9	alkanesulfonate transporter subunit ; membrane component of ABC superfamily
+agaR	1.1E-04	3.2E-03	12.6	10.5	10.6	10.3	fragment of DNA-binding transcriptional dual regulator (part 2)
+yceG	1.2E-04	3.2E-03	10.7	10.3	12.6	10.4	fragment of putative conserved membrane associated protein (partial)
+ybhJ	1.2E-04	3.2E-03	12.6	10.6	10.1	10.7	putative enzyme
+ydeE	1.2E-04	3.2E-03	11.5	11.5	11.5	9.4	putative transporter
+yniC	1.2E-04	3.2E-03	11.9	11.7	10.8	9.6	putative phosphoglycolate phosphatase
+yedJ	1.2E-04	3.3E-03	9.4	11.5	11.7	11.4	putative metal-dependent phosphohydrolase
+gcl	1.2E-04	3.3E-03	12.2	9.6	11.2	11.0	glyoxylate carboligase
+dedA	1.2E-04	3.3E-03	10.8	12.6	10.2	10.4	conserved hypothetical protein; putative inner membrane protein
+recG	1.3E-04	3.3E-03	10.6	11.8	9.7	11.9	ATP-dependent DNA helicase
+ybfF	1.3E-04	3.3E-03	12.5	10.6	10.4	10.5	putative esterase
+yjbH	1.3E-04	3.3E-03	10.9	10.3	12.6	10.2	putative porin
+yebU	1.3E-04	3.4E-03	11.1	11.6	9.5	11.8	putative RNA AdoMet-dependent methyltransferase
+trmA	1.3E-04	3.4E-03	9.8	10.8	11.9	11.6	tRNA (uracil-5-)-methyltransferase
+ycjX	1.3E-04	3.4E-03	10.9	12.0	9.6	11.4	conserved hypothetical protein; putative nucleoside triphosphate hydrolase domain
+yjcS	1.4E-04	3.5E-03	11.8	9.4	11.4	11.4	putative alkyl sulfatase
+yeaL	1.5E-04	3.8E-03	11.7	10.7	9.6	11.9	conserved hypothetical protein; putative inner membrane protein
+bfr	1.5E-04	3.8E-03	11.7	10.3	12.0	9.9	bacterioferritin, iron storage and detoxification protein
+gltS	1.6E-04	3.8E-03	9.7	11.0	12.1	11.3	glutamate transporter
+ypdA	1.7E-04	4.1E-03	12.1	9.7	11.6	10.6	putative sensory kinase in two-component system with YpdB
+yjfC	1.7E-04	4.1E-03	11.0	10.2	12.5	10.3	fragment of putative synthetase/amidase (partial)
+csrD	1.7E-04	4.1E-03	12.3	10.3	10.7	10.8	inner membrane associated factor modulating specific RNAseE dependent RNA degradation pathways
+zraR	1.7E-04	4.1E-03	10.8	11.7	11.8	9.7	fused DNA-binding response regulator in two-component regulatory system with ZraS: response regulator ; sigma54 interaction protein
+yadI	1.7E-04	4.1E-03	10.8	10.4	10.2	12.6	putative PTS Enzyme IIA
+yeiI	1.7E-04	4.1E-03	11.9	11.9	10.4	9.8	putative kinase
+ycjW	1.7E-04	4.1E-03	10.4	12.1	11.6	9.8	putative DNA-binding transcriptional regulator
+creB	1.8E-04	4.2E-03	11.8	9.5	11.1	11.5	DNA-binding response regulator in two-component regulatory system with CreC
+yecP	1.8E-04	4.2E-03	10.6	12.3	9.8	11.3	conserved hypothetical protein
+yecE	1.8E-04	4.2E-03	12.4	11.2	10.1	10.3	conserved hypothetical protein
+ccmB	1.9E-04	4.3E-03	12.4	11.2	10.3	10.1	heme exporter subunit ; membrane component of ABC superfamily
+ychP	2.0E-04	4.4E-03	12.0	11.1	11.4	9.5	putative adhesin/invasin
+yhjX	2.0E-04	4.4E-03	11.5	10.5	12.2	9.8	putative transporter
+wzc	2.0E-04	4.4E-03	11.5	11.0	9.5	11.9	protein-tyrosine kinase
+ybcQ	2.0E-04	4.4E-03	10.3	10.2	11.1	12.5	putative antitermination protein Q homolog; DLP12 prophage
+metJ	2.0E-04	4.4E-03	10.5	10.9	12.2	10.5	DNA-binding transcriptional repressor, S-adenosylmethionine-binding
+ybjE	2.0E-04	4.4E-03	11.5	11.6	11.3	9.6	putative transporter
+speC	2.0E-04	4.4E-03	11.2	10.0	12.3	10.5	ornithine decarboxylase, constitutive
+yhcC	2.1E-04	4.4E-03	10.4	11.6	12.1	9.8	putative Fe-S oxidoreductase
+btuC	2.1E-04	4.5E-03	12.5	11.1	10.1	10.3	vitamin B12 transporter subunit: membrane component of ABC superfamily
+yqaA	2.1E-04	4.5E-03	11.1	11.8	9.6	11.5	conserved hypothetical protein; putative inner membrane protein
+uhpB	2.2E-04	4.7E-03	11.3	10.4	12.2	10.1	sensory histidine kinase in two-component regulatory sytem with UhpA
+wza	2.3E-04	4.8E-03	12.3	11.4	10.0	10.3	fragment of lipoprotein required for capsular polysaccharide translocation through the outer membrane (part 1)
+yiaF	2.4E-04	5.0E-03	10.3	12.2	11.6	9.9	conserved hypothetical protein
+fepG	2.4E-04	5.0E-03	10.6	12.3	10.0	11.1	iron-enterobactin transporter subunit ; membrane component of ABC superfamily
+yfjD	2.4E-04	5.0E-03	10.9	9.7	12.0	11.5	conserved hypothetical protein; putative inner membrane protein
+wcaK	2.4E-04	5.0E-03	11.0	9.5	11.8	11.7	putative pyruvyl transferase
+ybgA	2.4E-04	5.0E-03	9.8	10.4	11.6	12.2	conserved hypothetical protein
+pck	2.5E-04	5.0E-03	11.2	9.6	11.6	11.6	phosphoenolpyruvate carboxykinase
+yiaC	2.5E-04	5.0E-03	10.8	10.7	12.5	10.0	putative acyltransferase with acyl-CoA N-acyltransferase domain
+ybhG	2.5E-04	5.0E-03	10.3	10.6	12.4	10.7	putative membrane fusion protein (MFP) component of efflux pump, membrane anchor; UPF0194 family
+yieP	2.5E-04	5.0E-03	11.8	11.2	11.4	9.6	putative transcriptional regulator
+yfgI	2.6E-04	5.0E-03	11.6	10.5	12.1	9.8	conserved hypothetical protein
+ybaP	2.6E-04	5.1E-03	11.1	10.1	10.3	12.5	conserved hypothetical protein
+ybiC	2.6E-04	5.1E-03	12.0	11.1	10.6	10.3	putative hydroxyacid dehydrogenase
+gloB	2.7E-04	5.2E-03	11.9	11.4	9.5	11.2	putative hydroxyacylglutathione hydrolase
+ytfT	2.7E-04	5.2E-03	11.4	12.0	9.5	11.1	putative sugar transporter subunit: membrane component of ABC superfamily
+tusD	2.8E-04	5.2E-03	10.6	9.8	11.7	12.0	methylsulfur transfer protein
+selB	2.8E-04	5.2E-03	11.3	11.9	11.4	9.5	selenocysteinyl-tRNA-specific translation factor
+yfhM	2.8E-04	5.2E-03	11.3	12.1	9.6	11.1	conserved hypothetical protein
+grpE	2.8E-04	5.2E-03	10.1	11.5	10.4	12.0	heat shock protein
+ubiC	2.8E-04	5.2E-03	11.8	9.4	11.6	11.2	chorismate pyruvate lyase
+pitB	2.9E-04	5.3E-03	11.1	11.6	11.8	9.5	phosphate transporter
+pgl	2.9E-04	5.3E-03	10.9	11.3	11.8	10.0	6-phosphogluconolactonase
+ftsX	2.9E-04	5.4E-03	11.0	9.6	12.1	11.3	transporter subunit: membrane component of ABC superfamily
+wcaC	2.9E-04	5.4E-03	10.7	12.1	11.5	9.6	putative glycosyl transferase
+djlA	3.0E-04	5.5E-03	12.5	10.8	10.0	10.6	DnaJ-like protein, membrane anchored
+yjcO	3.0E-04	5.5E-03	9.4	11.6	11.5	11.5	conserved hypothetical protein
+ruvB	3.0E-04	5.5E-03	9.5	12.0	10.9	11.6	ATP-dependent DNA helicase, component of RuvABC resolvasome
+ftsL	3.1E-04	5.5E-03	9.8	10.7	12.3	11.2	membrane bound cell division protein at septum containing leucine zipper motif
+pepD	3.1E-04	5.5E-03	11.5	9.8	11.7	11.0	aminoacyl-histidine dipeptidase (peptidase D)
+nrdI	3.1E-04	5.5E-03	10.4	11.9	10.9	10.8	protein that stimulates ribonucleotide reduction
+ygiP	3.1E-04	5.5E-03	11.6	11.6	9.6	11.3	putative DNA-binding transcriptional regulator
+sohA	3.1E-04	5.5E-03	11.6	11.4	11.0	10.0	putative regulator
+mdtF	3.2E-04	5.5E-03	11.1	11.5	9.5	12.0	multidrug transporter, RpoS-dependent
+rph	3.2E-04	5.5E-03	11.9	11.6	10.8	9.7	ribonuclease PH
+bisC	3.2E-04	5.5E-03	10.9	9.6	12.2	11.3	biotin sulfoxide reductase
+yqiK	3.2E-04	5.5E-03	11.1	9.7	10.9	12.3	conserved hypothetical protein
+ynfO	3.2E-04	5.5E-03	11.0	10.5	10.0	12.5	conserved hypothetical protein; Qin prophage
+yfiN	3.3E-04	5.5E-03	11.9	11.3	11.4	9.4	putative diguanylate cyclase
+glpD	3.3E-04	5.5E-03	10.4	10.2	12.5	10.9	sn-glycerol-3-phosphate dehydrogenase, aerobic, FAD/NAD(P)-binding
+yffI	3.3E-04	5.5E-03	9.8	10.9	12.2	11.1	putative ethanolaminosome structural protein with putative role in ethanolamine utilization
+mdoC	3.3E-04	5.5E-03	11.5	10.3	12.1	10.0	membrane protein required for modification of periplasmic glucan
+hypD	3.3E-04	5.5E-03	11.5	10.3	10.5	11.7	protein required for maturation of hydrogenases
+ybbO	3.3E-04	5.5E-03	11.7	10.8	11.9	9.6	putative oxidoreductase with NAD(P)-binding Rossmann-fold domain
+nikD	3.4E-04	5.5E-03	9.8	10.8	11.1	12.3	nickel transporter subunit ; ATP-binding component of ABC superfamily
+iap	3.4E-04	5.5E-03	10.8	11.0	12.4	9.8	aminopeptidase in alkaline phosphatase isozyme conversion
+yfcN	3.4E-04	5.5E-03	11.9	9.8	11.9	10.4	conserved hypothetical protein
+cyoE	3.4E-04	5.5E-03	11.0	11.6	9.7	11.6	protoheme IX farnesyltransferase
+ytfG	3.4E-04	5.5E-03	10.5	11.9	11.9	9.7	NAD(P)H:quinone oxidoreductase
+ygcR	3.4E-04	5.5E-03	11.8	11.3	11.5	9.5	putative flavoprotein
+yahI	3.8E-04	6.0E-03	11.7	11.2	11.6	9.5	putative carbamate kinase
+gatZ	3.8E-04	6.0E-03	10.4	10.3	12.6	10.7	D-tagatose 1,6-bisphosphate aldolase 2, subunit
+ydbH	3.8E-04	6.0E-03	10.0	10.7	12.5	10.8	conserved hypothetical protein
+phnB	3.8E-04	6.0E-03	9.5	11.1	11.6	11.9	conserved hypothetical protein
+yjeP	3.8E-04	6.0E-03	10.9	12.0	11.5	9.6	putative mechanosensitive channel
+fucU	3.8E-04	6.0E-03	12.1	10.5	11.6	9.9	L-fucose mutarotase
+ccmH	3.9E-04	6.1E-03	9.9	11.3	10.7	12.1	heme lyase, CcmH subunit
+rhaD	3.9E-04	6.1E-03	10.0	10.2	11.5	12.3	rhamnulose-1-phosphate aldolase
+yfhA	4.0E-04	6.1E-03	12.1	11.4	9.5	11.1	putative DNA-binding response regulator in two-component system
+yjfI	4.0E-04	6.1E-03	12.5	10.2	10.7	10.6	conserved hypothetical protein
+emtA	4.0E-04	6.1E-03	10.2	12.5	10.7	10.5	lytic murein endotransglycosylase E
+yajR	4.1E-04	6.2E-03	10.3	12.5	10.9	10.2	putative transporter, major facilitator family
+ssuD	4.2E-04	6.3E-03	11.9	11.1	11.4	9.5	alkanesulfonate monooxygenase, FMNH(2)-dependent
+aroH	4.2E-04	6.3E-03	10.8	11.7	9.7	11.8	3-deoxy-D-arabino-heptulosonate-7-phosphate synthase, tryptophan repressible
+yeeJ	4.2E-04	6.4E-03	12.2	10.4	10.0	11.4	fragment of adhesin (part 1)
+yhhF	4.3E-04	6.4E-03	12.5	10.1	10.6	10.8	putative methyltransferase
+ydgA	4.3E-04	6.4E-03	11.2	11.5	9.4	11.8	conserved hypothetical protein
+yggD	4.5E-04	6.6E-03	11.2	10.6	12.4	9.8	putative DNA-binding transcriptional regulator
+ybiW	4.5E-04	6.6E-03	11.1	11.6	9.5	11.9	putative glycyl radical cofactor protein
+acpS	4.5E-04	6.7E-03	11.4	11.6	11.5	9.4	holo-[acyl-carrier-protein] synthase 1
+araD	4.6E-04	6.7E-03	10.7	10.4	10.3	12.6	L-ribulose-5-phosphate 4-epimerase
+fadE	4.7E-04	6.8E-03	11.0	10.1	12.1	10.9	acyl coenzyme A dehydrogenase
+ydfQ	4.7E-04	6.8E-03	10.9	10.3	10.2	12.5	putative membrane-associated lysozyme; Qin prophage
+clcA	4.7E-04	6.8E-03	10.8	12.6	10.3	10.4	chloride channel, voltage-gated
+yeiB	4.8E-04	6.8E-03	11.6	11.9	10.8	9.7	conserved hypothetical protein; putative inner membrane protein
+gltL	4.8E-04	6.8E-03	11.2	11.7	9.7	11.4	glutamate and aspartate transporter subunit ; ATP-binding component of ABC superfamily
+copA	4.8E-04	6.8E-03	10.7	12.4	9.9	10.9	copper transporter
+ygdL	4.8E-04	6.8E-03	11.4	10.0	10.3	12.3	conserved hypothetical protein
+dnaQ	4.8E-04	6.8E-03	11.4	9.4	11.4	11.8	DNA polymerase III epsilon subunit
+yncD	4.9E-04	6.8E-03	11.6	11.3	11.4	9.7	fragment of putative iron outer membrane receptor (part 2)
+murE	4.9E-04	6.8E-03	10.5	10.8	10.2	12.5	UDP-N-acetylmuramoyl-L-alanyl-D-glutamate:meso-diaminopimelate ligase
+ybjD	4.9E-04	6.8E-03	11.5	9.7	10.6	12.1	conserved hypothetical protein; putative nucleoside triphosphate hydrolase domain
+yfeG	4.9E-04	6.8E-03	9.5	11.2	12.1	11.2	putative DNA-binding transcriptional regulator
+fdhD	5.0E-04	6.9E-03	10.6	12.0	11.7	9.7	formate dehydrogenase formation protein
+rtcR	5.1E-04	7.0E-03	10.5	11.3	12.3	9.9	sigma 54-dependent transcriptional regulator of rtcBA expression
+yiiU	5.3E-04	7.1E-03	11.7	11.5	11.4	9.5	conserved hypothetical protein
+yhcM	5.3E-04	7.1E-03	12.5	10.8	10.1	10.6	conserved hypothetical protein; putative nucleoside triphosphate hydrolase domain
+bioH	5.3E-04	7.1E-03	11.1	11.4	9.5	12.0	carboxylesterase of pimeloyl-CoA synthesis
+yicH	5.3E-04	7.2E-03	12.1	10.0	10.3	11.6	conserved hypothetical protein
+iaaA	5.3E-04	7.2E-03	10.4	10.5	10.7	12.4	isoaspartyl dipeptidase with L-asparaginase activity
+agaD	5.4E-04	7.2E-03	11.0	10.0	12.5	10.6	N-acetylgalactosamine-specific enzyme IID component of PTS
+gss	5.4E-04	7.2E-03	9.8	10.4	12.0	11.8	fused glutathionylspermidine amidase ; glutathionylspermidine synthetase
+moeA	5.4E-04	7.2E-03	11.4	11.7	11.2	9.7	molybdopterin biosynthesis protein
+uspA	5.4E-04	7.2E-03	11.4	11.3	11.7	9.5	universal stress global response regulator
+yjiE	5.5E-04	7.2E-03	9.5	11.6	11.8	11.0	putative DNA-binding transcriptional regulator
+norW	5.6E-04	7.3E-03	10.4	9.8	12.1	11.7	NADH:flavorubredoxin oxidoreductase
+mutS	5.6E-04	7.3E-03	9.7	12.1	10.6	11.6	methyl-directed mismatch repair protein
+kefB	5.6E-04	7.3E-03	11.1	9.9	11.5	11.5	potassium:proton antiporter
+bcsA	5.6E-04	7.3E-03	11.7	9.5	11.4	11.4	cellulose synthase, catalytic subunit
+cyaA	5.7E-04	7.4E-03	9.5	11.5	11.7	11.4	adenylate cyclase
+ybjM	5.8E-04	7.4E-03	12.1	10.9	9.8	11.2	conserved hypothetical protein; putative inner membrane protein
+ydfC	5.8E-04	7.4E-03	10.3	10.5	10.6	12.5	conserved hypothetical protein; Qin prophage
+yggP	5.8E-04	7.4E-03	12.2	10.6	11.4	9.8	putative dehydrogenase
+yhhK	5.9E-04	7.4E-03	11.4	10.5	9.8	12.3	conserved hypothetical protein
+yeaE	5.9E-04	7.4E-03	9.7	12.1	10.7	11.5	putative oxidoreductase
+yidR	5.9E-04	7.4E-03	11.7	9.8	10.4	12.0	conserved hypothetical protein
+ydiB	5.9E-04	7.5E-03	11.0	11.9	9.7	11.4	quinate/shikimate 5-dehydrogenase, NAD(P)-binding
+ycdW	6.0E-04	7.5E-03	10.7	11.6	11.5	10.2	2-ketoacid reductase
+macA	6.0E-04	7.5E-03	11.9	10.6	11.7	9.8	macrolide transporter subunit, membrane fusion protein (MFP) component
+acrF	6.0E-04	7.5E-03	10.7	10.3	10.5	12.6	multidrug efflux system protein
+aroM	6.2E-04	7.6E-03	10.1	10.3	11.2	12.3	conserved hypothetical protein
+hybE	6.2E-04	7.6E-03	11.3	10.5	11.1	11.0	hydrogenase 2-specific chaperone
+flk	6.2E-04	7.6E-03	11.8	9.9	12.0	10.3	flagella control of anti-sigma factor FlgM secretion into the periplasm
+yggF	6.3E-04	7.6E-03	12.3	10.8	9.7	11.2	fragment of putative hexoseP phosphatase (part 2)
+yqcC	6.3E-04	7.6E-03	11.1	11.6	9.5	11.7	conserved hypothetical protein
+ycfH	6.3E-04	7.6E-03	10.7	12.4	10.6	10.3	putative metallodependent hydrolase
+mgsA	6.3E-04	7.6E-03	11.8	10.0	11.5	10.7	methylglyoxal synthase
+ulaE	6.4E-04	7.7E-03	10.7	12.0	9.8	11.5	L-xylulose 5-phosphate 3-epimerase
+yfaD	6.5E-04	7.8E-03	11.7	9.4	11.6	11.2	Conserved hypothetical protein, putative transposase
+torT	6.5E-04	7.8E-03	11.4	11.3	11.9	9.5	periplasmic sensory protein associated with the TorRS two-component regulatory system
+zntR	6.5E-04	7.8E-03	11.6	10.1	10.2	12.1	DNA-binding transcriptional activator in response to Zn(II)
+ypfE	6.7E-04	7.9E-03	11.9	9.9	10.3	12.0	putative carboxysome-like ethanolaminosome structural protein with putative role in ethanol utilization
+prmA	6.7E-04	7.9E-03	11.3	11.7	11.5	9.5	methylase for 50S ribosomal subunit protein L11
+ygdK	6.7E-04	7.9E-03	11.4	9.7	12.2	10.7	putative Fe-S metabolism protein (sufE-like)
+yciH	6.8E-04	7.9E-03	11.0	11.8	11.3	9.9	conserved hypothetical protein
+ybcF	6.8E-04	7.9E-03	11.8	11.5	9.5	11.3	putative carbamate kinase
+mdtD	6.8E-04	7.9E-03	10.3	12.1	10.0	11.6	multidrug efflux system protein
+glnE	6.8E-04	7.9E-03	11.6	11.6	11.4	9.4	fused deadenylyltransferase ; adenylyltransferase for glutamine synthetase
+tauC	6.9E-04	8.0E-03	9.8	11.3	12.2	10.7	taurine transporter subunit ; membrane component of ABC superfamily
+mdtI	6.9E-04	8.0E-03	11.7	11.0	10.1	11.2	multidrug efflux system transporter
+ygcW	6.9E-04	8.0E-03	9.5	11.0	11.4	12.0	putative deoxygluconate dehydrogenase
+yjgK	7.0E-04	8.0E-03	12.4	10.9	10.5	10.1	conserved hypothetical protein
+yjbB	7.0E-04	8.0E-03	10.5	12.5	10.7	10.2	putative transporter
+pykA	7.1E-04	8.1E-03	9.8	11.2	11.7	11.3	pyruvate kinase II
+fdrA	7.2E-04	8.2E-03	11.3	10.1	10.3	12.4	putative acyl-CoA synthetase with NAD(P)-binding Rossmann-fold domain
+frsA	7.3E-04	8.2E-03	12.0	10.1	10.2	11.7	hydrolase, binds to enzyme IIA(Glc)
+flhE	7.5E-04	8.4E-03	9.5	10.9	11.8	11.8	conserved hypothetical protein
+rffG	7.5E-04	8.4E-03	11.7	9.7	11.7	10.9	dTDP-glucose 4,6-dehydratase
+ytfN	7.6E-04	8.5E-03	10.9	11.7	11.8	9.5	conserved hypothetical protein
+yfeD	7.7E-04	8.5E-03	12.0	10.3	10.3	11.5	putative nucleic acid-binding transcriptional regulator
+queA	7.7E-04	8.5E-03	11.1	12.1	9.6	11.2	S-adenosylmethionine:tRNA ribosyltransferase-isomerase
+nrfC	7.7E-04	8.5E-03	9.9	11.8	10.7	11.6	formate-dependent nitrite reductase, 4Fe4S subunit
+emrB	7.7E-04	8.5E-03	10.3	12.6	10.6	10.5	multidrug efflux system protein
+hemG	7.7E-04	8.5E-03	12.0	11.2	9.6	11.2	protoporphyrin oxidase, flavoprotein
+yegK	7.7E-04	8.5E-03	9.6	10.8	12.1	11.4	conserved hypothetical protein
+fimA	7.8E-04	8.5E-03	11.5	12.0	10.8	9.7	major type 1 subunit fimbrin (pilin)
+ribD	7.8E-04	8.5E-03	11.5	12.1	10.6	9.7	fused diaminohydroxyphosphoribosylaminopyrimidine deaminase;5-amino-6-(5-phosphoribosylamino) uracil reductase
+ytfM	7.9E-04	8.6E-03	10.7	10.1	12.4	10.8	conserved hypothetical protein; putative outer membrane protein and surface antigen
+ugpC	8.0E-04	8.6E-03	12.0	11.2	10.5	10.3	glycerol-3-phosphate transporter subunit ; ATP-binding component of ABC superfamily
+ftsI	8.0E-04	8.6E-03	11.2	9.9	12.2	10.8	transpeptidase involved in septal peptidoglycan synthesis (penicillin-binding protein 3)
+yahG	8.0E-04	8.6E-03	9.8	12.2	10.4	11.6	conserved hypothetical protein
+yciA	8.1E-04	8.6E-03	12.4	10.9	10.0	10.8	putative hydrolase
+yicO	8.1E-04	8.6E-03	11.2	9.9	10.5	12.4	putative xanthine/uracil permease
+glpG	8.1E-04	8.7E-03	12.2	11.5	10.5	9.8	putative intramembrane serine protease
+yfhD	8.3E-04	8.8E-03	12.6	10.4	10.4	10.5	putative transglycosylase
+ybhI	8.3E-04	8.8E-03	12.2	10.0	10.2	11.5	putative anion transporter
+yiiD	8.4E-04	8.9E-03	12.2	11.4	10.7	9.7	putative acetyltransferase
+wcaB	8.5E-04	9.0E-03	10.8	12.5	10.6	10.1	putative acyl transferase
+zapA	8.6E-04	9.0E-03	11.1	10.5	12.3	10.1	protein that localizes to the cytokinetic ring
+yegU	8.6E-04	9.0E-03	12.4	10.6	11.1	9.9	putative (phospho)hydrolase
+torY	8.8E-04	9.2E-03	11.1	9.6	12.1	11.2	TMAO reductase III (TorYZ), cytochrome c-type subunit
+nikC	9.3E-04	9.7E-03	11.0	11.8	11.6	9.6	nickel transporter subunit ; membrane component of ABC superfamily
+rtcA	9.3E-04	9.7E-03	12.0	9.6	11.4	11.0	RNA 3-terminal phosphate cyclase
+mdoB	9.4E-04	9.7E-03	10.9	9.9	11.6	11.6	phosphoglycerol transferase I
+hdhA	9.5E-04	9.8E-03	10.8	10.9	9.9	12.4	7-alpha-hydroxysteroid dehydrogenase, NAD-dependent
+aaeR	9.9E-04	1.0E-02	10.9	10.3	12.5	10.3	DNA-binding transcriptional regulator, efflux system
+yjgD	1.0E-03	1.0E-02	10.2	10.9	12.5	10.3	conserved hypothetical protein
+yraL	1.0E-03	1.0E-02	9.7	11.4	10.7	12.2	putative methyltransferase
+yeiM	1.0E-03	1.0E-02	12.0	11.5	9.6	10.9	putative sodium/proton nucleoside transporter
+yaiL	1.0E-03	1.0E-02	10.9	11.0	9.8	12.3	nucleoprotein/polynucleotide-associated enzyme
+tesB	1.0E-03	1.0E-02	12.5	10.3	10.6	10.7	acyl-CoA thioesterase II
+norR	1.1E-03	1.1E-02	9.8	10.7	12.3	11.2	DNA-binding transcriptional activator
+frmB	1.1E-03	1.1E-02	11.5	10.2	10.2	12.1	S-formylglutathione hydrolase
+yddM	1.1E-03	1.1E-02	11.9	9.6	10.8	11.7	fragment of putative DNA-binding transcriptional regulator (partial)
+ptsA	1.1E-03	1.1E-02	12.1	11.0	9.8	11.1	fused putative PTS enzymes: Hpr component ; enzyme I component ; enzyme IIA component
+yidZ	1.1E-03	1.1E-02	11.0	10.4	12.5	10.1	putative DNA-binding transcriptional regulator
+waaG	1.1E-03	1.1E-02	11.7	11.0	11.6	9.6	glucosyltransferase I
+exuT	1.1E-03	1.1E-02	12.0	11.5	10.1	10.4	hexuronate transporter
+ibrB	1.1E-03	1.1E-02	12.4	10.3	10.4	10.8	transcriptional regulator IbrB
+yicM	1.1E-03	1.1E-02	11.0	10.1	12.5	10.4	transporter
+cadC	1.1E-03	1.1E-02	12.0	9.7	11.6	10.8	DNA-binding transcriptional activator
+envC	1.1E-03	1.1E-02	11.5	9.7	11.3	11.5	protease with a role in cell division
+mdtG	1.1E-03	1.1E-02	12.5	10.6	10.7	10.2	putative metabolite efflux transporter
+fimC	1.1E-03	1.1E-02	11.3	12.3	10.4	10.0	chaperone, periplasmic
+pyrE	1.1E-03	1.1E-02	11.5	12.0	10.0	10.4	orotate phosphoribosyltransferase
+ydhM	1.1E-03	1.1E-02	12.5	10.6	10.2	10.7	putative DNA-binding transcriptional regulator
+cpsB	1.1E-03	1.1E-02	10.3	12.3	11.5	10.0	mannose-1-phosphate guanyltransferase
+yrfC	1.1E-03	1.1E-02	11.3	11.3	11.9	9.5	putative fimbrial assembly protein (pilN-like)
+yjeS	1.1E-03	1.1E-02	12.1	10.9	11.3	9.7	putative Fe-S electron transport protein
+folP	1.1E-03	1.1E-02	10.7	11.4	10.0	12.0	7,8-dihydropteroate synthase
+yfbM	1.2E-03	1.1E-02	10.1	10.2	12.3	11.4	conserved hypothetical protein
+yhhQ	1.2E-03	1.1E-02	10.9	10.6	10.0	12.5	conserved hypothetical protein; putative inner membrane protein
+phnH	1.2E-03	1.1E-02	12.4	10.0	11.1	10.6	carbon-phosphorus lyase complex subunit
+ycjN	1.2E-03	1.1E-02	10.6	9.8	12.2	11.4	putative sugar transporter subunit: periplasmic-binding component of ABC superfamily transporter
+obgE	1.2E-03	1.1E-02	11.7	10.3	10.1	11.9	GTPase involved in cell partioning and DNA repair
+marC	1.2E-03	1.1E-02	10.7	10.6	10.2	12.5	putative wide-spectrum exporter
+yedI	1.2E-03	1.1E-02	10.4	10.5	12.5	10.6	conserved hypothetical protein; putative inner membrane protein
+yeaP	1.2E-03	1.1E-02	11.7	11.0	9.5	11.8	putative diguanylate cyclase
+yebT	1.2E-03	1.1E-02	11.5	9.4	11.5	11.6	conserved hypothetical protein
+agaV	1.2E-03	1.1E-02	12.3	10.5	10.5	10.7	N-acetylgalactosamine-specific enzyme IIB component of PTS
+phnK	1.2E-03	1.1E-02	11.6	11.9	10.8	9.6	carbon-phosphorus lyase complex subunit
+yeeO	1.2E-03	1.1E-02	10.1	10.5	10.8	12.5	putative Na+-driven multidrug efflux system
+kdtA	1.2E-03	1.1E-02	11.9	11.1	11.2	9.8	3-deoxy-D-manno-octulosonic-acid transferase (KDO transferase)
+yehC	1.2E-03	1.1E-02	11.1	10.7	12.3	9.9	putative membrane-associated pilin chaperone
+yfdZ	1.2E-03	1.1E-02	11.4	10.3	12.1	10.2	putative aminotransferase, PLP-dependent
+rutA	1.2E-03	1.1E-02	11.7	11.4	11.4	9.5	monooxygenase of the alternative pyrimidine degradation pathway
+ydjQ	1.2E-03	1.1E-02	12.1	11.5	10.7	9.7	endonuclease of nucleotide excision repair
+ycdX	1.2E-03	1.1E-02	11.5	11.6	10.8	10.1	putative PHP hydrolase
+yfhJ	1.2E-03	1.1E-02	9.6	11.8	10.9	11.6	conserved hypothetical protein
+nrfG	1.3E-03	1.2E-02	11.2	11.6	9.5	11.8	heme lyase (NrfEFG) for insertion of heme into c552, subunit NrfG
+ycjM	1.3E-03	1.2E-02	11.5	9.8	10.5	12.2	putative glucosyltransferase
+yjiJ	1.3E-03	1.2E-02	11.3	11.4	11.8	9.5	conserved hypothetical protein; putative inner membrane protein
+yfcV	1.3E-03	1.2E-02	10.1	10.1	11.8	12.0	putative fimbrial-like adhesin exported protein
+bfd	1.3E-03	1.2E-02	11.8	10.3	11.8	10.2	bacterioferritin-associated ferredoxin
+yfhQ	1.3E-03	1.2E-02	10.6	10.9	10.1	12.3	putative methyltransferase
+essD	1.3E-03	1.2E-02	10.1	10.3	11.2	12.4	putative phage lysis protein S; DLP12 prophage
+oxyR	1.3E-03	1.2E-02	9.5	11.9	11.4	11.3	DNA-binding transcriptional dual regulator
+prlC	1.4E-03	1.2E-02	9.9	10.5	11.3	12.3	oligopeptidase A
+eutB	1.4E-03	1.2E-02	10.2	10.2	12.3	11.3	ethanolamine ammonia-lyase, large subunit, heavy chain
+ylbE	1.4E-03	1.2E-02	12.4	10.5	11.1	10.1	conserved hypothetical protein
+trmC	1.4E-03	1.2E-02	12.4	10.2	10.2	11.2	fused 5-methylaminomethyl-2-thiouridine-forming enzyme methyltransferase ; FAD-dependent demodification enzyme
+wzxE	1.4E-03	1.2E-02	11.2	10.4	10.0	12.3	O-antigen translocase
+uvrA	1.4E-03	1.2E-02	11.6	11.6	9.5	11.2	ATPase and DNA damage recognition protein of nucleotide excision repair excinuclease UvrABC
+yedX	1.4E-03	1.2E-02	11.7	10.7	10.9	10.8	conserved hypothetical protein
+dinD	1.4E-03	1.2E-02	11.4	9.9	12.3	10.4	DNA-damage-inducible protein
+yeiN	1.5E-03	1.3E-02	12.5	10.6	10.7	10.2	fragment of conserved hypothetical protein (part 1)
+dinB	1.5E-03	1.3E-02	11.3	9.6	12.1	11.0	DNA polymerase IV
+ymfC	1.5E-03	1.3E-02	12.5	10.5	10.9	10.2	fragment of 23S rRNA pseudouridine synthase (part 2)
+yedD	1.5E-03	1.3E-02	10.4	10.3	12.4	11.0	conserved hypothetical protein
+allB	1.5E-03	1.3E-02	11.6	11.6	9.5	11.3	allantoinase
+yhhA	1.5E-03	1.3E-02	11.9	9.6	10.8	11.6	conserved hypothetical protein
+ybjH	1.5E-03	1.3E-02	9.7	11.2	11.7	11.3	conserved hypothetical protein
+yhiN	1.6E-03	1.3E-02	11.7	11.6	11.3	9.5	putative oxidoreductase with FAD/NAD(P)-binding domain
+sapB	1.6E-03	1.3E-02	11.7	12.1	10.2	10.1	antimicrobial peptide transporter subunit ; permease component of ABC superfamily transporter
+nrdD	1.6E-03	1.3E-02	10.8	11.4	10.1	11.6	anaerobic ribonucleoside-triphosphate reductase
+yegE	1.6E-03	1.3E-02	11.4	10.9	9.6	12.1	putative diguanylate cyclase, GGDEF domain signalling protein
+fadR	1.6E-03	1.3E-02	10.5	11.2	12.4	10.0	DNA-binding transcriptional dual regulator of fatty acid metabolism
+ygfS	1.6E-03	1.3E-02	12.5	10.2	10.7	10.6	putative oxidoreductase, 4Fe-4S ferredoxin-type subunit
+mdtA	1.6E-03	1.3E-02	12.5	10.4	10.7	10.4	multidrug efflux system, subunit A
+rhtC	1.6E-03	1.3E-02	11.2	9.6	11.0	12.1	threonine efflux system
+caiB	1.6E-03	1.3E-02	10.4	10.3	12.5	10.8	crotonobetainyl CoA:carnitine CoA transferase
+yicC	1.6E-03	1.3E-02	10.8	12.3	10.4	10.5	conserved hypothetical protein
+yihL	1.6E-03	1.3E-02	12.5	10.7	10.1	10.8	putative DNA-binding transcriptional regulator
+phnE	1.6E-03	1.3E-02	12.5	10.1	11.0	10.4	phosphonates transport system, permease protein
+recC	1.6E-03	1.3E-02	10.7	10.4	12.2	10.7	exonuclease V (RecBCD complex), gamma chain
+nlpE	1.6E-03	1.3E-02	12.5	10.4	10.6	10.5	lipoprotein involved with copper homeostasis and adhesion
+yejB	1.6E-03	1.3E-02	11.1	12.1	9.7	11.1	putative oligopeptide transporter subunit; permease component of ABC superfamily
+eutJ	1.7E-03	1.3E-02	11.6	9.6	10.8	12.0	putative chaperonin, ethanolamine utilization protein
+dadA	1.7E-03	1.3E-02	10.9	10.8	11.9	10.4	D-amino acid dehydrogenase
+hyaE	1.7E-03	1.3E-02	11.5	10.4	10.0	12.1	protein involved in processing of HyaA and HyaB proteins
+qor	1.7E-03	1.3E-02	11.1	10.3	12.4	10.3	quinone oxidoreductase, NADPH-dependent
+aceK	1.7E-03	1.3E-02	11.8	10.0	10.2	12.0	isocitrate dehydrogenase kinase/phosphatase
+pgpA	1.7E-03	1.3E-02	10.5	11.8	11.9	9.8	phosphatidylglycerophosphatase A
+baeR	1.7E-03	1.3E-02	10.8	11.6	11.8	9.8	DNA-binding response regulator in two-component regulatory system with BaeS
+truC	1.7E-03	1.3E-02	10.0	12.1	10.3	11.6	tRNA pseudouridine synthase
+vacJ	1.7E-03	1.3E-02	11.2	12.2	10.8	9.7	putative lipoprotein
+yaeB	1.7E-03	1.4E-02	11.2	10.6	9.9	12.3	conserved hypothetical protein
+yigA	1.7E-03	1.4E-02	10.7	11.7	9.8	11.8	conserved hypothetical protein
+ygaM	1.7E-03	1.4E-02	10.5	10.1	11.0	12.4	conserved hypothetical protein
+yaeP	1.7E-03	1.4E-02	10.9	10.7	10.4	12.1	conserved hypothetical protein
+nagD	1.7E-03	1.4E-02	11.6	9.5	11.3	11.6	NMP phosphatase
+aslB	1.8E-03	1.4E-02	10.7	9.9	12.3	11.1	regulator of arylsulfatase activity
+ycjU	1.8E-03	1.4E-02	12.2	11.3	10.7	9.8	putative glucose-1-phosphate phosphodismutase, beta-phosphoglucomutase
+ybiN	1.8E-03	1.4E-02	11.7	10.5	12.1	9.8	putative AdoMet-dependent methyltransferase
+yhjV	1.8E-03	1.4E-02	12.5	10.3	10.7	10.5	transporter
+sanA	1.8E-03	1.4E-02	12.2	10.3	10.8	10.7	conserved hypothetical protein
+yfcY	1.8E-03	1.4E-02	11.8	9.7	11.7	10.8	beta-ketoacyl-CoA thiolase, anaerobic, subunit
+rutR	1.8E-03	1.4E-02	11.9	9.9	11.6	10.6	DNA-binding transcriptional regulator of the alternative pyrimidine degradation pathway
+mutM	1.8E-03	1.4E-02	9.9	10.9	11.5	11.7	formamidopyrimidine/5-formyluracil/ 5-hydroxymethyluracil DNA glycosylase
+yiaD	1.8E-03	1.4E-02	11.2	10.0	10.8	12.0	putative outer membrane lipoprotien
+asnC	1.8E-03	1.4E-02	11.0	11.4	11.9	9.7	DNA-binding transcriptional dual regulator
+yfcZ	1.8E-03	1.4E-02	10.8	11.8	10.5	11.0	conserved hypothetical protein
+dld	1.9E-03	1.4E-02	10.1	11.3	10.8	11.9	D-lactate dehydrogenase, FAD-binding, NADH independent
+glpK	1.9E-03	1.4E-02	10.1	10.7	12.1	11.2	glycerol kinase
+aapQ	1.9E-03	1.4E-02	11.1	11.8	9.5	11.5	amino-acid transporter subunit ; membrane component of ABC superfamily
+rluD	1.9E-03	1.4E-02	10.7	11.2	9.8	12.3	23S rRNA pseudouridine synthase
+phnI	1.9E-03	1.5E-02	10.3	12.0	10.0	11.8	carbon-phosphorus lyase complex subunit
+ybhL	1.9E-03	1.5E-02	9.9	11.4	12.2	10.5	conserved hypothetical protein; putative inner membrane protein
+nirC	1.9E-03	1.5E-02	10.3	10.1	11.9	11.7	nitrite transporter
+yiaY	1.9E-03	1.5E-02	9.5	11.4	11.5	11.6	Fe-containing alcohol dehydrogenase
+rncA	1.9E-03	1.5E-02	10.4	9.9	11.8	11.9	nickel and cobalt resistance
+tbpA	1.9E-03	1.5E-02	10.8	9.8	11.5	11.9	thiamin transporter subunit ; periplasmic-binding component of ABC superfamily
+nohB	2.0E-03	1.5E-02	9.8	11.7	11.9	10.7	DNA packaging protein; DLP12 prophage
+nudE	2.0E-03	1.5E-02	11.6	11.8	9.6	11.0	ADP-ribose diphosphatase
+malZ	2.0E-03	1.5E-02	12.2	11.4	9.8	10.6	maltodextrin glucosidase
+fepE	2.0E-03	1.5E-02	11.3	9.8	12.1	10.8	regulator of length of O-antigen component of lipopolysaccharide chains
+pepB	2.0E-03	1.5E-02	11.3	11.5	9.6	11.6	aminopeptidase B
+yfcH	2.0E-03	1.5E-02	10.3	10.5	12.5	10.7	conserved hypothetical protein; putative NAD(P)-binding Rossmann-fold domain
+yjjP	2.1E-03	1.5E-02	10.1	12.0	10.5	11.4	conserved hypothetical protein; putative inner membrane protein
+ybgS	2.1E-03	1.5E-02	10.3	10.5	12.3	10.9	conserved hypothetical protein
+fimI	2.1E-03	1.5E-02	11.1	12.3	10.7	9.8	fimbrial protein involved in type 1 pilus biosynthesis
+rpiA	2.1E-03	1.5E-02	9.5	11.3	11.9	11.3	ribose 5-phosphate isomerase, constitutive
+phnC	2.1E-03	1.6E-02	11.4	11.8	11.2	9.5	phosphonate/organophosphate ester transporter subunit ; ATP-binding component of ABC superfamily
+proB	2.1E-03	1.6E-02	9.6	11.6	11.9	10.9	gamma-glutamate kinase
+caiE	2.2E-03	1.6E-02	12.4	11.0	10.6	10.0	putative acyl transferase
+rimI	2.2E-03	1.6E-02	10.9	12.4	10.1	10.6	acetylase for 30S ribosomal subunit protein S18
+nrdH	2.2E-03	1.6E-02	10.4	10.5	11.6	11.5	glutaredoxin-like protein
+yjdK	2.2E-03	1.6E-02	11.8	10.2	11.1	10.8	conserved hypothetical protein
+ycgJ	2.2E-03	1.6E-02	11.7	11.5	11.1	9.7	conserved hypothetical protein
+yhdN	2.2E-03	1.6E-02	12.4	10.9	10.7	10.0	conserved hypothetical protein
+ftsY	2.2E-03	1.6E-02	11.6	11.4	9.6	11.5	fused Signal Recognition Particle (SRP) receptor: membrane binding protein ; conserved hypothetical protein
+ymdB	2.2E-03	1.6E-02	11.4	9.8	10.6	12.2	conserved hypothetical protein
+selA	2.2E-03	1.6E-02	10.0	11.5	11.5	11.0	selenocysteine synthase
+dapE	2.2E-03	1.6E-02	11.3	12.1	9.7	10.9	N-succinyl-diaminopimelate deacylase
+ynjH	2.3E-03	1.6E-02	12.1	9.7	11.5	10.7	conserved hypothetical protein
+ydcQ	2.3E-03	1.6E-02	11.5	9.5	11.9	11.1	fragment of putative DNA-binding transcriptional regulator (partial)
+hrpA	2.3E-03	1.6E-02	11.6	11.8	9.5	11.1	ATP-dependent helicase
+nfo	2.3E-03	1.6E-02	10.7	12.5	10.1	10.7	endonuclease IV with intrinsic 3-5 exonuclease activity
+ybfE	2.3E-03	1.6E-02	11.6	10.2	10.1	12.1	LexA regulated protein
+yedW	2.3E-03	1.6E-02	9.5	11.1	11.8	11.6	DNA-binding response regulator in two-component system with YedV
+yqgD	2.3E-03	1.6E-02	10.6	12.0	9.9	11.6	conserved hypothetical protein; putative inner membrane protein
+alkB	2.3E-03	1.6E-02	9.7	10.8	12.1	11.5	oxidative demethylase of N1-methyladenine or N3-methylcytosine DNA lesions
+cobT	2.3E-03	1.6E-02	10.0	11.2	12.2	10.6	nicotinate-nucleotide dimethylbenzimidazole-P phophoribosyl transferase
+ybhK	2.3E-03	1.6E-02	9.5	11.6	11.5	11.4	putative transferase with NAD(P)-binding Rossmann-fold domain; UPF0052 family
+cdsA	2.4E-03	1.7E-02	12.1	11.0	10.1	10.8	CDP-diglyceride synthase
+putP	2.4E-03	1.7E-02	11.1	11.9	9.9	11.1	proline:sodium symporter
+yhhW	2.4E-03	1.7E-02	10.6	12.0	11.7	9.7	conserved hypothetical protein
+macB	2.4E-03	1.7E-02	12.5	10.8	10.4	10.3	fragment of fused macrolide transporter subunits of ABC superfamily: ATP-binding component ; membrane component (part 2)
+spoT	2.4E-03	1.7E-02	11.4	11.1	9.6	11.9	bifunctional (p)ppGpp synthetase II and guanosine-3,5-bis pyrophosphate 3-pyrophosphohydrolase
+rutG	2.4E-03	1.7E-02	9.5	11.6	11.7	11.2	pyrimidine transporter
+eutL	2.4E-03	1.7E-02	11.1	10.0	12.3	10.6	putative carboxysome-related structural protein with putative role in ethanolamine utilization
+ybbS	2.4E-03	1.7E-02	10.8	10.6	12.5	10.1	putative DNA-binding transcriptional activator of the allD operon
+glxR	2.4E-03	1.7E-02	10.7	11.7	11.9	9.7	tartronate semialdehyde reductase, NADH-dependent
+eutE	2.5E-03	1.7E-02	12.0	9.8	11.7	10.6	putative aldehyde dehydrogenase, ethanolamine utilization protein
+zwf	2.5E-03	1.7E-02	10.8	12.4	10.7	10.1	glucose-6-phosphate dehydrogenase
+eutQ	2.5E-03	1.7E-02	11.5	10.1	10.1	12.2	conserved hypothetical protein involved in degradation of ethanolamine
+dmsB	2.5E-03	1.7E-02	10.2	11.3	11.4	11.1	dimethyl sulfoxide reductase, anaerobic, subunit B
+yhdU	2.5E-03	1.7E-02	12.5	10.6	10.6	10.3	conserved hypothetical protein; putative membrane protein
+rzpD	2.5E-03	1.7E-02	10.0	10.5	11.0	12.4	putative murein endopeptidase; DLP12 prophage
+yajL	2.5E-03	1.7E-02	10.4	12.3	10.4	11.0	conserved hypothetical protein
+treR	2.5E-03	1.7E-02	10.4	11.1	10.1	12.4	DNA-binding transcriptional repressor
+yfcA	2.6E-03	1.7E-02	11.8	11.1	9.6	11.5	conserved hypothetical protein; putative inner membrane protein
+yjhT	2.6E-03	1.7E-02	11.3	9.5	11.7	11.5	conserved hypothetical protein
+ydcA	2.6E-03	1.7E-02	12.1	11.3	11.0	9.6	hypothetical protein
+ybiM	2.6E-03	1.7E-02	12.1	9.8	11.4	10.7	conserved hypothetical protein
+hypC	2.6E-03	1.7E-02	10.7	10.7	10.9	11.7	protein required for maturation of hydrogenases 1 and 3
+yliI	2.6E-03	1.7E-02	11.1	9.6	11.9	11.4	PQQ-dependent aldose sugar dehydrogenase precursor (asd)
+ssuA	2.6E-03	1.7E-02	11.1	10.8	9.8	12.3	alkanesulfonate transporter subunit ; periplasmic-binding component of ABC superfamily
+yidJ	2.6E-03	1.7E-02	11.3	10.4	12.3	10.0	putative sulfatase/phosphatase
+yhcB	2.7E-03	1.8E-02	12.2	10.1	10.2	11.5	putative cytochrome d ubiquinol oxidase subunit III
+arcA	2.7E-03	1.8E-02	10.6	10.1	11.0	12.3	DNA-binding response regulator in two-component regulatory system with ArcB or CpxA
+yliF	2.7E-03	1.8E-02	11.2	10.5	12.3	10.0	putative diguanylate cyclase
+sfcA	2.7E-03	1.8E-02	11.1	11.4	9.6	12.0	malate dehydrogenase, (decarboxylating, NAD-requiring) (malic enzyme)
+yiiL	2.7E-03	1.8E-02	12.2	9.9	10.5	11.4	L-rhamnose mutarotase
+ycjT	2.7E-03	1.8E-02	11.8	11.0	11.6	9.6	putative glycosyl hydrolase/phosphorylase
+ccmE	2.7E-03	1.8E-02	10.2	11.4	10.4	12.1	periplasmic heme chaperone
+yieH	2.7E-03	1.8E-02	12.4	10.8	10.4	10.3	putative hydrolase
+grxA	2.7E-03	1.8E-02	12.2	9.7	11.3	10.9	glutaredoxin 1, redox coenzyme for ribonucleotide reductase (RNR1a)
+ais	2.8E-03	1.8E-02	10.1	10.5	11.5	11.8	conserved hypothetical protein
+yhjD	2.8E-03	1.8E-02	11.3	9.8	12.2	10.6	conserved hypothetical protein; putative inner membrane protein
+yehS	2.8E-03	1.8E-02	12.3	11.0	10.1	10.6	conserved hypothetical protein
+uxaB	2.8E-03	1.8E-02	11.4	9.6	11.5	11.5	altronate oxidoreductase, NAD-dependent
+yrdD	2.8E-03	1.8E-02	11.4	11.6	11.3	9.6	putative DNA topoisomerase
+cedA	2.8E-03	1.8E-02	12.3	10.6	9.9	11.2	cell division modulator
+ycdY	2.8E-03	1.8E-02	11.1	11.8	9.6	11.4	conserved hypothetical protein
+yfiC	2.9E-03	1.8E-02	12.0	9.8	10.4	11.8	putative S-adenosyl-L-methionine-dependent methyltransferase
+yigM	2.9E-03	1.9E-02	9.7	11.1	12.0	11.1	conserved hypothetical protein; putative inner membrane protein
+torD	2.9E-03	1.9E-02	11.5	10.6	10.1	11.8	chaperone involved in maturation of TorA subunit of trimethylamine N-oxide reductase system I
+glnD	2.9E-03	1.9E-02	11.9	9.9	11.4	10.8	uridylyltransferase
+rng	2.9E-03	1.9E-02	11.4	12.0	9.6	11.0	ribonuclease G
+yghU	3.0E-03	1.9E-02	12.3	10.5	10.0	11.1	S-transferase
+dipZ	3.0E-03	1.9E-02	10.9	10.8	9.9	12.4	fused thiol:disulfide interchange protein: activator of DsbC ; conserved hypothetical protein
+yojL	3.0E-03	1.9E-02	11.1	12.3	9.8	10.9	putative thiamine biosynthesis lipoprotein; defective assembly or repair of ThiH Fe-S cluster
+yjjW	3.0E-03	1.9E-02	10.9	12.2	10.7	10.2	putative pyruvate formate lyase activating enzyme
+fepB	3.0E-03	1.9E-02	10.8	11.7	10.3	11.1	iron-enterobactin transporter subunit ; periplasmic-binding component of ABC superfamily
+yjiN	3.0E-03	1.9E-02	11.6	11.1	9.5	11.7	conserved hypothetical protein; putative inner membrane protein
+ydgJ	3.0E-03	1.9E-02	10.6	12.1	10.3	10.9	putative oxidoreductase
+torS	3.0E-03	1.9E-02	11.6	11.4	11.6	9.5	fragment of hybrid sensory histidine kinase in two-component regulatory system with TorR (partial)
+yncG	3.0E-03	1.9E-02	11.6	11.5	9.6	11.3	fragment of putative enzyme with similarity with GST (part 2)
+yijO	3.0E-03	1.9E-02	11.6	11.0	11.8	9.5	putative DNA-binding transcriptional regulator
+yjcR	3.0E-03	1.9E-02	10.2	10.2	11.5	12.2	membrane fusion protein of efflux pump
+ycfX	3.0E-03	1.9E-02	12.0	11.5	10.6	9.8	N-acetyl-D-glucosamine kinase
+slp	3.0E-03	1.9E-02	10.7	10.6	10.2	12.5	outer membrane lipoprotein
+syd	3.1E-03	1.9E-02	11.6	11.5	11.3	9.6	conserved hypothetical protein
+smg	3.1E-03	1.9E-02	11.4	11.2	10.1	11.2	conserved hypothetical protein
+potI	3.1E-03	1.9E-02	12.2	10.3	10.8	10.7	putrescine transporter subunit: membrane component of ABC superfamily
+ycaI	3.1E-03	1.9E-02	11.8	9.6	11.7	10.9	conserved hypothetical protein; putative inner membrane protein
+sugE	3.1E-03	1.9E-02	10.9	9.7	11.2	12.2	large cation (quaternary ammonium) efflux transporter
+ilvL	3.1E-03	1.9E-02	10.4	10.5	12.5	10.7	ilvG operon leader peptide
+ygiW	3.1E-03	1.9E-02	10.6	12.4	10.5	10.4	conserved hypothetical protein
+ybbP	3.1E-03	1.9E-02	10.0	11.6	12.2	10.2	putative ABC transporter permease
+yhhM	3.1E-03	1.9E-02	10.2	10.9	12.4	10.5	conserved hypothetical protein
+yjbR	3.2E-03	1.9E-02	11.9	11.4	9.5	11.2	conserved hypothetical protein
+yeiS	3.2E-03	1.9E-02	11.5	9.8	12.2	10.6	conserved hypothetical protein; putative inner membrane protein
+citA	3.2E-03	1.9E-02	10.5	9.8	11.9	11.9	sensory histidine kinase in two-component regulatory system with citB
+caiC	3.2E-03	1.9E-02	10.9	10.2	12.5	10.4	putative crotonobetaine CoA ligase:carnitine CoA ligase
+radA	3.2E-03	2.0E-02	10.7	12.3	9.9	11.1	repair protein radA homolog
+entA	3.2E-03	2.0E-02	11.2	11.5	10.0	11.3	2,3-dihydro-2,3-dihydroxybenzoate dehydrogenase
+mpl	3.3E-03	2.0E-02	9.7	11.5	11.0	11.7	UDP-N-acetylmuramate:L-alanyl-gamma-D-glutamyl-meso-diaminopimelate ligase
+ttdA	3.3E-03	2.0E-02	10.8	11.1	12.3	9.8	L-tartrate dehydratase, alpha subunit
+endA	3.3E-03	2.0E-02	11.5	10.5	10.1	12.0	DNA-specific endonuclease I
+pmrD	3.3E-03	2.0E-02	11.1	11.5	11.7	9.7	polymyxin resistance protein B
+yeiQ	3.3E-03	2.0E-02	11.5	10.8	11.8	9.9	putative sugar dehydrogenase, NAD-dependent
+yehB	3.3E-03	2.0E-02	10.4	9.9	11.9	11.8	conserved hypothetical protein; putative outer membrane protein
+fliY	3.3E-03	2.0E-02	9.8	11.2	11.6	11.3	cystine transporter subunit ; periplasmic-binding component of ABC superfamily
+yjbG	3.3E-03	2.0E-02	11.3	9.5	11.6	11.6	conserved hypothetical protein
+fabR	3.4E-03	2.0E-02	11.0	10.2	10.5	12.3	DNA-binding transcriptional repressor
+ydhV	3.4E-03	2.0E-02	11.4	10.7	11.5	10.4	putative ferredoxin:oxidoreductase subunit
+phoA	3.4E-03	2.0E-02	10.7	12.1	10.1	11.1	bacterial alkaline phosphatase
+yliC	3.4E-03	2.0E-02	10.6	11.9	11.4	10.2	putative peptide transporter permease subunit: membrane component of ABC superfamily
+yqiA	3.4E-03	2.0E-02	10.7	11.9	10.7	10.6	putative esterase
+yohN	3.4E-03	2.0E-02	11.8	11.9	9.9	10.4	conserved hypothetical protein
+ydiA	3.5E-03	2.0E-02	10.7	10.9	10.4	12.0	conserved hypothetical protein
+rsmC	3.5E-03	2.0E-02	9.7	11.9	10.6	11.8	16S RNA m2G1207 methylase
+dgoT	3.5E-03	2.0E-02	10.9	10.3	12.5	10.4	D-galactonate transporter
+yecM	3.5E-03	2.1E-02	10.7	11.4	9.7	12.2	putative metal-binding enzyme
+rbbA	3.5E-03	2.1E-02	10.2	10.9	10.5	12.4	fused ribosome-associated ATPase: ATP-binding protein ; ATP-binding protein ; putative membrane protein
+yphF	3.6E-03	2.1E-02	10.2	10.3	12.4	11.0	putative sugar transporter subunit: periplasmic-binding component of ABC superfamily
+nanE	3.6E-03	2.1E-02	10.7	10.2	12.1	11.0	putative N-acetylmannosamine-6-P epimerase
+yfiB	3.6E-03	2.1E-02	12.0	10.9	11.4	9.7	putative outer membrane lipoprotein
+tusA	3.7E-03	2.1E-02	11.5	9.5	11.7	11.4	sulfurtransferase
+yfeR	3.7E-03	2.1E-02	10.2	10.2	11.3	12.3	putative DNA-binding transcriptional regulator
+yciV	3.7E-03	2.1E-02	9.6	12.0	11.4	11.0	conserved hypothetical protein
+nrfB	3.7E-03	2.1E-02	10.4	10.7	12.1	10.8	nitrite reductase, formate-dependent, penta-heme cytochrome c
+ygdB	3.7E-03	2.1E-02	10.3	11.8	12.0	9.9	conserved hypothetical protein
+fsaB	3.7E-03	2.1E-02	12.0	9.8	10.7	11.5	fructose-6-phosphate aldolase 2
+yrfD	3.7E-03	2.1E-02	10.2	12.1	11.6	10.1	putative pilus assembly protein
+ycjV	3.7E-03	2.1E-02	10.8	10.4	12.3	10.5	putative sugar transporter subunit: ATP-binding component of ABC superfamily transporter
+asnB	3.7E-03	2.1E-02	11.1	12.2	10.5	10.2	asparagine synthetase B
+yjiD	3.7E-03	2.1E-02	12.3	10.0	10.6	11.2	DNA replication/recombination/repair protein
+aceA	3.7E-03	2.1E-02	10.7	10.8	12.4	10.1	isocitrate lyase
+yjbO	3.7E-03	2.1E-02	10.7	9.6	11.8	11.8	putative membrane protein of unknown function
+rutB	3.7E-03	2.1E-02	11.8	11.2	11.4	9.6	enzyme of the alternative pyrimidine degradation pathway
+ybcH	3.7E-03	2.1E-02	12.0	9.6	11.6	10.8	conserved hypothetical protein
+fis	3.8E-03	2.1E-02	10.6	11.3	10.5	11.6	global DNA-binding transcriptional dual regulator
+yqjB	3.8E-03	2.1E-02	12.0	11.5	10.8	9.7	conserved hypothetical protein; puttaive outer membrane protein
+yhdH	3.8E-03	2.1E-02	11.3	10.2	11.9	10.6	putative oxidoreductase, Zn-dependent and NAD(P)-binding
+cpsG	3.8E-03	2.2E-02	11.4	11.0	9.6	12.0	phosphomannomutase
+entD	3.8E-03	2.2E-02	10.3	11.2	12.2	10.3	phosphopantetheinyltransferase component of enterobactin synthase multienzyme complex
+rusA	3.8E-03	2.2E-02	10.7	11.9	9.7	11.7	Crossover junction endodeoxyribonuclease
+eutA	3.8E-03	2.2E-02	11.9	9.5	11.5	11.1	reactivating factor for ethanolamine ammonia lyase
+ushA	3.8E-03	2.2E-02	11.5	9.6	10.9	11.9	bifunctional UDP-sugar hydrolase and 5-nucleotidase
+dadX	3.9E-03	2.2E-02	11.2	11.5	11.3	10.0	alanine racemase 2, PLP-binding
+nudG	3.9E-03	2.2E-02	11.1	12.1	11.1	9.7	pyrimidine (deoxy)nucleoside triphosphate pyrophosphohydrolase
+nrdR	3.9E-03	2.2E-02	10.5	11.7	11.7	10.1	transcriptional repressor of nrd genes
+ybdH	3.9E-03	2.2E-02	10.1	12.0	10.4	11.5	putative oxidoreductase
+holA	3.9E-03	2.2E-02	11.4	10.8	9.7	12.1	DNA polymerase III, delta subunit
+ydcY	3.9E-03	2.2E-02	11.5	11.9	9.7	10.9	conserved hypothetical protein
+ydiF	4.0E-03	2.2E-02	10.9	11.2	12.1	9.9	short chain acyl-CoA transferase: fused alpha subunit ; beta subunit
+rfaH	4.0E-03	2.2E-02	10.7	11.5	12.0	9.7	DNA-binding transcriptional antiterminator
+ybaZ	4.0E-03	2.2E-02	9.5	11.7	11.6	11.2	putative methylated DNA-protein cysteine alkyltransferase
+yjeK	4.1E-03	2.2E-02	10.7	12.4	10.7	10.2	putative lysine aminomutase
+fucK	4.1E-03	2.2E-02	11.9	10.8	10.9	10.4	L-fuculokinase
+nfuA	4.1E-03	2.3E-02	10.1	11.6	10.3	12.0	Fe/S biogenesis protein
+surE	4.1E-03	2.3E-02	11.6	9.6	11.4	11.4	broad specificity 5(3)-nucleotidase and polyphosphatase
+ygeR	4.2E-03	2.3E-02	12.3	10.5	9.9	11.3	Tetratricopeptide repeat transcriptional regulator
+waaC	4.2E-03	2.3E-02	11.6	10.3	10.2	11.9	ADP-heptose:LPS heptosyl transferase I
+nikB	4.2E-03	2.3E-02	10.7	11.2	12.2	9.9	nickel transporter subunit ; membrane component of ABC superfamily
+yhaJ	4.2E-03	2.3E-02	12.0	9.8	11.7	10.6	putative DNA-binding transcriptional regulator
+ccmG	4.2E-03	2.3E-02	9.8	11.7	10.9	11.6	periplasmic thioredoxin of cytochrome c-type biogenesis
+fruR	4.2E-03	2.3E-02	11.6	11.1	9.7	11.6	DNA-binding transcriptional dual regulator
+recQ	4.2E-03	2.3E-02	10.6	11.8	9.8	11.8	ATP-dependent DNA helicase
+yjgF	4.2E-03	2.3E-02	9.7	11.0	11.7	11.5	ketoacid-binding protein
+glxK	4.2E-03	2.3E-02	9.8	11.0	12.3	10.9	glycerate kinase II
+aroE	4.2E-03	2.3E-02	11.3	11.4	11.6	9.7	dehydroshikimate reductase, NAD(P)-binding
+ispA	4.2E-03	2.3E-02	11.0	11.3	9.9	11.8	geranyltranstransferase
+yliK	4.2E-03	2.3E-02	12.5	10.7	10.7	10.1	fragment of methylmalonyl-CoA mutase (partial)
+yegI	4.3E-03	2.3E-02	11.3	12.3	10.2	10.3	conserved hypothetical protein
+yoaF	4.3E-03	2.3E-02	10.1	12.4	10.7	10.8	conserved hypothetical protein; putative outer membrane protein
+nhaB	4.4E-03	2.3E-02	12.3	11.3	10.3	10.1	sodium:proton antiporter
+dcm	4.4E-03	2.3E-02	11.7	11.0	11.7	9.6	DNA cytosine methylase
+yhiQ	4.5E-03	2.4E-02	10.5	12.1	11.5	9.9	putative SAM-dependent methyltransferase
+pepT	4.5E-03	2.4E-02	10.6	10.1	12.0	11.3	peptidase T
+gadA	4.5E-03	2.4E-02	10.5	10.7	10.3	12.5	glutamate decarboxylase A, PLP-dependent
+purR	4.6E-03	2.4E-02	11.0	12.3	10.1	10.5	DNA-binding transcriptional repressor, hypoxanthine-binding
+ssuE	4.6E-03	2.4E-02	11.8	9.5	11.2	11.5	NAD(P)H-dependent FMN reductase
+ybaV	4.6E-03	2.4E-02	11.5	9.5	11.4	11.6	conserved hypothetical protein
+dam	4.6E-03	2.4E-02	11.9	11.6	9.7	10.8	Site-specific DNA-methyltransferase (adenine-specific)
+artP	4.6E-03	2.4E-02	9.6	11.5	11.1	11.8	arginine transporter subunit ; ATP-binding component of ABC superfamily
+nadC	4.6E-03	2.4E-02	12.5	10.7	10.7	10.1	quinolinate phosphoribosyltransferase
+ttk	4.6E-03	2.4E-02	9.7	11.8	10.8	11.7	division inhibitor
+yjdO	4.6E-03	2.4E-02	11.9	10.4	11.3	10.3	conserved hypothetical protein
+wcaF	4.7E-03	2.4E-02	11.3	10.0	10.4	12.3	putative glycose-acyl transferase
+tsgA	4.7E-03	2.4E-02	12.2	10.2	10.9	10.7	putative transporter
+rsxG	4.7E-03	2.4E-02	10.7	12.2	9.9	11.2	putative oxidoreductase
+yfbQ	4.7E-03	2.5E-02	11.4	11.4	9.9	11.3	putative aminotransferase
+thiP	4.7E-03	2.5E-02	11.0	9.8	12.0	11.2	fused thiamin transporter subunits of ABC superfamily: membrane components
+yebA	4.7E-03	2.5E-02	10.7	11.9	9.9	11.6	putative metallopeptidase
+ybbB	4.8E-03	2.5E-02	9.7	12.0	10.8	11.5	tRNA 2-selenouridine synthase, selenophosphate-dependent
+yqaB	4.8E-03	2.5E-02	10.4	11.7	11.7	10.3	putative hydrolase
+phnG	4.8E-03	2.5E-02	9.6	12.0	11.1	11.4	carbon-phosphorus lyase complex subunit
+cobB	4.8E-03	2.5E-02	10.8	12.1	9.7	11.4	deacetylase of acetyl-CoA synthetase, NAD-dependent
+gshB	4.8E-03	2.5E-02	9.5	11.6	11.4	11.5	glutathione synthetase
+uhpA	4.9E-03	2.5E-02	10.9	11.3	12.1	9.7	DNA-binding response regulator in two-component regulatory system wtih UhpB
+nagZ	4.9E-03	2.5E-02	10.6	12.3	10.7	10.4	beta N-acetyl-glucosaminidase
+lolE	4.9E-03	2.5E-02	11.8	11.8	10.6	9.8	outer membrane-specific lipoprotein transporter subunit ; membrane component of ABC superfamily
+garK	4.9E-03	2.5E-02	10.5	10.2	12.3	11.1	glycerate kinase I
+yfcX	4.9E-03	2.5E-02	10.2	11.2	12.2	10.3	fused enoyl-CoA hydratase and epimerase and isomerase ; 3-hydroxyacyl-CoA dehydrogenase
+tpiA	5.0E-03	2.5E-02	11.2	11.8	9.9	11.0	triosephosphate isomerase
+ynbE	5.0E-03	2.5E-02	11.5	10.6	12.1	9.8	putative lipoprotein
+cysE	5.0E-03	2.6E-02	10.2	11.6	10.6	11.6	serine acetyltransferase
+fhuB	5.1E-03	2.6E-02	10.4	10.9	10.4	12.3	fused iron-hydroxamate transporter subunits of ABC superfamily: membrane components
+narL	5.1E-03	2.6E-02	11.7	11.8	10.8	9.7	DNA-binding response regulator in two-component regulatory system with NarX (or NarQ)
+yjbJ	5.1E-03	2.6E-02	10.2	10.5	12.4	10.9	putative stress response protein
+mutH	5.2E-03	2.6E-02	11.7	12.0	9.8	10.5	methyl-directed mismatch repair protein
+yfdX	5.2E-03	2.6E-02	12.1	10.2	11.5	10.2	conserved hypothetical protein
+gltA	5.2E-03	2.6E-02	10.9	11.5	11.2	10.4	citrate synthase
+betB	5.2E-03	2.6E-02	11.9	11.4	10.4	10.4	betaine aldehyde dehydrogenase, NAD-dependent
+yceA	5.2E-03	2.6E-02	11.2	12.0	10.7	10.1	conserved hypothetical protein
+kdpA	5.3E-03	2.6E-02	10.3	11.0	10.5	12.2	potassium translocating ATPase, subunit A
+yecJ	5.4E-03	2.7E-02	11.1	10.9	12.2	9.8	conserved hypothetical protein
+ybhH	5.4E-03	2.7E-02	9.8	12.0	11.5	10.8	conserved hypothetical protein
+pflD	5.4E-03	2.7E-02	11.9	11.8	10.2	10.1	putative formate acetyltransferase 2 (pyruvate formate lyase II)
+pgk	5.4E-03	2.7E-02	9.7	11.4	11.5	11.4	phosphoglycerate kinase
+ytfH	5.4E-03	2.7E-02	12.0	9.9	11.7	10.4	fragment of putative transcriptional regulator (partial)
+yafV	5.4E-03	2.7E-02	10.1	12.1	11.5	10.4	putative C-N hydrolase family amidase
+cld	5.4E-03	2.7E-02	10.7	9.7	12.1	11.4	regulator of length of O-antigen component of lipopolysaccharide chains
+ssb	5.5E-03	2.7E-02	10.0	12.3	10.8	10.9	Single-stranded DNA-binding protein
+yadD	5.5E-03	2.7E-02	10.4	12.4	10.3	10.8	putative transposase
+yeaM	5.5E-03	2.7E-02	10.3	10.1	11.6	12.0	putative DNA-binding transcriptional regulator
+selD	5.5E-03	2.7E-02	10.5	10.8	12.5	10.3	selenophosphate synthase
+yeiU	5.6E-03	2.7E-02	11.6	10.7	9.8	11.8	undecaprenyl pyrophosphate phosphatase
+allC	5.6E-03	2.7E-02	11.2	9.8	12.2	10.8	allantoate amidohydrolase
+slyD	5.6E-03	2.7E-02	9.8	11.0	11.4	11.8	FKBP-type peptidyl prolyl cis-trans isomerase (rotamase)
+yphD	5.6E-03	2.7E-02	12.2	11.2	10.6	10.0	putative sugar transporter subunit: membrane component of ABC superfamily
+yjfY	5.6E-03	2.7E-02	12.3	9.9	11.3	10.5	conserved hypothetical protein
+ynbD	5.6E-03	2.7E-02	11.7	11.1	11.6	9.6	putative membrane associated phosphatase
+creA	5.6E-03	2.7E-02	11.8	10.3	12.0	10.0	conserved hypothetical protein
+lnt	5.6E-03	2.7E-02	11.3	11.5	11.7	9.5	apolipoprotein N-acyltransferase
+yggR	5.6E-03	2.7E-02	10.2	10.2	12.3	11.3	transporter
+frwD	5.6E-03	2.7E-02	10.9	9.6	11.9	11.6	enzyme IIB component of PTS
+eutH	5.7E-03	2.8E-02	11.4	11.9	11.1	9.6	putative ethanolamine transporter
+ygiE	5.7E-03	2.8E-02	11.4	10.7	9.9	12.0	zinc transporter
+lolD	5.7E-03	2.8E-02	10.5	10.8	12.5	10.2	outer membrane-specific lipoprotein transporter subunit ; ATP-binding component of ABC superfamily
+fadA	5.8E-03	2.8E-02	10.3	10.8	10.5	12.3	3-ketoacyl-CoA thiolase (thiolase I)
+aroC	5.8E-03	2.8E-02	11.9	9.6	11.4	11.1	chorismate synthase
+yiaH	5.8E-03	2.8E-02	11.2	11.3	11.9	9.5	conserved hypothetical protein; putative inner membrane protein
+glmU	5.9E-03	2.8E-02	10.6	12.3	10.0	11.1	fused N-acetyl glucosamine-1-phosphate uridyltransferase ; glucosamine-1-phosphate acetyl transferase
+yehQ	5.9E-03	2.8E-02	11.2	10.2	10.2	12.4	conserved hypothetical protein
+fadL	6.0E-03	2.8E-02	11.6	11.6	9.5	11.4	Long-chain fatty acid transport protein precursor (Outer membrane fadL protein) (Outer membrane flp protein)
+ycfM	6.0E-03	2.8E-02	10.8	11.8	10.0	11.4	putative outer membrane lipoprotein
+hybB	6.0E-03	2.8E-02	11.0	10.7	10.9	11.4	hydrogenase 2 cytochrome b type component
+nadD	6.0E-03	2.9E-02	12.4	10.8	10.1	10.6	nicotinic acid mononucleotide adenylyltransferase, NAD(P)-dependent
+rep	6.1E-03	2.9E-02	11.9	11.8	9.9	10.4	DNA helicase and single-stranded DNA-dependent ATPase
+yeiT	6.1E-03	2.9E-02	11.7	10.5	11.1	10.7	putative Fe-S cluster containing oxidoreductase subunit
+menE	6.1E-03	2.9E-02	10.5	10.3	10.9	12.2	o-succinylbenzoate-CoA ligase
+exo	6.1E-03	2.9E-02	12.0	11.6	10.1	10.3	exonuclease IX (5-3 exonuclease)
+mviM	6.1E-03	2.9E-02	12.3	10.6	10.5	10.6	fragment of putative oxidoreductase with NAD(P)-binding Rossmann-fold domain (part 1)
+cusS	6.1E-03	2.9E-02	10.9	10.1	10.5	12.5	sensory histidine kinase in two-component regulatory system with CusR, senses copper ions
+ygcF	6.2E-03	2.9E-02	9.5	11.2	11.5	11.7	conserved hypothetical protein
+ynhG	6.2E-03	2.9E-02	9.9	11.5	11.4	11.2	conserved hypothetical protein
+yeiC	6.2E-03	2.9E-02	12.4	10.8	10.8	10.0	putative kinase
+ydjX	6.3E-03	3.0E-02	10.0	12.1	10.4	11.5	conserved hypothetical protein; putative inner membrane protein
+yahJ	6.3E-03	3.0E-02	11.7	9.6	11.0	11.8	putative deaminase/amidohydrolase with metallo-dependent hydrolase domain
+cueO	6.4E-03	3.0E-02	10.9	11.9	9.7	11.6	multicopper oxidase (laccase)
+ybcS	6.4E-03	3.0E-02	10.0	10.3	11.8	11.9	putative lysozyme; DLP12 prophage
+prpD	6.4E-03	3.0E-02	10.0	11.8	11.9	10.3	2-methylcitrate dehydratase
+lpxK	6.5E-03	3.0E-02	10.8	12.3	10.0	10.9	fragment of lipid A 4kinase (part 2)
+metH	6.5E-03	3.0E-02	11.7	9.6	11.7	11.0	homocysteine-N5-methyltetrahydrofolate transmethylase, B12-dependent
+ydhT	6.5E-03	3.0E-02	11.3	11.5	11.6	9.5	conserved hypothetical protein
+pheP	6.5E-03	3.0E-02	12.0	11.1	10.2	10.7	phenylalanine transporter
+fadH	6.5E-03	3.0E-02	10.5	11.2	12.3	10.0	2,4-dienoyl-CoA reductase, NADH and FMN-linked
+yafK	6.6E-03	3.0E-02	11.1	11.4	11.8	9.7	conserved hypothetical protein
+citC	6.6E-03	3.1E-02	12.4	10.2	10.5	10.9	citrate lyase synthetase
+dnaX	6.7E-03	3.1E-02	12.4	10.8	10.7	10.1	DNA polymerase III/DNA elongation factor III, tau and gamma subunits
+ybiX	6.7E-03	3.1E-02	10.0	11.2	12.1	10.7	conserved hypothetical protein with PKHD hydroxylase domain
+pldA	6.8E-03	3.1E-02	11.9	11.2	9.9	11.0	outer membrane phospholipase A
+ycfP	6.8E-03	3.1E-02	11.3	9.5	11.7	11.4	conserved hypothetical protein
+yfbJ	6.8E-03	3.1E-02	12.3	10.1	10.4	11.2	conserved hypothetical protein; putative membrane protein
+mltC	6.8E-03	3.1E-02	11.5	11.9	10.8	9.8	membrane-bound lytic murein transglycosylase C
+yfbS	6.9E-03	3.1E-02	12.2	10.2	11.4	10.3	putative transporter
+fimF	6.9E-03	3.2E-02	11.6	12.0	10.4	10.0	minor component of type 1 fimbriae
+rhlE	6.9E-03	3.2E-02	10.5	10.8	12.5	10.2	RNA helicase
+cyaY	6.9E-03	3.2E-02	11.6	10.3	12.0	10.1	frataxin, iron-binding and oxidizing protein
+yidL	7.0E-03	3.2E-02	10.9	11.3	12.1	9.7	putative DNA-binding transcriptional regulator
+yeeA	7.0E-03	3.2E-02	9.6	11.1	11.8	11.5	conserved hypothetical protein; putative inner membrane protein
+gntR	7.0E-03	3.2E-02	9.9	10.8	12.3	11.0	DNA-binding transcriptional repressor
+hlyE	7.0E-03	3.2E-02	10.4	10.0	11.9	11.7	fragment of hemolysin E (partial)
+pepN	7.0E-03	3.2E-02	10.7	11.5	10.0	11.8	aminopeptidase N
+yehI	7.1E-03	3.2E-02	9.5	11.7	11.5	11.2	conserved hypothetical protein
+ybiV	7.1E-03	3.2E-02	11.4	11.7	10.0	10.9	type II HAD phosphatase
+ydfD	7.2E-03	3.2E-02	12.3	10.4	10.9	10.4	conserved hypothetical protein; Qin prophage
+hisA	7.2E-03	3.2E-02	9.7	11.6	11.0	11.7	N-(5-phospho-L-ribosyl-formimino)-5-amino-1-(5-phosphoribosyl)-4-imidazolecarboxamide isomerase
+yphE	7.2E-03	3.2E-02	11.3	9.8	12.2	10.7	fused putative sugar transporter subunits of ABC superfamily: ATP-binding components
+bcr	7.2E-03	3.2E-02	11.4	9.6	12.0	10.9	bicyclomycin/multidrug efflux system
+yjfK	7.2E-03	3.2E-02	11.9	10.3	9.9	11.9	conserved hypothetical protein
+pepQ	7.2E-03	3.2E-02	10.5	10.2	11.5	11.9	proline dipeptidase
+phnF	7.4E-03	3.3E-02	11.6	9.6	11.7	11.0	putative DNA-binding transcriptional regulator of phosphonate uptake and biodegradation
+yhfK	7.4E-03	3.3E-02	11.9	11.1	10.2	10.9	conserved hypothetical protein; putative inner membrane protein
+ybdF	7.4E-03	3.3E-02	11.1	11.3	9.8	11.8	conserved hypothetical protein
+fucR	7.5E-03	3.3E-02	11.6	10.0	11.1	11.3	DNA-binding transcriptional activator
+suhB	7.5E-03	3.3E-02	12.0	11.4	10.8	9.8	inositol monophosphatase
+sufA	7.6E-03	3.4E-02	10.3	11.4	11.2	11.0	Fe-S cluster assembly protein
+dgkA	7.6E-03	3.4E-02	10.0	12.2	11.2	10.5	diacylglycerol kinase
+sufS	7.6E-03	3.4E-02	11.0	11.7	10.5	10.8	selenocysteine lyase, PLP-dependent
+yfeO	7.6E-03	3.4E-02	11.6	11.1	9.6	11.7	putative ion channel protein
+amn	7.6E-03	3.4E-02	9.9	11.3	11.2	11.5	AMP nucleosidase
+ftsB	7.6E-03	3.4E-02	12.3	10.8	10.2	10.7	cell division protein
+yneE	7.7E-03	3.4E-02	11.6	10.5	10.0	11.9	conserved hypothetical protein; putative inner membrane protein
+ydhB	7.8E-03	3.4E-02	10.2	10.7	12.3	10.8	putative DNA-binding transcriptional regulator; LysR-type
+yahF	7.8E-03	3.4E-02	10.3	10.2	11.1	12.4	putative enzyme with acyl-CoA domain
+ydiS	7.9E-03	3.5E-02	10.5	10.0	11.0	12.4	putative oxidoreductase subunit with FAD/NAD(P)-binding domain
+dxr	7.9E-03	3.5E-02	12.3	10.9	10.4	10.4	fragment of 1-deoxy-D-xylulose 5-phosphate reductoisomerase (part 1)
+rhtA	8.0E-03	3.5E-02	11.6	11.0	11.7	9.7	threonine and homoserine efflux system
+yiiX	8.0E-03	3.5E-02	10.9	10.6	10.1	12.4	putative peptidoglycan peptidase
+ycfJ	8.0E-03	3.5E-02	9.6	11.5	11.7	11.3	conserved hypothetical protein
+yfjB	8.0E-03	3.5E-02	9.9	11.5	11.4	11.1	NAD kinase
+frwC	8.0E-03	3.5E-02	10.7	10.2	10.6	12.5	enzyme IIC component of PTS
+wcaA	8.1E-03	3.5E-02	12.1	9.7	11.2	11.0	putative glycosyl transferase
+yehW	8.1E-03	3.5E-02	10.3	10.1	12.1	11.5	putative transporter subunit: permease component of ABC superfamily transporter
+rnhB	8.1E-03	3.5E-02	12.2	11.1	10.0	10.7	ribonuclease HII, degrades RNA of DNA-RNA hybrids
+polA	8.2E-03	3.6E-02	11.5	11.1	11.6	9.8	fragment of fused DNA polymerase I 5->3 exonuclease ; 3->5 polymerase ; 3->5 exonuclease (part 2)
+ispH	8.2E-03	3.6E-02	11.1	12.0	11.2	9.6	1-hydroxy-2-methyl-2-(E)-butenyl 4-diphosphate reductase, 4Fe-4S protein
+yacL	8.2E-03	3.6E-02	9.8	11.0	12.2	11.0	conserved hypothetical protein
+yigZ	8.2E-03	3.6E-02	11.7	11.0	9.9	11.5	putative elongation factor
+yodC	8.2E-03	3.6E-02	10.9	9.7	11.7	11.7	hypothetical protein
+pdxK	8.3E-03	3.6E-02	10.0	11.6	10.4	12.0	pyridoxal-pyridoxamine kinase/hydroxymethylpyrimidine kinase
+ynbC	8.3E-03	3.6E-02	12.2	10.5	11.1	10.2	putative hydrolase
+aidB	8.3E-03	3.6E-02	10.3	10.0	11.9	11.8	isovaleryl CoA dehydrogenase
+ligT	8.4E-03	3.6E-02	10.4	11.2	10.2	12.1	2-5 RNA ligase
+yejF	8.4E-03	3.6E-02	10.6	11.8	9.8	11.8	putative fused oligopeptide transporter subunits of ABC superfamily: ATP-binding components
+ygaZ	8.4E-03	3.6E-02	10.8	11.9	11.4	9.9	putative transporter
+glgC	8.4E-03	3.6E-02	11.9	10.3	11.3	10.6	glucose-1-phosphate adenylyltransferase
+thiL	8.4E-03	3.6E-02	11.8	11.4	9.7	11.1	thiamin-monophosphate kinase
+yehM	8.4E-03	3.6E-02	10.4	11.1	12.4	10.2	conserved hypothetical protein
+yebY	8.5E-03	3.6E-02	11.7	11.0	11.2	10.1	conserved hypothetical protein
+ydfH	8.5E-03	3.6E-02	11.3	12.1	9.9	10.7	putative DNA-binding transcriptional regulator
+fdx	8.5E-03	3.6E-02	9.8	11.5	11.0	11.8	[2Fe-2S] ferredoxin
+hcp	8.8E-03	3.7E-02	11.6	10.0	12.0	10.3	hybrid-cluster [4Fe-2S-2O] protein in anaerobic terminal reductases
+rhaA	9.0E-03	3.8E-02	12.2	10.9	9.7	11.1	L-rhamnose isomerase
+chbR	9.0E-03	3.8E-02	11.1	9.6	11.9	11.4	DNA-binding transcriptional dual regulator
+moeB	9.0E-03	3.8E-02	12.3	10.8	10.2	10.8	molybdopterin synthase sulfurylase
+btuD	9.0E-03	3.8E-02	10.3	11.1	12.4	10.2	vitamin B12 transporter subunit : ATP-binding component of ABC superfamily
+ygfZ	9.1E-03	3.8E-02	11.0	11.0	12.3	9.8	enzyme component involved in 2-methylthio-6-iodeadenosine formation
+fixA	9.2E-03	3.9E-02	10.3	10.4	10.9	12.4	putative electron transfer flavoprotein subunit, ETFP adenine nucleotide-binding domain
+gyrA	9.2E-03	3.9E-02	10.8	12.2	9.8	11.1	DNA gyrase (type II topoisomerase), subunit A
+fliF	9.2E-03	3.9E-02	9.7	11.3	12.0	11.0	flagellar basal-body MS-ring and collar protein
+yceJ	9.2E-03	3.9E-02	12.1	10.9	10.4	10.6	putative cytochrome b561
+yafD	9.3E-03	3.9E-02	11.8	11.4	10.5	10.3	conserved hypothetical protein
+ycbG	9.3E-03	3.9E-02	10.6	10.4	12.5	10.6	conserved hypothetical protein
+ptr	9.3E-03	3.9E-02	11.0	11.6	9.6	11.7	protease III
+aceB	9.4E-03	3.9E-02	10.6	11.5	11.9	9.9	malate synthase A
+nadA	9.4E-03	3.9E-02	10.4	10.9	11.5	11.2	quinolinate synthase, subunit A
+ychQ	9.4E-03	3.9E-02	11.7	11.8	10.8	9.7	putative membrane protein; putative component of transcriptional regulator
+clpA	9.4E-03	3.9E-02	10.7	10.8	11.3	11.2	ATPase and specificity subunit of ClpA-ClpP ATP-dependent serine protease, chaperone activity
+xdhD	9.4E-03	3.9E-02	11.9	11.1	9.6	11.4	fused putative xanthine/hypoxanthine oxidase: molybdopterin-binding subunit ; Fe-S binding subunit
+ynjF	9.4E-03	3.9E-02	11.2	10.1	10.3	12.3	putative phosphatidyl transferase, inner membrane protein
+ydjR	9.4E-03	3.9E-02	10.1	10.5	11.1	12.3	conserved hypothetical protein
+fimH	9.5E-03	3.9E-02	11.1	12.0	11.1	9.8	minor component of type 1 fimbriae
+ftsN	9.5E-03	3.9E-02	11.5	11.7	9.7	11.2	essential cell division protein
+gatA	9.6E-03	3.9E-02	10.9	10.4	12.5	10.3	galactitol-specific enzyme IIA component of PTS
+yghA	9.6E-03	3.9E-02	11.2	10.5	12.2	10.1	putative glutathionylspermidine synthase, with NAD(P)-binding Rossmann-fold domain
+appA	9.6E-03	3.9E-02	11.0	10.2	10.4	12.4	phosphoanhydride phosphorylase
+yihE	9.6E-03	4.0E-02	11.9	11.0	11.4	9.8	putative kinase
+yihI	9.7E-03	4.0E-02	11.7	11.6	11.2	9.6	conserved hypothetical protein
+yecS	9.7E-03	4.0E-02	10.0	11.8	11.6	10.6	putative transporter subunit: permease component of ABC superfamily transporter
+yifE	9.7E-03	4.0E-02	11.1	10.4	10.7	11.9	conserved hypothetical protein
+fadB	9.8E-03	4.0E-02	11.5	10.6	11.9	10.0	fused 3-hydroxybutyryl-CoA epimerase and delta(3)-cis-delta(2)-trans-enoyl-CoA isomerase and enoyl-CoA hydratase ; 3-hydroxyacyl-CoA dehydrogenase
+ptrB	9.8E-03	4.0E-02	12.2	9.9	11.1	10.7	fragment of protease II (part 1)
+tauD	9.9E-03	4.0E-02	9.6	11.4	11.7	11.3	taurine dioxygenase, 2-oxoglutarate-dependent
+yaiZ	9.9E-03	4.0E-02	9.8	11.3	12.1	10.7	conserved hypothetical protein
+yafS	9.9E-03	4.0E-02	11.1	11.9	9.7	11.3	putative S-adenosyl-L-methionine-dependent methyltransferase
+fldA	9.9E-03	4.0E-02	9.6	11.7	11.1	11.6	flavodoxin 1
+ybdK	1.0E-02	4.0E-02	11.9	11.3	11.1	9.8	gamma-glutamyl:cysteine ligase
+ydhR	1.0E-02	4.0E-02	10.0	11.4	11.4	11.2	conserved hypothetical protein
+fliK	1.0E-02	4.1E-02	10.3	10.4	12.4	10.9	flagellar hook-length control protein
+potG	1.0E-02	4.1E-02	10.8	12.1	10.4	10.7	putrescine transporter subunit: ATP-binding component of ABC superfamily
+fixC	1.0E-02	4.1E-02	10.4	10.7	12.5	10.5	putative oxidoreductase with FAD/NAD(P)-binding domain
+ydhQ	1.0E-02	4.1E-02	11.1	9.9	11.9	11.1	conserved hypothetical protein
+yfiH	1.0E-02	4.2E-02	10.4	12.5	10.5	10.6	conserved hypothetical protein
+hokE	1.0E-02	4.2E-02	10.4	10.9	10.3	12.4	toxic polypeptide, small
+ygdQ	1.0E-02	4.2E-02	11.0	11.2	12.1	9.7	conserved hypothetical protein; putative inner membrane protein
+citX	1.0E-02	4.2E-02	9.8	11.4	10.7	12.1	apo-citrate lyase phosphoribosyl-dephospho-CoA transferase
+ychN	1.0E-02	4.2E-02	10.8	10.8	12.4	10.0	conserved hypothetical protein
+pdxY	1.0E-02	4.2E-02	11.4	11.6	9.9	11.2	pyridoxal kinase 2/pyridoxine kinase
+ccmF	1.0E-02	4.2E-02	10.3	10.7	11.8	11.2	heme lyase, CcmF subunit
+ynaJ	1.0E-02	4.2E-02	11.0	11.0	11.9	10.1	conserved hypothetical protein; putative inner membrane protein
+pqiA	1.1E-02	4.2E-02	12.0	11.2	11.1	9.6	paraquat-inducible membrane protein A
+ydfG	1.1E-02	4.2E-02	10.1	10.9	12.3	10.7	L-allo-threonine dehydrogenase, NAD(P)-binding
+yhgN	1.1E-02	4.2E-02	11.9	9.7	11.6	10.8	putative antibiotic transporter
+dacB	1.1E-02	4.2E-02	10.1	11.9	10.4	11.5	D-alanyl-D-alanine carboxypeptidase
+mukB	1.1E-02	4.2E-02	10.2	12.1	10.2	11.6	fused chromosome partitioning protein: putative nucleotide hydrolase ; conserved hypothetical protein ; conserved protein
+aspC	1.1E-02	4.2E-02	10.1	11.9	10.6	11.4	aspartate aminotransferase, PLP-dependent
+yjeI	1.1E-02	4.3E-02	10.9	12.4	10.2	10.6	conserved hypothetical protein
+yijE	1.1E-02	4.3E-02	11.3	10.1	10.4	12.2	putative permease
+yigB	1.1E-02	4.3E-02	11.7	11.6	11.1	9.6	putative hydrolase
+ybjQ	1.1E-02	4.3E-02	11.7	11.1	11.6	9.7	conserved hypothetical protein
+ybhF	1.1E-02	4.3E-02	10.0	10.6	11.4	12.0	putative transporter fused subunits of ABC superfamily: ATP-binding components
+yhjA	1.1E-02	4.4E-02	10.2	10.5	11.4	11.9	cytochrome C peroxidase (cpp-like)
+flgI	1.1E-02	4.4E-02	11.1	10.7	12.3	9.9	flagellar basal body P-ring protein
+yhaH	1.1E-02	4.4E-02	12.3	10.3	10.5	10.8	conserved hypothetical protein; putative inner membrane protein
+greB	1.1E-02	4.4E-02	10.2	11.7	11.9	10.1	transcription elongation factor
+mdtL	1.1E-02	4.4E-02	12.1	10.1	10.2	11.5	multidrug efflux system protein
+yfbB	1.1E-02	4.4E-02	12.1	11.0	10.9	10.0	putative thioesterase, menaquinone synthesis
+ydcK	1.1E-02	4.4E-02	10.4	11.2	12.2	10.2	putative enzyme
+fmt	1.1E-02	4.4E-02	11.2	11.2	9.8	11.8	10-formyltetrahydrofolate:L-methionyl-tRNA(fMet) N-formyltransferase
+yecN	1.1E-02	4.4E-02	11.9	11.3	9.6	11.2	conserved hypothetical protein; putative inner membrane protein
+aroF	1.1E-02	4.5E-02	10.0	11.3	11.5	11.2	3-deoxy-D-arabino-heptulosonate-7-phosphate synthase, tyrosine-repressible
+gudD	1.1E-02	4.5E-02	10.1	10.8	12.4	10.8	(D)-glucarate dehydratase 1
+smpA	1.2E-02	4.5E-02	11.6	11.7	11.0	9.6	small membrane lipoprotein
+erfK	1.2E-02	4.5E-02	10.0	10.8	10.9	12.3	conserved hypothetical protein; putative NAD(P)-binding Rossmann-fold domain
+hgdC	1.2E-02	4.5E-02	10.2	12.1	10.8	10.8	ATPase, activator of (R)-hydroxyglutaryl-CoA dehydratase
+rnt	1.2E-02	4.5E-02	11.2	12.0	9.6	11.2	ribonuclease T (RNase T)
+ygiN	1.2E-02	4.5E-02	9.5	11.4	11.5	11.6	quinol monooxygenase
+yhiD	1.2E-02	4.5E-02	12.0	11.1	11.2	9.7	putative Mg(2+) transport ATPase inner membrane protein
+ypfG	1.2E-02	4.5E-02	11.1	10.3	12.4	10.2	conserved hypothetical protein
+yjaH	1.2E-02	4.5E-02	11.4	10.2	11.8	10.6	conserved hypothetical protein
+fdhE	1.2E-02	4.6E-02	11.8	11.6	10.1	10.6	formate dehydrogenase formation protein
+ygeD	1.2E-02	4.6E-02	9.7	11.2	11.5	11.6	conserved hypothetical protein; putative inner membrane protein
+narK	1.2E-02	4.6E-02	10.5	10.3	11.2	12.0	nitrate/nitrite transporter
+ydeQ	1.2E-02	4.6E-02	10.0	11.2	10.9	12.0	putative fimbrial-like exported adhesin protein
+yjjN	1.2E-02	4.6E-02	10.3	10.1	11.2	12.3	putative oxidoreductase, Zn-dependent and NAD(P)-binding
+sufC	1.2E-02	4.6E-02	11.0	11.5	10.9	10.6	component of SufBCD complex, ATP-binding component of ABC superfamily
+uspE	1.2E-02	4.6E-02	10.6	10.8	12.0	10.6	stress-induced protein
+ygcQ	1.2E-02	4.6E-02	11.2	9.5	11.7	11.6	putative flavoprotein
+efeU	1.2E-02	4.6E-02	11.5	11.1	10.2	11.2	ferrous iron permease
+clpS	1.2E-02	4.6E-02	10.8	10.8	11.6	10.8	regulatory protein for ClpA substrate specificity
+ulaR	1.2E-02	4.7E-02	9.9	10.7	12.2	11.2	DNA-binding transcriptional dual regulator
+chaA	1.2E-02	4.7E-02	10.1	11.4	10.8	11.7	calcium/sodium:proton antiporter
+ycjF	1.2E-02	4.7E-02	10.9	12.1	9.9	11.1	conserved hypothetical protein; putative inner membrane protein
+glgS	1.2E-02	4.7E-02	9.9	11.1	12.2	10.7	putative glycogen synthesis protein
+ogt	1.3E-02	4.7E-02	10.3	11.6	11.2	11.0	O-6-alkylguanine-DNA:cysteine-protein methyltransferase
+rluC	1.3E-02	4.7E-02	10.6	11.3	10.0	12.1	23S rRNA pseudouridylate synthase
+yeiL	1.3E-02	4.7E-02	9.9	11.1	12.3	10.7	DNA-binding transcriptional activator of stationary phase nitrogen survival
+mazG	1.3E-02	4.8E-02	12.2	10.4	11.0	10.4	nucleoside triphosphate pyrophosphohydrolase
+gadW	1.3E-02	4.8E-02	11.1	10.1	10.4	12.3	DNA-binding transcriptional activator
+speB	1.3E-02	4.8E-02	10.0	11.1	10.7	12.2	agmatinase
+vsr	1.3E-02	4.8E-02	12.0	9.8	11.5	10.7	DNA mismatch endonuclease of very short patch repair
+yegX	1.3E-02	4.8E-02	11.5	9.9	10.7	11.9	putative membrane-bound hydrolase
+ydiU	1.3E-02	4.8E-02	11.2	11.8	10.2	10.9	conserved hypothetical protein
+yedO	1.3E-02	4.8E-02	12.1	11.2	10.7	10.1	D-cysteine desulfhydrase, PLP-dependent
+yebF	1.3E-02	4.8E-02	10.0	10.5	11.6	11.9	conserved hypothetical protein
+rcsC	1.3E-02	4.8E-02	12.0	11.6	10.0	10.4	hybrid sensory kinase in two-component regulatory system with RcsB and YojN
+ycfT	1.3E-02	4.8E-02	11.3	9.9	10.7	12.1	conserved hypothetical protein; putative inner membrane protein
+ymdA	1.3E-02	4.8E-02	11.8	10.0	11.9	10.3	conserved hypothetical protein
+nikE	1.3E-02	4.8E-02	10.2	10.6	12.2	11.0	nickel transporter subunit ; ATP-binding component of ABC superfamily
+artM	1.3E-02	4.9E-02	11.5	11.6	9.6	11.4	arginine transporter subunit ; membrane component of ABC superfamily
+ansA	1.3E-02	4.9E-02	10.5	11.8	10.0	11.7	cytoplasmic L-asparaginase I
+folK	1.3E-02	4.9E-02	9.9	11.9	10.5	11.7	2-amino-4-hydroxy-6-hydroxymethyldihyropteridine pyrophosphokinase
+hisI	1.3E-02	4.9E-02	11.2	12.0	9.8	10.9	fused phosphoribosyl-AMP cyclohydrolase ; phosphoribosyl-ATP pyrophosphatase
+yadB	1.3E-02	4.9E-02	10.0	11.7	11.3	11.0	glutamyl-Q tRNA(Asp) synthetase
+ygaC	1.3E-02	5.0E-02	9.8	10.7	11.9	11.6	conserved hypothetical protein
+betI	1.3E-02	5.0E-02	11.9	11.3	10.2	10.7	DNA-binding transcriptional repressor

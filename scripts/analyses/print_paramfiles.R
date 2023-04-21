@@ -69,8 +69,8 @@ for (sim.name in rownames(all.sims)) {
 
 #Controls
 all.sims <- rbind(
-  No_sel = c("Control_no_sel/param1.txt", "Control_no_sel/extparam1.txt"),
-  Sel = c("Control_sel/param1.txt", "Control_sel/extparam1.txt")
+  Control_no_sel = c("Control_no_sel/param1.txt", "Control_no_sel/extparam1.txt"),
+  Control_sel = c("Control_sel/param1.txt", "Control_sel/extparam1.txt")
 )
 for (sim.name in rownames(all.sims)) {
   cat("Setting up simulation", sim.name, "...\n")
@@ -229,8 +229,8 @@ for (sim.name in rownames(all.sims)) {
 
 #Controls
   all.sims <- rbind(
-    No_sel = c("Control_no_sel/param1.txt", "Control_no_sel/extparam1.txt"),
-    Sel = c("Control_sel/param1.txt", "Control_sel/extparam1.txt")
+    Control_no_sel = c("Control_no_sel/param1.txt", "Control_no_sel/extparam1.txt"),
+    Control_sel = c("Control_sel/param1.txt", "Control_sel/extparam1.txt")
   )
 for (sim.name in rownames(all.sims)) {
   cat("Setting up simulation", sim.name, "...\n")
