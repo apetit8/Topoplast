@@ -1,0 +1,63 @@
+TF	Gene encoding TF	TF family	TF Function	Gene targets of TF	Differential expression
+AdiY	adiY	AraC/Xyls	Arginine decarboxylase regulator 	adiA	downregulated
+				gadA	downregulated
+				gadB	downregulated
+				gadC	downregulated
+				gadX	ns
+				gltB	ns
+				gltD	ns
+				gltF	ns
+AppY	appY	AraC/Xyls	Acid phosphatase regulator 	appA	downregulated
+				appB	downregulated
+				appC	downregulated
+				appX	downregulated
+				hyaA	downregulated
+				hyaB	downregulated
+				hyaC	downregulated
+				hyaD	downregulated
+				hyaE	downregulated
+				hyaF	downregulated
+BetI	betI	TetR/AcrR	Biosynthesis of the osmoprotectant glycine betaine	betA	upregulated
+				betB	upregulated
+				betI	upregulated
+				betT	ns
+GadE	gadE	LuxR/UhpA	Regulator of genes involved in maintenance of pH homeostasis, acid resistance system and multidrug efflux	cyoA	ns
+				cyoB	ns
+				cyoC	upregulated
+				cyoD	upregulated
+				cyoE	upregulated
+				fabZ	ns
+				fliC	ns
+				gadB	downregulated
+				gadC	downregulated
+				gadE	downregulated
+				gadF	downregulated
+				gadW	ns
+				gadX	ns
+				gltB	ns
+				gltD	ns
+				gltF	ns
+				gnd	ns
+				hdeA	downregulated
+				hdeB	downregulated
+				hdeD	downregulated
+				lpxA	ns
+				lpxD	ns
+				lrp	ns
+				mdtE	downregulated
+				mdtF	downregulated
+				purA	ns
+				rcsA	ns
+				skp	ns
+				yhiD	downregulated
+				yhiM	downregulated
+				yjbQ	ns
+				yjbR	ns
+MhpR	mhpR	IclR	Phenylpropionate degradation regulator	mhpA	ns
+				mhpB	ns
+				mhpC	ns
+				mhpD	ns
+				mhpE	ns
+				mhpF	ns
+PutA	putA	PutA	Oxidizes proline to glutamate for use as a carbon and nitrogen source	putA	upregulated
+				putP	ns

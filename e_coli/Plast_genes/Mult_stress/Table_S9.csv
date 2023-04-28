@@ -1,0 +1,40 @@
+TF	Gene encoding TF	TF family	TF Function	Gene targets of TF	Differential expression
+AppY	appY	AraC/Xyls	Acid phosphatase regulator 	appA	downregulated
+				appB	downregulated
+				appC	downregulated
+				appX	downregulated
+				hyaA	downregulated
+				hyaB	downregulated
+				hyaC	downregulated
+				hyaD	downregulated
+				hyaE	downregulated
+				hyaF	downregulated
+CaiF	caiF	CaiF	Carnitine metabolism	caiA	ns
+				caiB	ns
+				caiC	ns
+				caiD	ns
+				caiE	ns
+				caiT	ns
+				fixA	ns
+				fixB	ns
+				fixC	ns
+				fixX	ns
+HcaR	hcaR	LysR	3-phenylpropionate catabolism	hcaB	ns
+				hcaC	ns
+				hcaD	ns
+				hcaE	ns
+				hcaF	ns
+				hcaR	upregulated
+LldR	lldR	GntR	Lactate regulator	lldD	upregulated
+				lldD	upregulated
+				lldP	upregulated
+				lldP	upregulated
+				lldR	upregulated
+MhpR	mhpR	IclR	Regulates degradation of phenylpropionate	mhpA	ns
+				mhpB	ns
+				mhpC	ns
+				mhpD	ns
+				mhpE	ns
+				mhpF	ns
+PutA	putA	PutA	Oxidizes proline to glutamate for use as a carbon and nitrogen source	putA	upregulated
+				putP	ns

@@ -1,0 +1,100 @@
+TF	Gene encoding TF	TF family	TF Function	Gene targets of TF	Differential expression
+AdiY	adiY	AraC/Xyls	Arginine decarboxylase regulator 	adiA	downregulated
+				gadA	ns
+				gadB	ns
+				gadC	ns
+				gadX	ns
+				gltB	ns
+				gltD	ns
+				gltF	ns
+AppY	appY	AraC/Xyls	Acid phosphatase regulator 	appA	downregulated
+				appB	downregulated
+				appC	downregulated
+				appX	downregulated
+				hyaA	downregulated
+				hyaB	downregulated
+				hyaC	downregulated
+				hyaD	downregulated
+				hyaE	downregulated
+				hyaF	downregulated
+BetI	betI	TetR/AcrR	Biosynthesis of the osmoprotectant glycine betaine	betA	downregulated
+				betB	downregulated
+				betI	downregulated
+				betT	ns
+CaiF	caiF	CaiF	Carnitine metabolism	caiA	ns
+				caiB	ns
+				caiC	ns
+				caiD	downregulated
+				caiE	ns
+				caiT	ns
+				fixA	ns
+				fixB	ns
+				fixC	ns
+				fixX	ns
+CsgD	csgD	LuxR/UhpA	Curli assembly, transport, and structural components	csgA	ns
+				csgB	ns
+				csgC	ns
+				csgD	upregulated
+				csgE	upregulated
+				csgF	upregulated
+				csgG	ns
+				dgcC	ns
+				flgM	ns
+				flgN	ns
+				fliA	ns
+				fliE	ns
+				fliF	downregulated
+				fliG	downregulated
+				fliH	downregulated
+				fliI	ns
+				fliJ	downregulated
+				fliK	downregulated
+				fliZ	downregulated
+				iraP	ns
+				nlpA	ns
+				pepD	ns
+				tcyJ	ns
+				ubiT	ns
+				wrbA	ns
+				yccJ	ns
+				yccT	ns
+				yhbS	ns
+FliZ	fliZ	AraC/Xyls	Regulation of curli expression and the motility system	csgA	ns
+				csgB	ns
+				csgC	ns
+				csgD	upregulated
+				csgE	upregulated
+				csgF	upregulated
+				csgG	ns
+				flhC	ns
+				flhD	ns
+				gadB	ns
+				gadC	ns
+				gadE	ns
+				gadF	ns
+				hdeA	ns
+				hdeB	ns
+				mdtE	ns
+				mdtF	ns
+				mlrA	ns
+				osmY	ns
+				pdeR	ns
+				yhiD	ns
+PutA	putA	PutA	Oxidizes proline to glutamate for use as a carbon and nitrogen source	putA	upregulated
+				putP	ns
+RcsA	rcsA	LuxR/UhpA	Regulator of the synthesis of colanic acid capsule, cell division, periplasmic proteins and motility	csgD	upregulated
+				csgE	upregulated
+				csgF	upregulated
+				csgG	ns
+				flhC	ns
+				flhD	ns
+				rcsA	upregulated
+				wcaA	ns
+				wcaB	ns
+				wza	ns
+				wzb	ns
+				wzc	ns
+				yjbE	ns
+				yjbF	ns
+				yjbG	ns
+				yjbH	ns

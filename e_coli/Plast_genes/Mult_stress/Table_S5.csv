@@ -1,0 +1,159 @@
+TF	Gene encoding TF	TF family	TF Function	Gene targets of TF	Differential expression
+AidB	aidB	AidB	Part of adaptive response to alkylating agents	aidB	upregulated
+BolA	bola	BolA	Important role in general stress response	ampC	ns
+				ampC	ns
+				dacC	ns
+				dacC	ns
+				mreB	ns
+				mreC	ns
+				mreD	ns
+Cbl	Cbl	LysR	Regulates aliphatic sulfonate utilization and homeostatic response to sulfate starvation	ssuA	ns
+				ssuB	ns
+				ssuC	ns
+				ssuD	upregulated
+				ssuE	ns
+				tauA	upregulated
+				tauB	upregulated
+				tauC	upregulated
+				tauD	ns
+CsgD	csgD	LuxR/UhpA	Curli assembly, transport, and structural components	csgA	upregulated
+				csgB	ns
+				csgC	ns
+				csgD	upregulated
+				csgE	upregulated
+				csgF	upregulated
+				csgG	upregulated
+				dgcC	ns
+				flgM	ns
+				flgN	ns
+				fliA	ns
+				fliE	ns
+				fliF	ns
+				fliG	ns
+				fliH	ns
+				fliI	ns
+				fliJ	ns
+				fliK	ns
+				fliZ	ns
+				iraP	upregulated
+				nlpA	upregulated
+				pepD	ns
+				tcyJ	upregulated
+				ubiT	ns
+				wrbA	upregulated
+				yccJ	upregulated
+				yccT	upregulated
+				yhbS	ns
+CspA	cspA	Cold	Major cold shock protein	gyrA	ns
+				hns	ns
+FeaR	feaR	AraC/Xyls	Activator of phenylacetate synthesis from 2-phenylethylamine (PEA)	feaB	ns
+				tynA	ns
+GadE	gadE	LuxR/UhpA	Regulator of genes involved in maintenance of pH homeostasis, acid resistance system and multidrug efflux	cyoA	ns
+				cyoB	ns
+				cyoC	ns
+				cyoD	ns
+				cyoE	ns
+				fabZ	ns
+				fliC	ns
+				gadB	upregulated
+				gadC	upregulated
+				gadE	upregulated
+				gadF	upregulated
+				gadW	ns
+				gadX	upregulated
+				gltB	upregulated
+				gltD	upregulated
+				gltF	ns
+				gnd	ns
+				hdeA	upregulated
+				hdeB	upregulated
+				hdeD	upregulated
+				lpxA	ns
+				lpxD	ns
+				lrp	ns
+				mdtE	upregulated
+				mdtF	upregulated
+				purA	ns
+				rcsA	ns
+				skp	ns
+				yhiD	upregulated
+				yhiM	upregulated
+				yjbQ	ns
+				yjbR	ns
+GadX	gadX	AraC/Xyls	Regulator of pH-inducible genes and the acid resistance system	amtB	ns
+				asnB	ns
+				btuB	ns
+				cadA	ns
+				cadB	ns
+				dctR	upregulated
+				dtpA	ns
+				gadA	upregulated
+				gadB	upregulated
+				gadC	upregulated
+				gadE	upregulated
+				gadF	upregulated
+				gadW	ns
+				gadW	ns
+				gadX	upregulated
+				gadY	ns
+				glnK	ns
+				glsA	upregulated
+				hdeA	upregulated
+				hdeA	upregulated
+				hdeB	upregulated
+				hdeB	upregulated
+				hdeD	upregulated
+				hns	ns
+				lon	ns
+				mdtE	upregulated
+				mdtF	upregulated
+				murI	ns
+				rpoS	upregulated
+				slp	upregulated
+				speG	ns
+				uspE	ns
+				ybaT	upregulated
+				ydeM	ns
+				ydeN	ns
+				yhiD	upregulated
+				yhiD	upregulated
+				ynfB	ns
+McbR	mcbR	GntR	Biofilm formation	mcbA	upregulated
+				rmf	upregulated
+				rsd	ns
+				yciE	upregulated
+				yciF	upregulated
+				yciG	upregulated
+MetR	metR	LysR	Methionine biosynthesis regulator	glyA	ns
+				glyA	ns
+				hmp	ns
+				metE	upregulated
+				metH	ns
+				metR	upregulated
+MlrA	mlrA	MerR	Curli biosynthesis	cadC	ns
+				csgD	upregulated
+				csgE	upregulated
+				csgF	upregulated
+				csgG	upregulated
+				ibaG	ns
+				obgE	ns
+				rplU	ns
+				rpmA	ns
+				yhbE	ns
+PrpR	prpR	NtrC	Propionate catabolism	prpB	upregulated
+				prpC	upregulated
+				prpD	upregulated
+				prpE	ns
+				prpR	upregulated
+PutA	putA	PutA	Oxidizes proline to glutamate for use as a carbon and nitrogen source	putA	ns
+				putP	ns
+RbsR	rbsR	GalR/LacI	Ribose catabolism and transport 	add	ns
+				purD	upregulated
+				purH	upregulated
+				rbsA	ns
+				rbsB	ns
+				rbsC	ns
+				rbsD	ns
+				rbsK	ns
+				rbsR	ns
+YgiV	ygiV	Xre	Xenobiotic-response-element recognition protein	Data not found	

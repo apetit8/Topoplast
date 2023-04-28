@@ -58,56 +58,78 @@ feedforward.to <- function(graph, to, cutoff.max = -1, cutoff.min = 1) {
 }
 
 
-#gives a table with count of coherence and incoherence loop
-coherence_count <- function(list.w, cutoff.max=3, cutoff.min=1, target=2){
-  results <- sapply(list.w, function(w){
-    g <- graph.adjacency(abs(t(w)), mode="directed")
-    E(g)$sign <- (w)[(w) != 0] #Signs
-    # ff <- feedforward.to(g, to=2, cutoff.max=3, cutoff.min=1)
-    ff <- ifelse(!is.null(feedforward.to(g, to=target, cutoff.max=cutoff.max, cutoff.min=cutoff.min)),
-                feedforward.to(g, to=target, cutoff.max=cutoff.max, cutoff.min=cutoff.min), "no_ff") #Only gives first element of the list to ff ...
-    #Coherence or incoherence of FF loops
-    coherence <- sapply(ff, function(n){
-      if(n[1]=="no_ff") return("No_FF") else{
-        reg1 <- E(g, path=n[[1]])$sign[length(E(g, path=n[[1]])$sign)] #Take the last sign since it's the x -> Target
-        reg2 <- E(g, path=n[[2]])$sign[length(E(g, path=n[[2]])$sign)] #Take the last sign since it's the x -> Target
-        return(ifelse(reg1==reg2, c("FF_Coherent"), c("FF_Incoherent")))
-      }})
-    return(coherence)
-  })
-  return(table(results))
-}
 
-
-
-
-
-#Alt algo : 
+#Loop and loop coherence count
 c.count <- function(list.w, cutoff.max=3, cutoff.min=1, target=2, randomFF=FALSE){
   df <- data.frame(Coherent=c(rep(0, length(list.w))), Incoherent=c(rep(0, length(list.w))), No_loop=c(rep(0, length(list.w))), Loop=c(rep(0, length(list.w))))
   i <- 1
-  for(w in list.w){
-    g <- graph.adjacency(t(w), mode="directed", weighted = TRUE)
-    if(is.null(feedforward.to(g, to=target, cutoff.max=cutoff.max, cutoff.min=cutoff.min))){ 
-      df[i,3] <- 1   
-      i <- i + 1 } else{
+  for(i in 1:length(list.w)){
+    g <- graph.adjacency(t(list.w[[i]]), mode="directed")
+    E(g)$sign <- (list.w[[i]])[list.w[[i]] != 0] #signs ; does not work with signed=TRUE because of the negative values. 
+    if(is.null(feedforward.to(g, to=target, cutoff.max=cutoff.max, cutoff.min=cutoff.min))){
+      df[i,3] <- 1  } else{
         df[i,4] <- 1
         ff <- feedforward.to(g, to=target, cutoff.max=cutoff.max, cutoff.min=cutoff.min)
         if(randomFF==TRUE){
-          n <- ff[[sample(length(ff),1)]] #Problem : still a list. does not work !
-          reg1 <- E(g, path=n[[1]])$weight[length(E(g, path=n[[1]])$weight)] #Take the last weight since it's the x -> Target
-          reg2 <- E(g, path=n[[2]])$weight[length(E(g, path=n[[2]])$weight)] #Take the last weight since it's the x -> Target
+          n <- ff[[sample(length(ff),1)]]
+          reg1 <- E(g, path=n[[1]])$sign[length(E(g, path=n[[1]])$sign)] #Take the last sign since it's the x -> Target
+          reg2 <- E(g, path=n[[2]])$sign[length(E(g, path=n[[2]])$sign)] #Take the last sign since it's the x -> Target
           df[i,1] <- df[i,1] + ifelse(reg1==reg2, 1, 0)
           df[i,2] <- df[i,2] + ifelse(reg1!=reg2, 1, 0)
         }else{
           for(n in ff) {
-            reg1 <- E(g, path=n[[1]])$weight[length(E(g, path=n[[1]])$weight)] #Take the last weight since it's the x -> Target
-            reg2 <- E(g, path=n[[2]])$weight[length(E(g, path=n[[2]])$weight)] #Take the last weight since it's the x -> Target
+            reg1 <- E(g, path=n[[1]])$sign[length(E(g, path=n[[1]])$sign)] #Take the last sign since it's the x -> Target
+            reg2 <- E(g, path=n[[2]])$sign[length(E(g, path=n[[2]])$sign)] #Take the last sign since it's the x -> Target
             df[i,1] <- df[i,1] + ifelse(reg1==reg2, 1/length(ff), 0)
             df[i,2] <- df[i,2] + ifelse(reg1!=reg2, 1/length(ff), 0)
           }}
-        i <- i + 1
       }}
   return(df)
 }
 
+
+#Loop and loop homogeneity count
+homog.count <- function(list.w, cutoff.max=3, cutoff.min=1, target=2, randomFF=FALSE){
+  df <- data.frame(Heterogenous=c(rep(0, length(list.w))), Homogenous=c(rep(0, length(list.w))), No_loop=c(rep(0, length(list.w))), Loop=c(rep(0, length(list.w))))
+  i <- 1
+  for(i in 1:length(list.w)){
+    g <- graph.adjacency(t(list.w[[i]]), mode="directed")
+    E(g)$sign <- (list.w[[i]])[list.w[[i]] != 0] #signs ; does not work with signed=TRUE because of the negative values. 
+    if(is.null(feedforward.to(g, to=target, cutoff.max=cutoff.max, cutoff.min=cutoff.min))){
+      df[i,3] <- 1  } else{
+        df[i,4] <- 1
+        ff <- feedforward.to(g, to=target, cutoff.max=cutoff.max, cutoff.min=cutoff.min)
+        if(randomFF==TRUE){
+          n <- ff[[sample(length(ff),1)]]
+          reg1 <- prod(E(g, path=n[[1]])$sign) #When regulations are heterogeneous, the product is -1
+          reg2 <- prod(E(g, path=n[[2]])$sign) 
+          df[i,1] <- df[i,1] + ifelse(reg1*reg2==-1, 1, 0)
+          df[i,2] <- df[i,2] + ifelse(reg1*reg2==1, 1, 0)
+        }else{
+          for(n in ff) {
+            reg1 <- prod(E(g, path=n[[1]])$sign) #When regulations are heterogeneous, the product is -1
+            reg2 <- prod(E(g, path=n[[2]])$sign) 
+            df[i,1] <- df[i,1] + ifelse(reg1==-1 || reg2==-1, 1/length(ff), 0)
+            df[i,2] <- df[i,2] + ifelse(reg1==1 && reg2==1, 1/length(ff), 0)
+          }}
+      }}
+  return(df)
+}
+
+
+
+#Count number of loop for each gene
+loops_n.count <- function(list.w, cutoff.max=3, cutoff.min=1, target=2){
+  df <- data.frame(Loop_number=c(rep(0, length(list.w))), No_loop=c(rep(0, length(list.w))), Loop=c(rep(0, length(list.w))))
+  i <- 1
+  for(i in 1:length(list.w)){
+    g <- graph.adjacency(t(list.w[[i]]), mode="directed")
+    E(g)$sign <- (list.w[[i]])[list.w[[i]] != 0] #signs ; does not work with signed=TRUE because of the negative values. 
+    if(is.null(feedforward.to(g, to=target, cutoff.max=cutoff.max, cutoff.min=cutoff.min))){
+      df[i,2] <- 1  } else{
+        df[i,3] <- 1
+        ff <- feedforward.to(g, to=target, cutoff.max=cutoff.max, cutoff.min=cutoff.min)
+        df[i,1] <- length(ff)
+      }}
+  return(df)
+}
