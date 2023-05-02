@@ -31,19 +31,20 @@ treshold_og <- 0.001    # difference accepted in the RN linear regression interc
 
 topo.anticor10 <- essential.topo(df=subset(df.10, Gen==max(df.10$Gen) & envir=="Anticorrelated"),
                                 treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3:10))
-core.anticor10 <- core_topo.alt(topo.anticor10)
 
 topo.corr10 <- essential.topo(df=subset(df.10, Gen==max(df.10$Gen) & envir=="Correlated"),
                              treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3:10))
-core.corr10 <- core_topo.alt(topo.corr10)
 
 topo.no_sel10 <- essential.topo(df=subset(df.10, Gen==max(df.10$Gen) & envir=="Control_no_sel"),
                                treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3:10))
-core.no_sel10 <- core_topo.alt(topo.no_sel10)
 
 topo.sel10 <- essential.topo(df=subset(df.10, Gen==max(df.10$Gen) & envir=="Control_sel"),
                             treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3:10))
+
 core.sel10 <- core_topo.alt(topo.sel10)
+core.anticor10 <- core_topo.alt(topo.anticor10)
+core.corr10 <- core_topo.alt(topo.corr10)
+core.no_sel10 <- core_topo.alt(topo.no_sel10)
 
 pdf(pdfname, width=6, height=6)
 layout(matrix(c(1:4), 2, 2, byrow = TRUE))

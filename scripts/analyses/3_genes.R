@@ -31,19 +31,20 @@ treshold_og <- 0.001    # difference accepted in the RN linear regression interc
 
 topo.anticor3 <- essential.topo(df=subset(df.3, Gen==max(df.3$Gen) & envir=="Anticorrelated"),
                               treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3))
-core.anticor3 <- core_topo.alt(topo.anticor3)
 
 topo.corr3 <- essential.topo(df=subset(df.3, Gen==max(df.3$Gen) & envir=="Correlated"),
                            treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3))
-core.corr3 <- core_topo.alt(topo.corr3)
 
 topo.no_sel3 <- essential.topo(df=subset(df.3, Gen==max(df.3$Gen) & envir=="Control_no_sel"),
                               treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3))
-core.no_sel3 <- core_topo.alt(topo.no_sel3)
 
 topo.sel3 <- essential.topo(df=subset(df.3, Gen==max(df.3$Gen) & envir=="Control_sel"),
                            treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3))
+
 core.sel3 <- core_topo.alt(topo.sel3)
+core.anticor3 <- core_topo.alt(topo.anticor3)
+core.corr3 <- core_topo.alt(topo.corr3)
+core.no_sel3 <- core_topo.alt(topo.no_sel3)
 
 pdf(pdfname, width=6, height=6)
 layout(matrix(c(1:4), 2, 2, byrow = TRUE))
@@ -90,48 +91,12 @@ for (i in unique(topo.corr3)) {
 dev.off()
 
 
-###
-
-Anticor3 <- coherence_count(topo.anticor3, cutoff.max = 3, cutoff.min = 2)
-if(is.na(Anticor3["No_FF"])) Anticor3["No_FF"] <- 0
-if(is.na(Anticor3["FF_Coherent"])) Anticor3["FF_Coherent"] <- 0
-if(is.na(Anticor3["FF_Incoherent"])) Anticor3["FF_Incoherent"] <- 0
-Corr3 <- coherence_count(topo.corr3, cutoff.max = 3, cutoff.min = 1)
-if(is.na(Corr3["No_FF"])) Corr3["No_FF"] <- 0
-if(is.na(Corr3["FF_Coherent"])) Corr3["FF_Coherent"] <- 0
-if(is.na(Corr3["FF_Incoherent"])) Corr3["FF_Incoherent"] <- 0
-#Enrichment in incoherent FFL when selected for plasticity !
-No_sel3 <- coherence_count(topo.no_sel3, cutoff.max = 3, cutoff.min = 2)
-if(is.na(No_sel3["No_FF"])) No_sel3["No_FF"] <- 0
-if(is.na(No_sel3["FF_Coherent"])) No_sel3["FF_Coherent"] <- 0
-if(is.na(No_sel3["FF_Incoherent"])) No_sel3["FF_Incoherent"] <- 0
-Sel3 <- coherence_count(topo.sel3, cutoff.max = 3, cutoff.min = 1)
-if(is.na(Sel3["No_FF"])) Sel3["No_FF"] <- 0
-if(is.na(Sel3["FF_Coherent"])) Sel3["FF_Coherent"] <- 0
-if(is.na(Sel3["FF_Incoherent"])) Sel3["FF_Incoherent"] <- 0
-
-
-l <- list("Anticor3"=Anticor3, "Corr3"=Corr3, "No_sel3"=No_sel3, "Sel3"=Sel3)
-df.coherence <- do.call(rbind, lapply(l, function(row) row[order(names(row))]))
-
-
-
-pdf("figures/FFL_distrib_3g.pdf", width=4, height=4)
-layout(matrix(c(1), 1, 1, byrow = TRUE))
-par(mar=c(2, 2, 2, 2), mgp = c(1.75, 0.75, 0), las=0)
-barplot(t(df.coherence)*100/300, col=c(7,3,"grey"))
-legend("bottomleft", box.lty=0,  bg="transparent", fill=c(7,3,"grey"),
-       legend=c("Coherent FFL", "Incoherent FFL", "No FFL"))
-dev.off()
-
-
-
 #####
 
-Anticor3 <- c.count(topo.anticor3, cutoff.max = 3, cutoff.min = 1, randomFF=TRUE)
-Corr3 <- c.count(topo.corr3, cutoff.max = 3, cutoff.min = 1, randomFF=TRUE)
-No_sel3 <- c.count(topo.no_sel3, cutoff.max = 3, cutoff.min = 1, target = 2, randomFF=TRUE) #
-Sel3 <- c.count(topo.sel3, cutoff.max = 3, cutoff.min = 1, randomFF=TRUE)
+Anticor3 <- c.count(topo.anticor3, cutoff.max = 3, cutoff.min = 1, randomFF=FALSE)
+Corr3 <- c.count(topo.corr3, cutoff.max = 3, cutoff.min = 1, randomFF=FALSE)
+No_sel3 <- c.count(topo.no_sel3, cutoff.max = 3, cutoff.min = 1, target = 2, randomFF=FALSE) #
+Sel3 <- c.count(topo.sel3, cutoff.max = 3, cutoff.min = 1, randomFF=FALSE)
 
 df <- rbind(colSums(Anticor3), colSums(Corr3), colSums(No_sel3), colSums(Sel3))
 rownames(df) <- c("Anticor3", "Corr3", "No_sel3", "Sel3")
@@ -141,3 +106,36 @@ layout(matrix(c(1:1), 1, 1, byrow = TRUE))
 barplot(t(df[,1:3])*100/300, col=c(7,3,"grey"))
 legend("bottomleft", box.lty=0,  bg="transparent", fill=c(7,3,"grey"),
        legend=c("Coherent FFl", "Incoherent FFL","No FFL"))
+
+#####
+
+#####
+
+Anticor3 <- homog.count(topo.anticor3, cutoff.max = 3, cutoff.min = 1, randomFF=FALSE)
+Corr3 <- homog.count(topo.corr3, cutoff.max = 3, cutoff.min = 1, randomFF=FALSE)
+No_sel3 <- homog.count(topo.no_sel3, cutoff.max = 3, cutoff.min = 1, target = 2, randomFF=FALSE) #
+Sel3 <- homog.count(topo.sel3, cutoff.max = 3, cutoff.min = 1, randomFF=FALSE)
+
+df <- rbind(colSums(Anticor3), colSums(Corr3), colSums(No_sel3), colSums(Sel3))
+rownames(df) <- c("Anticor3", "Corr3", "No_sel3", "Sel3")
+
+layout(matrix(c(1:1), 1, 1, byrow = TRUE))
+
+barplot(t(df[,1:3])*100/300, col=c(7,3,"grey"))
+legend("bottomleft", box.lty=0,  bg="transparent", fill=c(7,3,"grey"),
+       legend=c("Coherent FFl", "Incoherent FFL","No FFL"))
+
+#####
+
+
+
+
+
+
+
+
+
+
+
+
+

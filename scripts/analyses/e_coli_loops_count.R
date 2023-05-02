@@ -33,10 +33,10 @@ phgenes <- read.table("e_coli/Plast_genes/Ph/plastic_genes.txt", sep ="\t", head
 phgenes <- phgenes[(phgenes[,1] %in% colnames(E_coli_mat)),] 
 
 phloops <- mclapply(phgenes, function(gene) {
-  cc <- c.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, randomFF=FALSE, target = which(colnames(E_coli_mat)==gene))
+  cc <- loops_n.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = which(colnames(E_coli_mat)==gene))
   return(cc)
-}, mc.cores = 4)
-write.csv(rbindlist(phloops), "scripts/data/ph_plast_ffloops.csv")
+},mc.cores=20)
+write.csv(rbindlist(phloops), "scripts/data/ph_plast_nloops.csv")
 
 ########################################
 ##Medium of growth
@@ -49,17 +49,17 @@ non_envir_genes <- read.csv("e_coli/Plast_genes/Growth_envir/Supp_tables_S3.csv"
 non_envir_genes <- non_envir_genes[(non_envir_genes[,1] %in% colnames(E_coli_mat)),1] 
 
 plast_medgrowthloops <- mclapply(medgrowth_genes, function(gene) {
-  cc <- c.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, randomFF=FALSE, target = which(colnames(E_coli_mat)==gene))
+  cc <- loops_n.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = which(colnames(E_coli_mat)==gene))
   return(cc)
 }, mc.cores = 50)
-write.csv(rbindlist(plast_medgrowthloops), "scripts/data/plast_medium_growth_ffloops.csv")
+write.csv(rbindlist(plast_medgrowthloops), "scripts/data/plast_medium_growth_nloops.csv")
 
 #Non plastic genes (expression depending on strains and not on tested environment)
 np_medgrowthloops <- mclapply(non_envir_genes, function(gene) {
-  cc <- c.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, randomFF=FALSE, target = which(colnames(E_coli_mat)==gene))
+  cc <- loops_n.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = which(colnames(E_coli_mat)==gene))
   return(cc)
 }, mc.cores = 50)
-write.csv(rbindlist(np_medgrowthloops), "scripts/data/np_medium_growth_ffloops.csv")
+write.csv(rbindlist(np_medgrowthloops), "scripts/data/np_medium_growth_nloops.csv")
 
 
 ########################################
@@ -69,10 +69,10 @@ mg_c_genes <- as.data.frame(unique(subset(read.csv("e_coli/Plast_genes/C_Mg_Na/4
 mg_c_genes <- mg_c_genes[(mg_c_genes[,1] %in% colnames(E_coli_mat)),] 
 
 plast_mg_c <- mclapply(mg_c_genes, function(gene) {
-  cc <- c.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, randomFF=FALSE, target = which(colnames(E_coli_mat)==gene))
+  cc <- loops_n.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = which(colnames(E_coli_mat)==gene))
   return(cc)
 }, mc.cores = 50)
-write.csv(rbindlist(plast_mg_c), "scripts/data/plast_mg_c_ffloops.csv")
+write.csv(rbindlist(plast_mg_c), "scripts/data/plast_mg_c_nloops.csv")
 
 ########################################
 #10.1128/AEM.00914-09
@@ -81,10 +81,10 @@ ox_genes <- read.csv("e_coli/Plast_genes/Oxydative_stress/table_5_genes_updated_
 ox_genes <- ox_genes[(ox_genes[,1] %in% colnames(E_coli_mat)),] 
 
 plast_ox <- mclapply(ox_genes, function(gene) {
-  cc <- c.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, randomFF=FALSE, target = which(colnames(E_coli_mat)==gene))
+  cc <- loops_n.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = which(colnames(E_coli_mat)==gene))
   return(cc)
 }, mc.cores = 50)
-write.csv(rbindlist(plast_ox), "scripts/data/plast_ox_ffloops.csv")
+write.csv(rbindlist(plast_ox), "scripts/data/plast_ox_nloops.csv")
 
 ########################################
 #10.1007/s00253-018-9083-5
@@ -93,10 +93,10 @@ aero_genes <- read.table("e_coli/Plast_genes/Aero_liquid/Table_2_3_4.txt", sep =
 aero_genes <- aero_genes[(aero_genes[,1] %in% colnames(E_coli_mat)),] 
 
 plast_aero <- mclapply(aero_genes, function(gene) {
-  cc <- c.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, randomFF=FALSE, target = which(colnames(E_coli_mat)==gene))
+  cc <- loops_n.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = which(colnames(E_coli_mat)==gene))
   return(cc)
 }, mc.cores = 50)
-write.csv(rbindlist(plast_aero), "scripts/data/plast_aero_ffloops.csv")
+write.csv(rbindlist(plast_aero), "scripts/data/plast_aero_nloops.csv")
 
 ########################################
 #10.1128/AEM.02841-08
@@ -105,10 +105,10 @@ juice_genes <- read.table("e_coli/Plast_genes/apple_juice/Table_1_genes_updated_
 juice_genes <- juice_genes[(juice_genes[,1] %in% colnames(E_coli_mat)),] 
 
 plast_juice <- mclapply(juice_genes, function(gene) {
-  cc <- c.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, randomFF=FALSE, target = which(colnames(E_coli_mat)==gene))
+  cc <- loops_n.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = which(colnames(E_coli_mat)==gene))
   return(cc)
 }, mc.cores = 50)
-write.csv(rbindlist(plast_juice), "scripts/data/plast_juice_ffloops.csv")
+write.csv(rbindlist(plast_juice), "scripts/data/plast_juice_nloops.csv")
 
 ########################################
 #10.1128/JB.01929-06
@@ -117,10 +117,10 @@ temptr_genes <- read.table("e_coli/Plast_genes/human_temp/Table_1_genes_updated_
 temptr_genes <- temptr_genes[(temptr_genes[,1] %in% colnames(E_coli_mat)),] 
 
 plast_temptr <- mclapply(temptr_genes, function(gene) {
-  cc <- c.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, randomFF=FALSE, target = which(colnames(E_coli_mat)==gene))
+  cc <- loops_n.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = which(colnames(E_coli_mat)==gene))
   return(cc)
 }, mc.cores = 50)
-write.csv(rbindlist(plast_temptr), "scripts/data/plast_temptr_ffloops.csv")
+write.csv(rbindlist(plast_temptr), "scripts/data/plast_temptr_nloops.csv")
 
 ########################################
 #10.1038/s41598-022-12463-3
@@ -129,10 +129,10 @@ stringent_genes <- as.data.frame(unique(read.table("e_coli/Plast_genes/Stringent
 stringent_genes <- stringent_genes[(stringent_genes[,1] %in% colnames(E_coli_mat)),] 
 
 plast_stringent <- mclapply(stringent_genes, function(gene) {
-  cc <- c.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, randomFF=FALSE, target = which(colnames(E_coli_mat)==gene))
+  cc <- loops_n.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = which(colnames(E_coli_mat)==gene))
   return(cc)
 }, mc.cores = 50)
-write.csv(rbindlist(plast_stringent), "scripts/data/plast_stringent_ffloops.csv")
+write.csv(rbindlist(plast_stringent), "scripts/data/plast_stringent_nloops.csv")
 
 ########################################
 #10.1128/JB.01092-07
@@ -145,42 +145,41 @@ stress_genes <- as.data.frame(unique(c(subset(read.csv("e_coli/Plast_genes/Mult_
 stress_genes <- stress_genes[(stress_genes[,1] %in% colnames(E_coli_mat)),] 
 
 plast_stress <- mclapply(stress_genes, function(gene) {
-  cc <- c.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, randomFF=FALSE, target = which(colnames(E_coli_mat)==gene))
+  cc <- loops_n.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = which(colnames(E_coli_mat)==gene))
   return(cc)
 }, mc.cores = 50)
-write.csv(rbindlist(plast_stress), "scripts/data/plast_stress_ffloops.csv")
-
+write.csv(rbindlist(plast_stress), "scripts/data/plast_stress_nloops.csv")
 
 ########################################
 #Every plastic genes
-plast_genes <- unique(c(mg_c_genes,medgrowth_genes,phgenes,ox_genes,aero_genes,juice_genes,temptr_genes))
+plast_genes <- unique(c(mg_c_genes,medgrowth_genes,phgenes$V1,ox_genes,aero_genes,juice_genes,temptr_genes))
 
 plast_ffloops <- mclapply(plast_genes, function(gene) {
   cc <- c.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, randomFF=FALSE, target = which(colnames(E_coli_mat)==gene))
   return(cc)
 }, mc.cores = 100)
-write.csv(rbindlist(nonplast_ffloops), "scripts/data/plast_genes_ffloops.csv")
+write.csv(rbindlist(plast_ffloops), "scripts/data/plast_genes_ffloops.csv")
 
 ########################################
 #Genes that were not find as responding to the environment in our data corpus
 non_plast_genes <- as.data.frame(colnames(E_coli_mat))
-nonplast_genes <- non_plast_genes[!(non_plast_genes[,1] %in% c(mg_c_genes,medgrowth_genes,phgenes,ox_genes,aero_genes,juice_genes,temptr_genes)),]
+nonplast_genes <- non_plast_genes[!(non_plast_genes[,1] %in% c(mg_c_genes,medgrowth_genes,phgenes$V1,ox_genes,aero_genes,juice_genes,temptr_genes)),]
 
-nonplast_ffloops <- mclapply(nonplast_genes, function(gene) {
-  cc <- c.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, randomFF=FALSE, target = which(colnames(E_coli_mat)==gene))
+nonplast_nloops <- mclapply(nonplast_genes, function(gene) {
+  cc <- loops_n.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = which(colnames(E_coli_mat)==gene))
   return(cc)
 }, mc.cores = 50)
-write.csv(rbindlist(nonplast_ffloops), "scripts/data/nonplast_ffloops.csv")
+write.csv(rbindlist(nonplast_nloops), "scripts/data/nonplast_nloops.csv")
 
 
 ########################################
 #Control : every genes
 
-all_ffloops <- mclapply(colnames(E_coli_mat), function(gene) {
-  cc <- c.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, randomFF=FALSE, target = which(colnames(E_coli_mat)==gene))
+all_nloops <- mclapply(colnames(E_coli_mat), function(gene) {
+  cc <- loops_n.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = which(colnames(E_coli_mat)==gene))
   return(cc)
 }, mc.cores = 100)
-write.csv(rbindlist(nonplast_ffloops), "scripts/data/all_genes_ffloops.csv")
+write.csv(rbindlist(nonplast_nloops), "scripts/data/all_genes_nloops.csv")
 
 
 

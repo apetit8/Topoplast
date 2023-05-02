@@ -62,9 +62,8 @@ feedforward.to <- function(graph, to, cutoff.max = -1, cutoff.min = 1) {
 #Loop and loop coherence count
 c.count <- function(list.w, cutoff.max=3, cutoff.min=1, target=2, randomFF=FALSE){
   df <- data.frame(Coherent=c(rep(0, length(list.w))), Incoherent=c(rep(0, length(list.w))), No_loop=c(rep(0, length(list.w))), Loop=c(rep(0, length(list.w))))
-  i <- 1
   for(i in 1:length(list.w)){
-    g <- graph.adjacency(t(list.w[[i]]), mode="directed")
+    g <- graph.adjacency(t(list.w[[i]]), weighted = TRUE)
     E(g)$sign <- (list.w[[i]])[list.w[[i]] != 0] #signs ; does not work with signed=TRUE because of the negative values. 
     if(is.null(feedforward.to(g, to=target, cutoff.max=cutoff.max, cutoff.min=cutoff.min))){
       df[i,3] <- 1  } else{
@@ -93,7 +92,7 @@ homog.count <- function(list.w, cutoff.max=3, cutoff.min=1, target=2, randomFF=F
   df <- data.frame(Heterogenous=c(rep(0, length(list.w))), Homogenous=c(rep(0, length(list.w))), No_loop=c(rep(0, length(list.w))), Loop=c(rep(0, length(list.w))))
   i <- 1
   for(i in 1:length(list.w)){
-    g <- graph.adjacency(t(list.w[[i]]), mode="directed")
+    g <- graph.adjacency(t(list.w[[i]]), weighted = TRUE)
     E(g)$sign <- (list.w[[i]])[list.w[[i]] != 0] #signs ; does not work with signed=TRUE because of the negative values. 
     if(is.null(feedforward.to(g, to=target, cutoff.max=cutoff.max, cutoff.min=cutoff.min))){
       df[i,3] <- 1  } else{
@@ -123,7 +122,7 @@ loops_n.count <- function(list.w, cutoff.max=3, cutoff.min=1, target=2){
   df <- data.frame(Loop_number=c(rep(0, length(list.w))), No_loop=c(rep(0, length(list.w))), Loop=c(rep(0, length(list.w))))
   i <- 1
   for(i in 1:length(list.w)){
-    g <- graph.adjacency(t(list.w[[i]]), mode="directed")
+    g <- graph.adjacency(t(list.w[[i]]), weighted = TRUE)
     E(g)$sign <- (list.w[[i]])[list.w[[i]] != 0] #signs ; does not work with signed=TRUE because of the negative values. 
     if(is.null(feedforward.to(g, to=target, cutoff.max=cutoff.max, cutoff.min=cutoff.min))){
       df[i,2] <- 1  } else{
@@ -133,3 +132,4 @@ loops_n.count <- function(list.w, cutoff.max=3, cutoff.min=1, target=2){
       }}
   return(df)
 }
+
