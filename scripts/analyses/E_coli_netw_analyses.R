@@ -3,12 +3,13 @@ source("scripts/functions/detectloops.R")
 #########################################
 #Genetic data
 ec_cyc <- read.csv("e_coli/ECOLI-regulatory-network_cyc_editd.csv") #List of regulations from Ecocyc
-ec_genes <- read.csv("e_coli/All-genes-of-E.-coli-K-12-substr.-MG1655---GO.csv", sep ="\t") #List of E coli genes from Ecocyc
+ec_genes <- read.csv("e_coli/ncbi_dataset_K-12_annotation.csv", sep ="\t") #List of E coli genes from Ecocyc
 
 #Adding non-regulated genes in regulation data
-nonreg_genes <- as.data.frame(ec_genes[!(ec_genes[,1] %in% ec_cyc[,1]),])
-nonreg_genes <- nonreg_genes[!(nonreg_genes[,1] %in% ec_cyc[,2]),] #1704 genes that are non-regulated
-nr <- as.data.frame(cbind(nonreg_genes[,1],nonreg_genes[,1], rep(0, length(nonreg_genes)))) #Same file format as ec_cyc
+nonreg_genes <- as.data.frame(ec_genes[!(ec_genes[,2] %in% ec_cyc[,1]),]) #Regulators
+nonreg_genes <- nonreg_genes[!(nonreg_genes[,2] %in% ec_cyc[,2]),] #Regulatees
+#1639 genes that are non-regulated
+nr <- as.data.frame(cbind(nonreg_genes[,2],nonreg_genes[,2], rep(0, nrow(nonreg_genes)))) #Same file format as ec_cyc
 setnames(nr, 1:3, colnames(ec_cyc))
 ec_reg_full <- rbind(ec_cyc, nr) #Reg file with every genes
 ##########
@@ -159,7 +160,7 @@ plast_ffloops <- mclapply(plast_genes, function(gene) {
   cc <- c.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, randomFF=FALSE, target = which(colnames(E_coli_mat)==gene))
   return(cc)
 }, mc.cores = 100)
-write.csv(rbindlist(nonplast_ffloops), "scripts/data/plast_genes_ffloops.csv")
+write.csv(rbindlist(plast_ffloops), "scripts/data/plast_genes_ffloops.csv")
 
 ########################################
 #Genes that were not find as responding to the environment in our data corpus

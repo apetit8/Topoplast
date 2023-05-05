@@ -13,9 +13,8 @@ my_all_simple_paths <- function(graph, from, to=igraph::V(graph), mode=c("out", 
 }}
 
 feedback.from.to <- function(graph, from, to, cutoff = -1) {
-	path.from <- my_all_simple_paths(graph=graph, from=from[1], to=to[1], mode="out", cutoff=cutoff-1)
-	path.to   <- my_all_simple_paths(graph=graph, from=to[1], to=from[1], mode="out", cutoff=cutoff-1)
-	
+  path.from <- my_all_simple_paths(graph=graph, from=from[1], to=to[1], mode="out", cutoff=cutoff)
+	path.to   <- my_all_simple_paths(graph=graph, from=to[1], to=from[1], mode="out", cutoff=cutoff)
 	if (length(path.from) == 0 || length(path.to) == 0)
 		return(NULL)
 	ee <- expand.grid(seq_along(path.from), seq_along(path.to))
@@ -24,14 +23,14 @@ feedback.from.to <- function(graph, from, to, cutoff = -1) {
 		ans <- ans[sapply(ans, length) <= cutoff]
 	if (length(ans) > 0) 	# Remove answers with duplcated nodes (beyond "from")
 		ans <- ans[sapply(ans, function(x) sum(duplicated(x)) == 1)]
-	ans
+	return(ans)
 }
 
 feedback.from <- function(graph, from, cutoff = -1) {
-	ans <- do.call(c, lapply(igraph::V(g), feedback.from.to, graph=graph, from=from, cutoff=cutoff))
+	ans <- do.call(c, lapply(igraph::V(graph), feedback.from.to, graph=graph, from=from, cutoff=cutoff))
 		# Remove duplicated path -- this is a trick, because unique() does not work for lists
 	ans <- ans[!duplicated(sapply(ans, paste0, collapse="-"))]
-	ans
+	return(ans)
 }
 
 feedforward.from.to <- function(graph, from, to, cutoff.max = -1, cutoff.min = 1) {
@@ -108,8 +107,10 @@ homog.count <- function(list.w, cutoff.max=3, cutoff.min=1, target=2, randomFF=F
           for(n in ff) {
             reg1 <- prod(E(g, path=n[[1]])$sign) #When regulations are heterogeneous, the product is -1
             reg2 <- prod(E(g, path=n[[2]])$sign) 
-            df[i,1] <- df[i,1] + ifelse(reg1==-1 || reg2==-1, 1/length(ff), 0)
-            df[i,2] <- df[i,2] + ifelse(reg1==1 && reg2==1, 1/length(ff), 0)
+            # df[i,1] <- df[i,1] + ifelse(reg1==-1 || reg2==-1, 1/length(ff), 0)
+            # df[i,2] <- df[i,2] + ifelse(reg1==1 && reg2==1, 1/length(ff), 0)
+            df[i,1] <- df[i,1] + ifelse(reg1*reg2==-1, 1/length(ff), 0)
+            df[i,2] <- df[i,2] + ifelse(reg1*reg2==1, 1/length(ff), 0)
           }}
       }}
   return(df)
@@ -132,4 +133,53 @@ loops_n.count <- function(list.w, cutoff.max=3, cutoff.min=1, target=2){
       }}
   return(df)
 }
+
+
+#Count number of feedbackloop for each gene
+FBL_n.count <- function(list.w, cutoff=2, target=2){
+  df <- data.frame(FBL_number=c(rep(0, length(list.w))), No_FBL=c(rep(0, length(list.w))), FBL=c(rep(0, length(list.w))))
+  i <- 1
+  for(i in 1:length(list.w)){
+    g <- graph.adjacency(t(list.w[[i]]), weighted = TRUE)
+    E(g)$sign <- (list.w[[i]])[list.w[[i]] != 0] #signs ; does not work with signed=TRUE because of the negative values. 
+    if(is.null(feedback.from(g, from=target, cutoff=cutoff))){
+      df[i,2] <- 1  } else{
+        df[i,3] <- 1
+        ff <- feedback.from(g, from=target, cutoff=cutoff)
+        df[i,1] <- length(ff)
+      }}
+  return(df)
+}
+
+
+
+#FBL and FBL homogeneity count
+FBL.type <- function(list.w, cutoff=3, target=2, randomFF=FALSE){
+  df <- data.frame(Inhibiting=c(rep(0, length(list.w))), Activating=c(rep(0, length(list.w))), No_FBL=c(rep(0, length(list.w))), FBL=c(rep(0, length(list.w))))
+  i <- 1
+  for(i in 1:length(list.w)){
+    g <- graph.adjacency(t(list.w[[i]]), weighted = TRUE)
+    E(g)$sign <- (list.w[[i]])[list.w[[i]] != 0] #signs ; does not work with signed=TRUE because of the negative values. 
+    if(length(feedback.from(g, from=target, cutoff=cutoff))==0){
+      df[i,3] <- 1  } else{
+        df[i,4] <- 1
+        ff <- feedback.from(g, from=target, cutoff=cutoff)
+        if(randomFF==TRUE){
+          nn <- ff[[sample(length(ff),1)]]
+          reg1 <- E(g, path=nn)$sign #When regulations are heterogeneous, the product is -1
+          df[i,1] <- df[i,1] + ifelse(reg1[1]==-1, 1, 0)
+          df[i,2] <- df[i,2] + ifelse(reg1[1]==1, 1, 0)
+        }else{
+          for(nn in 1:length(ff)) {
+            reg1 <- E(g, path=ff[[nn]])$sign #When regulations are heterogeneous, the product is -1
+            df[i,1] <- df[i,1] + ifelse(reg1[1]==-1, 1/length(ff), 0)
+            df[i,2] <- df[i,2] + ifelse(reg1[1]==1, 1/length(ff), 0)
+          }}
+      }}
+  return(df)
+}
+
+
+
+
 

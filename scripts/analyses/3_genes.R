@@ -6,20 +6,13 @@ genes <- 3
 min <- 0.15
 max <- 0.85
 target <- 2 # Target gene in the network
-pdfname <- "figures/3g.pdf"
+pdfname <- "figures/3g"
 #####################
 #DATA
 ##################
 df.3 <- df.simul(sims.dirs1, all.gen = TRUE)
 df.3$envir <- str_split(df.3$data.dir, "/", n=8, simplify = TRUE)[,3]
 df.3$anc_id <- str_split(str_split(df.3$data.dir, "/", n=8, simplify = TRUE)[,4], "-", simplify = TRUE)[,2]
-
-
-#Add Slope
-for (i in 1:nrow(df.3)) {
-  W <- t(matrix(as.numeric(df.3[i,7:(genes^2+6)]), ncol = genes))
-  df.3[i,(genes^2+9)] <- getSlope.ALR(W=W, n.env=21, target.gene=target, min=min, max=max, a=0.5)
-}
 
 
 ################################################################################
@@ -41,33 +34,13 @@ topo.no_sel3 <- essential.topo(df=subset(df.3, Gen==max(df.3$Gen) & envir=="Cont
 topo.sel3 <- essential.topo(df=subset(df.3, Gen==max(df.3$Gen) & envir=="Control_sel"),
                            treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3))
 
-core.sel3 <- core_topo.alt(topo.sel3)
-core.anticor3 <- core_topo.alt(topo.anticor3)
-core.corr3 <- core_topo.alt(topo.corr3)
-core.no_sel3 <- core_topo.alt(topo.no_sel3)
-
-pdf(pdfname, width=6, height=6)
-layout(matrix(c(1:4), 2, 2, byrow = TRUE))
-  par(mar=c(2, 2, 2, 2), mgp = c(1.75, 0.75, 0), las=0)
-  #
-  plot(core.anticor3, layout=layout_in_circle, edge.color=ifelse(E(core.anticor3)$weight > .8, "black",ifelse(E(core.anticor3)$weight < -.8, "red","grey")), vertex.size=30, main="Anticor", vertex.color=c("green","orange", "yellow"))
-  #
-  plot(core.corr3, layout=layout_in_circle, edge.color=ifelse(E(core.corr3)$weight > .8, "black",ifelse(E(core.corr3)$weight < -.8, "red","grey")), vertex.size=30, main="Corr", vertex.color=c("green","orange", "yellow"))
-  # 
-  plot(core.no_sel3, layout=layout_in_circle, edge.color=ifelse(E(core.no_sel3)$weight > .8, "black",ifelse(E(core.no_sel3)$weight < -.8, "red","grey")), vertex.size=30, main="No_sel", vertex.color=c("green","orange", "yellow"))
-  #
-  plot(core.sel3, layout=layout_in_circle, edge.color=ifelse(E(core.sel3)$weight > .8, "black",ifelse(E(core.sel3)$weight < -.8, "red","grey")), vertex.size=30, main="Sel", vertex.color=c("green","orange", "yellow"))
-  # 
-dev.off()
-
-
-pdf("figures/3g_anticorr.pdf", width=6, height=6)
+pdf("figures/3g_sel.pdf", width=6, height=6)
 layout(matrix(c(1:9), 3, 3, byrow = TRUE))
 par(mar=c(0.5, 0.5, 1, 0), mgp = c(1.75, 0.75, 0), las=0)
 j<-1
-for (i in unique(topo.anticor3)) {
-  mainT <- length(which(sapply(1:length(topo.anticor3),function(x) length(which(paste0(topo.anticor3[[x]],
-            collapse = "") == paste0(unique(topo.anticor3)[[j]], collapse = "")))) == 1))/length(topo.anticor3)*100
+for (i in unique(topo.sel3)) {
+  mainT <- length(which(sapply(1:length(topo.sel3),function(x) length(which(paste0(topo.sel3[[x]],
+                                                                                       collapse = "") == paste0(unique(topo.sel3)[[j]], collapse = "")))) == 1))/length(topo.sel3)*100
   #W matrix as a graph :
   G <- as.directed(graph.adjacency(t(i), weighted = T))
   V(G)$color <- c("green","orange", "yellow", "yellow")
@@ -75,13 +48,14 @@ for (i in unique(topo.anticor3)) {
   j <- j+1
 }
 dev.off()
-pdf("figures/3g_cor.pdf", width=6, height=6)
+
+pdf("figures/3g_corr.pdf", width=6, height=6)
 layout(matrix(c(1:9), 3, 3, byrow = TRUE))
 par(mar=c(0.5, 0.5, 1, 0), mgp = c(1.75, 0.75, 0), las=0)
 j<-1
 for (i in unique(topo.corr3)) {
   mainT <- length(which(sapply(1:length(topo.corr3),function(x) length(which(paste0(topo.corr3[[x]],
-                                                                                       collapse = "") == paste0(unique(topo.corr3)[[j]], collapse = "")))) == 1))/length(topo.corr3)*100
+                                                                                   collapse = "") == paste0(unique(topo.corr3)[[j]], collapse = "")))) == 1))/length(topo.corr3)*100
   #W matrix as a graph :
   G <- as.directed(graph.adjacency(t(i), weighted = T))
   V(G)$color <- c("green","orange", "yellow", "yellow")
@@ -90,52 +64,104 @@ for (i in unique(topo.corr3)) {
 }
 dev.off()
 
+################
+cutoff.max <- 3
+cutoff.min <- 1
+##### Loop count
+Anticor3_n <- loops_n.count(topo.anticor3, cutoff.max = cutoff.max, cutoff.min = cutoff.min)
+Corr3_n <- loops_n.count(topo.corr3, cutoff.max = cutoff.max, cutoff.min = cutoff.min)
+No_sel3_n <- loops_n.count(topo.no_sel3, cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = 2) #
+Sel3_n <- loops_n.count(topo.sel3, cutoff.max = cutoff.max, cutoff.min = cutoff.min)
 
-#####
+pdf(paste0(pdfname,"_N_FFL",".pdf"))
+layout(matrix(c(1:4), 2, 2, byrow = TRUE))
+hist(Anticor3_n$Loop_number, main = "Anticor Plast", ylim = c(0, 300))
+hist(Corr3_n$Loop_number, main = "Cor Plast", ylim = c(0, 300))
+hist(No_sel3_n$Loop_number, main = "No Sel", ylim = c(0, 300))
+hist(Sel3_n$Loop_number, main = "Sel Stable", ylim = c(0, 300))
+dev.off()
 
-Anticor3 <- c.count(topo.anticor3, cutoff.max = 3, cutoff.min = 1, randomFF=FALSE)
-Corr3 <- c.count(topo.corr3, cutoff.max = 3, cutoff.min = 1, randomFF=FALSE)
-No_sel3 <- c.count(topo.no_sel3, cutoff.max = 3, cutoff.min = 1, target = 2, randomFF=FALSE) #
-Sel3 <- c.count(topo.sel3, cutoff.max = 3, cutoff.min = 1, randomFF=FALSE)
-
-df <- rbind(colSums(Anticor3), colSums(Corr3), colSums(No_sel3), colSums(Sel3))
-rownames(df) <- c("Anticor3", "Corr3", "No_sel3", "Sel3")
-
-layout(matrix(c(1:1), 1, 1, byrow = TRUE))
-
-barplot(t(df[,1:3])*100/300, col=c(7,3,"grey"))
-legend("bottomleft", box.lty=0,  bg="transparent", fill=c(7,3,"grey"),
-       legend=c("Coherent FFl", "Incoherent FFL","No FFL"))
-
-#####
-
-#####
-
-Anticor3 <- homog.count(topo.anticor3, cutoff.max = 3, cutoff.min = 1, randomFF=FALSE)
-Corr3 <- homog.count(topo.corr3, cutoff.max = 3, cutoff.min = 1, randomFF=FALSE)
-No_sel3 <- homog.count(topo.no_sel3, cutoff.max = 3, cutoff.min = 1, target = 2, randomFF=FALSE) #
-Sel3 <- homog.count(topo.sel3, cutoff.max = 3, cutoff.min = 1, randomFF=FALSE)
+################
+##### Coherence
+Anticor3 <- c.count(topo.anticor3, cutoff.max = cutoff.max, cutoff.min = cutoff.min, randomFF=TRUE)
+Corr3 <- c.count(topo.corr3, cutoff.max = cutoff.max, cutoff.min = cutoff.min, randomFF=TRUE)
+No_sel3 <- c.count(topo.no_sel3, cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = 2, randomFF=TRUE) #
+Sel3 <- c.count(topo.sel3, cutoff.max = cutoff.max, cutoff.min = cutoff.min, randomFF=TRUE)
 
 df <- rbind(colSums(Anticor3), colSums(Corr3), colSums(No_sel3), colSums(Sel3))
 rownames(df) <- c("Anticor3", "Corr3", "No_sel3", "Sel3")
 
+pdf(paste0(pdfname,"_coherence_FFL",".pdf"), width=6.5, height=6)
 layout(matrix(c(1:1), 1, 1, byrow = TRUE))
-
 barplot(t(df[,1:3])*100/300, col=c(7,3,"grey"))
 legend("bottomleft", box.lty=0,  bg="transparent", fill=c(7,3,"grey"),
-       legend=c("Coherent FFl", "Incoherent FFL","No FFL"))
-
-#####
-
+       legend=c("Coherent FFL", "Incoherent FFL","No Loop"))
+dev.off()
 
 
+################
+##### Homogeneity
+Anticor3 <- homog.count(topo.anticor3, cutoff.max = cutoff.max, cutoff.min = cutoff.min, randomFF=FALSE)
+Corr3 <- homog.count(topo.corr3, cutoff.max = cutoff.max, cutoff.min = cutoff.min, randomFF=FALSE)
+No_sel3 <- homog.count(topo.no_sel3, cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = 2, randomFF=FALSE) #
+Sel3 <- homog.count(topo.sel3, cutoff.max = cutoff.max, cutoff.min = cutoff.min, randomFF=FALSE)
+
+df <- rbind(colSums(Anticor3), colSums(Corr3), colSums(No_sel3), colSums(Sel3))
+rownames(df) <- c(paste0("Anticor\n m loop = ", round(mean(Anticor3_n$Loop_number), 1)),
+                  paste0("Corr\n m loop =  ", round(mean(Corr3_n$Loop_number), 1)),
+                  paste0("No_sel\n m loop =  ", round(mean(No_sel3_n$Loop_number), 1)),
+                  paste0("Sel\n m loop =  ", round(mean(Sel3_n$Loop_number), 1)))
+
+pdf(paste0(pdfname,"_homog_FFL",".pdf"), width=6.5, height=6)
+layout(matrix(c(1:1), 1, 1, byrow = TRUE))
+barplot(t(df[,1:3])*100/300, col=c(2,4,"grey"))
+legend("bottomleft", box.lty=0,  bg="transparent", fill=c(2,4,"grey"),
+       legend=c("Het FFL", "Hom FFL","No FFL"))
+dev.off()
 
 
+################################################################################
+#FEEDBACKS
+
+#Renforcing = same sign
+#Defusing = opposite sign
+
+################
+cutoff <- 3
+##### Loop count
+Anticor3_n <- FBL_n.count(topo.anticor3, cutoff = cutoff, target = 2)
+Corr3_n <- FBL_n.count(topo.corr3, cutoff = cutoff, target = 2)
+No_sel3_n <- FBL_n.count(topo.no_sel3, cutoff = cutoff, target = 2) #
+Sel3_n <- FBL_n.count(topo.sel3, cutoff = cutoff, target = 2)
+
+pdf(paste0(pdfname,"_N_FBL",".pdf"))
+layout(matrix(c(1:4), 2, 2, byrow = TRUE))
+hist(Anticor3_n$Loop_number, main = "Anticor Plast", ylim = c(0, 300))
+hist(Corr3_n$Loop_number, main = "Cor Plast", ylim = c(0, 300))
+hist(No_sel3_n$Loop_number, main = "No Sel", ylim = c(0, 300))
+hist(Sel3_n$Loop_number, main = "Sel Stable", ylim = c(0, 300))
+dev.off()
 
 
+################
+##### Type
+Anticor3 <- FBL.type(topo.anticor3, cutoff = cutoff, target = 2, randomFF=FALSE)
+Corr3 <- FBL.type(topo.corr3, cutoff = cutoff, target = 2, randomFF=FALSE)
+No_sel3 <- FBL.type(topo.no_sel3, cutoff = cutoff, target = 2, randomFF=FALSE) #
+Sel3 <- FBL.type(topo.sel3, cutoff = cutoff, target = 2, randomFF=FALSE)
 
+df <- rbind(colSums(Anticor3), colSums(Corr3), colSums(No_sel3), colSums(Sel3))
+rownames(df) <- c(paste0("Anticor\n m loop = ", round(mean(Anticor3_n$FBL_number), 1)),
+                  paste0("Corr\n m loop =  ", round(mean(Corr3_n$FBL_number), 1)),
+                  paste0("No_sel\n m loop =  ", round(mean(No_sel3_n$FBL_number), 1)),
+                  paste0("Sel\n m loop =  ", round(mean(Sel3_n$FBL_number), 1)))
 
-
+pdf(paste0(pdfname,"_type_FBL",".pdf"), width=6.5, height=6)
+layout(matrix(c(1:1), 1, 1, byrow = TRUE))
+barplot(t(df[,1:3])*100/300, col=c("sienna1","orchid3","grey"))
+legend("bottomleft", box.lty=0,  bg="transparent", fill=c("sienna1","orchid3","grey"),
+       legend=c("Defusing", "Renforcing FFL","No FFL"))
+dev.off()
 
 
 

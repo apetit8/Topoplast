@@ -179,7 +179,7 @@ all_nloops <- mclapply(colnames(E_coli_mat), function(gene) {
   cc <- loops_n.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = which(colnames(E_coli_mat)==gene))
   return(cc)
 }, mc.cores = 100)
-write.csv(rbindlist(nonplast_nloops), "scripts/data/all_genes_nloops.csv")
+write.csv(rbindlist(all_nloops), "scripts/data/all_genes_nloops.csv")
 
 
 
