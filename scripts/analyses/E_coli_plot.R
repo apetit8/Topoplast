@@ -1,7 +1,7 @@
 #Figures of E_coli Loop analyses
 source("scripts/functions/functions.R")
 
-all_genes <- read.csv("scripts/data/all_genes_ffloops.csv", sep = ",")[,2:5]
+all_genes <- read.csv("scripts/data/all_genes_FFL.csv", sep = ",")[,2:5]
 non_plast <- read.csv("scripts/data/nonplast_ffloops.csv", sep = ",")[,2:5]
 all_plast <- read.csv("scripts/data/plast_genes_ffloops.csv", sep = ",")[,2:5]
 np_medgrowthloops <- read.csv("scripts/data/np_medium_growth_ffloops.csv", sep = ",")[,2:5]

@@ -53,13 +53,14 @@ feedforward.from.to <- function(graph, from, to, cutoff.max = -1, cutoff.min = 1
 }
 
 feedforward.to <- function(graph, to, cutoff.max = -1, cutoff.min = 1) {
+  #test <- feedforward.from.to(graph=graph, V(graph), to=to, cutoff.max=cutoff.max, cutoff.min=cutoff.min)
 	ans <- unlist(lapply(V(graph), feedforward.from.to, graph=graph, to=to, cutoff.max=cutoff.max, cutoff.min=cutoff.min), recursive=FALSE)
 }
 
 
 
 #Loop and loop coherence count
-c.count <- function(list.w, cutoff.max=3, cutoff.min=1, target=2, randomFF=FALSE){
+FFL.coherence <- function(list.w, cutoff.max=3, cutoff.min=1, target=2, randomFF=FALSE){
   df <- data.frame(Coherent=c(rep(0, length(list.w))), Incoherent=c(rep(0, length(list.w))), No_loop=c(rep(0, length(list.w))), Loop=c(rep(0, length(list.w))))
   for(i in 1:length(list.w)){
     g <- graph.adjacency(t(list.w[[i]]), weighted = TRUE)
@@ -160,10 +161,10 @@ FBL.type <- function(list.w, cutoff=3, target=2, randomFF=FALSE){
   for(i in 1:length(list.w)){
     g <- graph.adjacency(t(list.w[[i]]), weighted = TRUE)
     E(g)$sign <- (list.w[[i]])[list.w[[i]] != 0] #signs ; does not work with signed=TRUE because of the negative values. 
-    if(length(feedback.from(g, from=target, cutoff=cutoff))==0){
+    ff <- feedback.from(g, from=target, cutoff=cutoff)
+    if(length(ff)==0){
       df[i,3] <- 1  } else{
         df[i,4] <- 1
-        ff <- feedback.from(g, from=target, cutoff=cutoff)
         if(randomFF==TRUE){
           nn <- ff[[sample(length(ff),1)]]
           reg1 <- E(g, path=nn)$sign #When regulations are heterogeneous, the product is -1
