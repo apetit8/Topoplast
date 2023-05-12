@@ -6,7 +6,7 @@ ec_cyc <- read.csv("e_coli/ECOLI-regulatory-network_cyc_editd.csv") #List of reg
 ec_genes <- read.csv("e_coli/ncbi_dataset_K-12_annotation.csv", sep ="\t") #List of E coli genes from Ecocyc
 
 #Transcriptions factors
-TF_genes <- unique(ec_cyc[,1])
+TF_genes <- unique(ec_cyc[,1]) # Here, TF = all regulating genes from Ecocyc reg data
 #Adding non-regulated genes in regulation data
 nonreg_genes <- as.data.frame(ec_genes[!(ec_genes[,2] %in% ec_cyc[,1]),]) #Regulators
 nonreg_genes <- nonreg_genes[!(nonreg_genes[,2] %in% ec_cyc[,2]),] #Regulatees
@@ -20,6 +20,8 @@ E_coli_mat <- t((get.adjacency(g,sparse=FALSE, attr='V3'))) #t() to have regulat
 
 E_coli_mat <- matrix(as.numeric(E_coli_mat), ncol = ncol(E_coli_mat), dimnames = dimnames(E_coli_mat)) #convert to numeric matrix
 E_coli_mat[is.na(E_coli_mat)] <- 0 #fill NA to 0, mandatory for later analyses
+##########
+igraph_options(return.vs.es=F)
 #########################################
 #DEBUG
 # ff <- as.matrix(E_coli_mat[1:200,1:200])
@@ -39,7 +41,7 @@ cutoff.min <- 1
 phgenes <- read.table("e_coli/Plast_genes/Ph/plastic_genes.txt", sep ="\t", header=FALSE)
 phgenes <- phgenes[(phgenes[,1] %in% colnames(E_coli_mat)),] 
 
-phloops <- mclapply(phgenes, function(gene) {
+phloops <- mclapply(phgenes[1], function(gene) {
   #To avoid igraph::all_simple_paths to take days and weeks, we subset the regulatory networks. Only target genes and connected TFs are kept.
   gg <- induced.subgraph(g, vids = c(which(colnames(E_coli_mat)==gene), which(colnames(E_coli_mat)%in%TF_genes)) )
   E_coli_mat2 <- t((get.adjacency(gg, sparse=FALSE, attr='V3')))
@@ -50,7 +52,7 @@ phloops <- mclapply(phgenes, function(gene) {
   cc <- FFL.coherence(list(E_coli_mat3), cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = which(colnames(E_coli_mat3)==gene))
   # cc <- FFL.coherence(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, randomFF=FALSE, target = which(colnames(E_coli_mat)==gene))
   return(cc)
-}, mc.cores = 22)
+}, mc.cores = 1)
 write.csv(rbindlist(phloops), "scripts/data/ph_plast_FFL.csv")
 
 print("Ph done!")
@@ -75,6 +77,7 @@ plast_medgrowthloops <- mclapply(medgrowth_genes, function(gene) {
   return(cc)
 }, mc.cores = 50)
 write.csv(rbindlist(plast_medgrowthloops), "scripts/data/plast_medium_growth_FFL.csv")
+print("Medgrowth plastic genes done!")
 
 #Non plastic genes (expression depending on strains and not on tested environment)
 np_medgrowthloops <- mclapply(non_envir_genes, function(gene) {
@@ -89,7 +92,7 @@ np_medgrowthloops <- mclapply(non_envir_genes, function(gene) {
 }, mc.cores = 50)
 write.csv(rbindlist(np_medgrowthloops), "scripts/data/np_medium_growth_FFL.csv")
 
-print("Medgrowth done!")
+print("Medgrowth non plastic genes done!")
 ########################################
 #10.1038/srep45303
 #List of plastic genes for 3 different conditions: carbone source, Mg stress, Na+ stress

@@ -5,6 +5,8 @@ source("scripts/functions/detectloops.R")
 ec_cyc <- read.csv("e_coli/ECOLI-regulatory-network_cyc_editd.csv") #List of regulations from Ecocyc
 ec_genes <- read.csv("e_coli/ncbi_dataset_K-12_annotation.csv", sep ="\t") #List of E coli genes from Ecocyc
 
+#Transcriptions factors
+TF_genes <- unique(ec_cyc[,1]) # Here, TF = all regulating genes from Ecocyc reg data
 #Adding non-regulated genes in regulation data
 nonreg_genes <- as.data.frame(ec_genes[!(ec_genes[,2] %in% ec_cyc[,1]),]) #Regulators
 nonreg_genes <- nonreg_genes[!(nonreg_genes[,2] %in% ec_cyc[,2]),] #Regulatees
@@ -18,6 +20,8 @@ E_coli_mat <- t((get.adjacency(g,sparse=FALSE, attr='V3'))) #t() to have regulat
 
 E_coli_mat <- matrix(as.numeric(E_coli_mat), ncol = ncol(E_coli_mat), dimnames = dimnames(E_coli_mat)) #convert to numeric matrix
 E_coli_mat[is.na(E_coli_mat)] <- 0 #fill NA to 0, mandatory for later analyses
+##########
+igraph_options(return.vs.es=F)
 #########################################
 #
 #

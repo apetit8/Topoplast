@@ -58,13 +58,41 @@ feedforward.to <- function(graph, to, cutoff.max = -1, cutoff.min = 1) {
 }
 
 
+# 
+# #Loop and loop coherence count
+# FFL.coherence <- function(list.w, cutoff.max=3, cutoff.min=1, target=2, randomFF=FALSE){
+#   df <- data.frame(Coherent=c(rep(0, length(list.w))), Incoherent=c(rep(0, length(list.w))), No_loop=c(rep(0, length(list.w))), Loop=c(rep(0, length(list.w))))
+#   for(i in 1:length(list.w)){
+#     g <- graph.adjacency(t(list.w[[i]]), weighted = TRUE)
+#     #E(g)$sign <- (list.w[[i]])[list.w[[i]] != 0] #signs ; does not work with signed=TRUE because of the negative values. 
+#     if(is.null(feedforward.to(g, to=target, cutoff.max=cutoff.max, cutoff.min=cutoff.min))){
+#       df[i,3] <- 1  } else{
+#         df[i,4] <- 1
+#         ff <- feedforward.to(g, to=target, cutoff.max=cutoff.max, cutoff.min=cutoff.min)
+#         if(randomFF==TRUE){
+#           n <- ff[[sample(length(ff),1)]]
+#           reg1 <- E(g, path=n[[1]])$weight[length(E(g, path=n[[1]])$weight)] #Take the last weight since it's the x -> Target
+#           reg2 <- E(g, path=n[[2]])$weight[length(E(g, path=n[[2]])$weight)] #Take the last weight since it's the x -> Target
+#           df[i,1] <- df[i,1] + ifelse(reg1==reg2, 1, 0)
+#           df[i,2] <- df[i,2] + ifelse(reg1!=reg2, 1, 0)
+#         }else{
+#           for(n in ff) {
+#             reg1 <- E(g, path=n[[1]])$weight[length(E(g, path=n[[1]])$weight)] #Take the last weight since it's the x -> Target
+#             reg2 <- E(g, path=n[[2]])$weight[length(E(g, path=n[[2]])$weight)] #Take the last weight since it's the x -> Target
+#             df[i,1] <- df[i,1] + ifelse(reg1==reg2, 1/length(ff), 0)
+#             df[i,2] <- df[i,2] + ifelse(reg1!=reg2, 1/length(ff), 0)
+#           }}
+#       }}
+#   return(df)
+# }
 
-#Loop and loop coherence count
 FFL.coherence <- function(list.w, cutoff.max=3, cutoff.min=1, target=2, randomFF=FALSE){
   df <- data.frame(Coherent=c(rep(0, length(list.w))), Incoherent=c(rep(0, length(list.w))), No_loop=c(rep(0, length(list.w))), Loop=c(rep(0, length(list.w))))
+  i <- 1
   for(i in 1:length(list.w)){
-    g <- graph.adjacency(t(list.w[[i]]), weighted = TRUE)
+    g <- graph.adjacency(abs(t(list.w[[i]])), mode="directed") # abs(list.w[[i]]) mode="directed"
     E(g)$sign <- (list.w[[i]])[list.w[[i]] != 0] #signs ; does not work with signed=TRUE because of the negative values. 
+    # OK: with directed, when reg=5, count it 5x ... Change how matrix is encoded !!
     if(is.null(feedforward.to(g, to=target, cutoff.max=cutoff.max, cutoff.min=cutoff.min))){
       df[i,3] <- 1  } else{
         df[i,4] <- 1
@@ -85,7 +113,6 @@ FFL.coherence <- function(list.w, cutoff.max=3, cutoff.min=1, target=2, randomFF
       }}
   return(df)
 }
-
 
 #Loop and loop homogeneity count
 homog.count <- function(list.w, cutoff.max=3, cutoff.min=1, target=2, randomFF=FALSE){
@@ -180,6 +207,26 @@ FBL.type <- function(list.w, cutoff=3, target=2, randomFF=FALSE){
   return(df)
 }
 
+
+
+e_coli_prep_analyses <- function(genes_list, g, g_mat, fun="FFL", cores=50){
+  stopifnot(fun=="FFL" || fun=="FBL")
+  #here, create txt file, name=paste0(filename,"_",fun,".csv")
+  loops <- mclapply(genes_list, function(gene) {
+    #To avoid igraph::all_simple_paths to take days and weeks, we subset the regulatory networks. Only target genes and connected TFs are kept.
+    gg <- induced.subgraph(g, vids = c(which(colnames(E_coli_mat)==gene), which(colnames(E_coli_mat)%in%TF_genes)) )
+    E_coli_mat2 <- t((get.adjacency(gg, sparse=FALSE, attr='V3')))
+    ggg <- induced.subgraph(gg, vids = as.vector(unlist(neighborhood(gg, cutoff.max-1, nodes = which(colnames(E_coli_mat2)==gene), mode = 'all'))))
+    E_coli_mat3 <- t((get.adjacency(ggg, sparse=FALSE, attr='V3')))
+    E_coli_mat3 <- matrix(as.numeric(E_coli_mat3), ncol = ncol(E_coli_mat3), dimnames = dimnames(E_coli_mat3)) #convert to numeric matrix
+    E_coli_mat3[is.na(E_coli_mat3)] <- 0
+    if(fun=="FFL") cc <- FFL.coherence(list(E_coli_mat3), cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = which(colnames(E_coli_mat3)==gene))
+    if(fun=="FBL") cc <- FBL.type(list(E_coli_mat3), cutoff = cutoff, target = which(colnames(E_coli_mat3)==gene))
+    #Here, insert writing c(gene,cc) in a txt file
+    return(c(gene,cc))
+  }, mc.cores = cores)
+  return(rbindlist(loops))
+}
 
 
 
