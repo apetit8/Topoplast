@@ -3,8 +3,8 @@ library(signnet)
 
 my_all_simple_paths <- function(graph, from, to=igraph::V(graph), mode=c("out", "in", "all", "total"),  cutoff = -1) {
 	# Technical function to deal with old versions of igraph::all_simple_paths that does not have the cutoff argument
-	if (cutoff %in% names(formals((igraph::all_simple_paths)))) {
-		igraph::all_simple_paths(graph=graph, from=from, to=tp, mode=mode, cutoff=cutoff)
+	if ("cutoff" %in% names(formals(igraph::all_simple_paths))) {
+		igraph::all_simple_paths(graph=graph, from=from, to=to, mode=mode, cutoff=cutoff)
 	} else {
 		a <- igraph::all_simple_paths(graph=graph, from=from, to=to, mode=mode)
 		if (cutoff > 0) 
