@@ -88,7 +88,6 @@ feedforward.to <- function(graph, to, cutoff.max = -1, cutoff.min = 1) {
 
 FFL.coherence <- function(list.w, cutoff.max=3, cutoff.min=1, target=2, randomFF=FALSE){
   df <- data.frame(Coherent=c(rep(0, length(list.w))), Incoherent=c(rep(0, length(list.w))), No_loop=c(rep(0, length(list.w))), Loop=c(rep(0, length(list.w))))
-  i <- 1
   for(i in 1:length(list.w)){
     g <- graph.adjacency(abs(t(list.w[[i]])), mode="directed") # abs(list.w[[i]]) mode="directed"
     E(g)$sign <- (list.w[[i]])[list.w[[i]] != 0] #signs ; does not work with signed=TRUE because of the negative values. 
@@ -114,42 +113,141 @@ FFL.coherence <- function(list.w, cutoff.max=3, cutoff.min=1, target=2, randomFF
   return(df)
 }
 
-#Loop and loop homogeneity count
-homog.count <- function(list.w, cutoff.max=3, cutoff.min=1, target=2, randomFF=FALSE){
-  df <- data.frame(Heterogenous=c(rep(0, length(list.w))), Homogenous=c(rep(0, length(list.w))), No_loop=c(rep(0, length(list.w))), Loop=c(rep(0, length(list.w))))
-  i <- 1
+#Frequency = FALSE : the most represented motif "win"
+FFL.type <- function(list.w, cutoff.max=3, cutoff.min=1, target=2, frequencies=TRUE){
+  df <- data.frame(Activating=c(rep(0, length(list.w))), Inhibiting=c(rep(0, length(list.w))), Z_act=c(rep(0, length(list.w))), Z_inh=c(rep(0, length(list.w))), No_loop=c(rep(0, length(list.w))), Loop=c(rep(0, length(list.w))))
   for(i in 1:length(list.w)){
-    g <- graph.adjacency(t(list.w[[i]]), weighted = TRUE)
+    g <- graph.adjacency(abs(t(list.w[[i]])), mode="directed") # abs(list.w[[i]]) mode="directed"
     E(g)$sign <- (list.w[[i]])[list.w[[i]] != 0] #signs ; does not work with signed=TRUE because of the negative values. 
     if(is.null(feedforward.to(g, to=target, cutoff.max=cutoff.max, cutoff.min=cutoff.min))){
-      df[i,3] <- 1  } else{
-        df[i,4] <- 1
+      df[i,5] <- 1  } else{
+        df[i,6] <- 1
         ff <- feedforward.to(g, to=target, cutoff.max=cutoff.max, cutoff.min=cutoff.min)
-        if(randomFF==TRUE){
-          n <- ff[[sample(length(ff),1)]]
-          reg1 <- prod(E(g, path=n[[1]])$sign) #When regulations are heterogeneous, the product is -1
-          reg2 <- prod(E(g, path=n[[2]])$sign) 
-          df[i,1] <- df[i,1] + ifelse(reg1*reg2==-1, 1, 0)
-          df[i,2] <- df[i,2] + ifelse(reg1*reg2==1, 1, 0)
+        if(frequencies==FALSE){
+          act   <- 0
+          inh   <- 0
+          z_act <- 0
+          z_inh <- 0
+          #for n in ff
+            for (n in ff) {
+              reg1 <- E(g, path=n[[1]])$sign[length(E(g, path=n[[1]])$sign)] #Take the last sign since it's the x -> Target
+              reg2 <- E(g, path=n[[2]])$sign[length(E(g, path=n[[2]])$sign)]
+              act   <- act + ifelse(reg1==reg2 && reg2==1, 1, 0)
+              inh   <- inh + ifelse(reg1==reg2 && reg2==-1, 1, 0)
+              z_act <- z_act + ifelse(reg1!=reg2 && reg2==-1, 1, 0)
+              z_inh <-  z_inh + ifelse(reg1!=reg2 && reg2==1, 1, 0)
+            }
+          fract <- length(which(c(act, inh, z_act, z_inh)==max(c(act, inh, z_act, z_inh))))
+          df[i,1] <- df[i,1] + ifelse(act >= inh && act >= z_act && act >= z_inh, 1/fract, 0)
+          df[i,2] <- df[i,2] + ifelse(inh >= act && inh >= z_act && inh >= z_inh, 1/fract, 0)
+          df[i,3] <- df[i,3] + ifelse(z_act >= act && z_act >= z_inh && z_act >= inh, 1/fract, 0)
+          df[i,4] <- df[i,4] + ifelse(z_inh >= act && z_inh >= z_act && z_inh >= inh, 1/fract, 0)
+          
         }else{
           for(n in ff) {
-            reg1 <- prod(E(g, path=n[[1]])$sign) #When regulations are heterogeneous, the product is -1
-            reg2 <- prod(E(g, path=n[[2]])$sign) 
-            # df[i,1] <- df[i,1] + ifelse(reg1==-1 || reg2==-1, 1/length(ff), 0)
-            # df[i,2] <- df[i,2] + ifelse(reg1==1 && reg2==1, 1/length(ff), 0)
-            df[i,1] <- df[i,1] + ifelse(reg1*reg2==-1, 1/length(ff), 0)
-            df[i,2] <- df[i,2] + ifelse(reg1*reg2==1, 1/length(ff), 0)
+            reg1 <- E(g, path=n[[1]])$sign[length(E(g, path=n[[1]])$sign)] #Take the last sign since it's the x -> Target
+            reg2 <- E(g, path=n[[2]])$sign[length(E(g, path=n[[2]])$sign)] #Take the last sign since it's the x -> Target
+            df[i,1] <- df[i,1] + ifelse(reg1==reg2 && reg2==1, 1/length(ff), 0)
+            df[i,2] <- df[i,2] + ifelse(reg1==reg2 && reg2==-1, 1/length(ff), 0)
+            df[i,3] <- df[i,3] + ifelse(reg1!=reg2 && reg2==-1, 1/length(ff), 0)
+            df[i,4] <- df[i,4] + ifelse(reg1!=reg2 && reg2==1, 1/length(ff), 0)
           }}
       }}
   return(df)
 }
 
 
+# #Custom motif categories : adapted to our simulation model with constitutive expression different from 0
+# #change everything to get a tab ? 5 column, "Loop","No loop", "Z_sign", "In/Coherence" and "True/False" and column of concatenate last 3 columns
+# FFL.type2 <- function(list.w, cutoff.max=3, cutoff.min=1, target=2){
+#   df <- data.frame(FFL=c(rep(0, length(list.w))), No_FFL=c(rep(0, length(list.w))),
+#                    Input_Dep=c(rep(0, length(list.w))), Type=c(rep(0, length(list.w))), Sign=c(rep(0, length(list.w))) )
+#   for(i in 1:length(list.w)){
+#     g <- graph.adjacency(abs(t(list.w[[i]])), mode="directed") 
+#     E(g)$sign <- (list.w[[i]])[list.w[[i]] != 0] 
+#     if(is.null(feedforward.to(g, to=target, cutoff.max=cutoff.max, cutoff.min=cutoff.min))){
+#       df[i,2] <- 1 } else{
+#         df[i,1] <- 1
+#         ff <- feedforward.to(g, to=target, cutoff.max=cutoff.max, cutoff.min=cutoff.min)
+#         #OUPS: TAKING ONLY THE LAST LOOP !!!! HAVE TO GO BACK TO FRACTION SYSTEM YOU DUMBASS
+#           for(m in ff) {
+#             df[i,3] <- ifelse(prod(c(E(g, path=m[[1]])$sign,E(g, path=m[[2]])$sign))==-1, "Input_Ind", "Input_Dep")
+#             df[i,4] <- ifelse(E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)]==E(g, path=m[[2]])$sign[length(E(g, path=m[[2]])$sign)], "Amplifying","Disruptive") #Environment Dependent and Environment Independent
+#             df[i,5] <- ifelse(E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)]==-1, "neg","pos")
+#           }
+#       }}
+#   df$Motif <- paste0(df$Input_Dep,"_",df$Type) #Might not work since "_" is 1 rep
+#   df$Motif_sign <- paste0(df$Input_Dep,"_",df$Type,"_",df$Sign)
+#   return(df)
+# }
+
+#Custom motif categories : adapted to our simulation model with constitutive expression different from 0
+#change everything to get a tab ? 5 column, "Loop","No loop", "Z_sign", "In/Coherence" and "True/False" and column of concatenate last 3 columns
+FFL.type2 <- function(list.w, cutoff.max=3, cutoff.min=1, target=2){
+  
+  if(cutoff.max==3 && cutoff.min==1){
+    df <- data.frame(FFL=c(rep(0, length(list.w))), No_FFL=c(rep(0, length(list.w))),
+    ID_A_N=c(rep(0, length(list.w))), ID_A_P=c(rep(0, length(list.w))), ID_D_N=c(rep(0, length(list.w))), ID_D_N=c(rep(0, length(list.w))),
+    II_A_N=c(rep(0, length(list.w))), II_A_P=c(rep(0, length(list.w))), II_D_N=c(rep(0, length(list.w))), II_D_N=c(rep(0, length(list.w))) )   }
+ 
+   if(cutoff.max==4 && cutoff.min==2){
+    df <- data.frame(FFL=c(rep(0, length(list.w))), No_FFL=c(rep(0, length(list.w))),
+    Pos_pos=c(rep(0, length(list.w))), Pos_mixt=c(rep(0, length(list.w))), Pos_neg=c(rep(0, length(list.w))), Neg_pos=c(rep(0, length(list.w))),
+    Neg_mixt=c(rep(0, length(list.w))), Neg_neg=c(rep(0, length(list.w))), Mixt_pos=c(rep(0, length(list.w))), Mixt_mixt_hom=c(rep(0, length(list.w))),
+    Mixt_mixt_het=c(rep(0, length(list.w))), Mixt_neg=c(rep(0, length(list.w))))   }
+  
+  for(i in 1:length(list.w)){
+    g <- graph.adjacency(abs(t(list.w[[i]])), mode="directed") 
+    E(g)$sign <- (list.w[[i]])[list.w[[i]] != 0] 
+    if(is.null(feedforward.to(g, to=target, cutoff.max=cutoff.max, cutoff.min=cutoff.min))){
+      df[i,2] <- 1 } else{
+        df[i,1] <- 1
+        
+        ff <- feedforward.to(g, to=target, cutoff.max=cutoff.max, cutoff.min=cutoff.min)
+        if(cutoff.max==3 && cutoff.min==1){
+        for(m in ff) {
+          if(length(E(g, path=m[[1]])$sign)>1 && length(E(g, path=m[[2]])$sign)>2) stop("Wrong cut.offs")
+          B1 <- FFL_Z_reg(g, m, Input=1)
+          B0 <- FFL_Z_reg(g, m, Input=0)
+          if(B1!=B0 && E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)]==E(g, path=m[[2]])$sign[length(E(g, path=m[[2]])$sign)] && (E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)])==-1) df[i,3] <- df[i,3] + 1/length(ff)
+          if(B1!=B0 && E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)]==E(g, path=m[[2]])$sign[length(E(g, path=m[[2]])$sign)] && (E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)])==1) df[i,4] <- df[i,4] + 1/length(ff)
+          if(B1!=B0 && E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)]!=E(g, path=m[[2]])$sign[length(E(g, path=m[[2]])$sign)] && (E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)])==-1) df[i,5] <- df[i,5] + 1/length(ff)
+          if(B1!=B0 && E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)]!=E(g, path=m[[2]])$sign[length(E(g, path=m[[2]])$sign)] && (E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)])==1) df[i,6] <- df[i,6] + 1/length(ff)
+          if(B1==B0 && E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)]==E(g, path=m[[2]])$sign[length(E(g, path=m[[2]])$sign)] && (E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)])==-1) df[i,7] <- df[i,7] + 1/length(ff)
+          if(B1==B0 && E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)]==E(g, path=m[[2]])$sign[length(E(g, path=m[[2]])$sign)] && (E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)])==1) df[i,8] <- df[i,8] + 1/length(ff)
+          if(B1==B0 && E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)]!=E(g, path=m[[2]])$sign[length(E(g, path=m[[2]])$sign)] && (E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)])==-1) df[i,9] <- df[i,9] + 1/length(ff)
+          if(B1==B0 && E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)]!=E(g, path=m[[2]])$sign[length(E(g, path=m[[2]])$sign)] && (E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)])==1) df[i,10] <- df[i,10] + 1/length(ff)
+        }}
+        if(cutoff.max==4 && cutoff.min==2){
+          for(m in ff) {
+            if(length(E(g, path=m[[1]])$sign)>2 && length(E(g, path=m[[2]])$sign)>2) stop("Wrong cut.offs")
+            reg_j1 <- E(g, path=m[[1]])$sign[1]
+            reg_j2 <- E(g, path=m[[1]])$sign[2]
+            reg_i1 <- E(g, path=m[[2]])$sign[1]
+            reg_i2 <- E(g, path=m[[2]])$sign[2]
+            browser()
+            #For each condition, fill more than 1 column, for the different categories ? Relou but at the same time not many other way to have fractions ...
+            if(reg_j1==1 && reg_j1==reg_i1 && reg_j1==reg_j2 && reg_i1==reg_i2) df[i,3] + 1/length(ff)
+            if(reg_j1==1 && reg_j1==reg_i1 && reg_j2!=reg_i2) df[i,4] + 1/length(ff)
+            if(reg_j1==1 && reg_j1==reg_i1 && reg_j2==-1 && reg_j2==reg_i2) df[i,5] + 1/length(ff)
+            #
+            if(reg_j1==-1 && reg_j1==reg_i1 && reg_j1==reg_j2 && reg_i1==reg_i2) df[i,6] + 1/length(ff)
+            if(reg_j1==-1 && reg_j1==reg_i1 && reg_j2!=reg_i2) df[i,7] + 1/length(ff)
+            if(reg_j1==-1 && reg_j1==reg_i1 && reg_j2==-1 && reg_j2==reg_i2) df[i,8] + 1/length(ff)
+            #
+            if(reg_j1!=reg_i1 && reg_j1==reg_j2 && reg_i1==reg_i2) df[i,9] + 1/length(ff)
+            if(reg_j1!=reg_i1 && reg_j2!=reg_i2 && reg_j1==reg_j2) df[i,10] + 1/length(ff)
+            if(reg_j1!=reg_i1 && reg_j2!=reg_i2 && reg_j1!=reg_j2) df[i,11] + 1/length(ff)
+            if(reg_j1!=reg_i1 && reg_j2==-1 && reg_j2==reg_i2) df[i,12] + 1/length(ff)
+          }}
+      }}
+  return(df)
+}
+
 
 #Count number of loop for each gene
 loops_n.count <- function(list.w, cutoff.max=3, cutoff.min=1, target=2){
   df <- data.frame(Loop_number=c(rep(0, length(list.w))), No_loop=c(rep(0, length(list.w))), Loop=c(rep(0, length(list.w))))
-  i <- 1
   for(i in 1:length(list.w)){
     g <- graph.adjacency(t(list.w[[i]]), weighted = TRUE)
     E(g)$sign <- (list.w[[i]])[list.w[[i]] != 0] #signs ; does not work with signed=TRUE because of the negative values. 
@@ -166,7 +264,6 @@ loops_n.count <- function(list.w, cutoff.max=3, cutoff.min=1, target=2){
 #Count number of feedbackloop for each gene
 FBL_n.count <- function(list.w, cutoff=2, target=2){
   df <- data.frame(FBL_number=c(rep(0, length(list.w))), No_FBL=c(rep(0, length(list.w))), FBL=c(rep(0, length(list.w))))
-  i <- 1
   for(i in 1:length(list.w)){
     g <- graph.adjacency(t(list.w[[i]]), weighted = TRUE)
     E(g)$sign <- (list.w[[i]])[list.w[[i]] != 0] #signs ; does not work with signed=TRUE because of the negative values. 
@@ -184,7 +281,6 @@ FBL_n.count <- function(list.w, cutoff=2, target=2){
 #FBL and FBL homogeneity count
 FBL.type <- function(list.w, cutoff=3, target=2, randomFF=FALSE){
   df <- data.frame(Inhibiting=c(rep(0, length(list.w))), Activating=c(rep(0, length(list.w))), No_FBL=c(rep(0, length(list.w))), FBL=c(rep(0, length(list.w))))
-  i <- 1
   for(i in 1:length(list.w)){
     g <- graph.adjacency(t(list.w[[i]]), weighted = TRUE)
     E(g)$sign <- (list.w[[i]])[list.w[[i]] != 0] #signs ; does not work with signed=TRUE because of the negative values. 
@@ -230,4 +326,21 @@ e_coli_prep_analyses <- function(genes_list, g, g_mat, fun="FFL", cores=50){
 
 
 
+FFL_Z_reg <- function(graph, motif, a=0.5, Input=1){
+  #motif must be a subgraph
+  regX_Z <- half_loop_reg(E(graph, path=motif[[1]])$sign, Input=Input)
+  regX_Y_Z <- half_loop_reg(E(graph, path=motif[[2]])$sign, Input=Input)
+  return( a*(regX_Z+regX_Y_Z)  )
+}
 
+
+half_loop_reg <- function(sub_loop_sign, a=0.5, Input=1){
+    if(length(sub_loop_sign)==1){
+      regX_Z <- Input*sub_loop_sign[1]    }
+  else if(length(sub_loop_sign)==2){
+    regX_Z <- sub_loop_sign[2]*(a+(Input*sub_loop_sign[1]))  }
+  else if(length(sub_loop_sign)==3){
+    regX_Z <- (a+(sub_loop_sign[2]*(a+(Input*sub_loop_sign[1]))))*sub_loop_sign[3]  }
+  else if(length(sub_loop_sign)==4){
+    regX_Z <- (a+((a+(sub_loop_sign[2]*(a+(Input*sub_loop_sign[1]))))*sub_loop_sign[3]))*sub_loop_sign[4]  }
+}

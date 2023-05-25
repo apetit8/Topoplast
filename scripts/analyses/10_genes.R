@@ -19,23 +19,24 @@ df.10$anc_id <- str_split(str_split(df.10$data.dir, "/", n=8, simplify = TRUE)[,
 #Inspired by Burda et al., 2011
 treshold_coeff <- 0.001 # difference accepted in the Reaction Norm linear regression slope
 treshold_og <- 0.001    # difference accepted in the RN linear regression intercept
+gen <- 3000 #max(df.10$Gen)
 #############
 
-topo.anticor10 <- essential.topo(df=subset(df.10, Gen==max(df.10$Gen) & envir=="Anticorrelated"),
+topo.anticor10 <- essential.topo(df=subset(df.10, Gen==gen & envir=="Anticorrelated"),
                                  treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3:10))
 
-topo.corr10 <- essential.topo(df=subset(df.10, Gen==max(df.10$Gen) & envir=="Correlated"),
+topo.corr10 <- essential.topo(df=subset(df.10, Gen==gen & envir=="Correlated"),
                               treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3:10))
 
-topo.no_sel10 <- essential.topo(df=subset(df.10, Gen==max(df.10$Gen) & envir=="Control_no_sel"),
+topo.no_sel10 <- essential.topo(df=subset(df.10, Gen==gen & envir=="Control_no_sel"),
                                 treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3:10))
 
-topo.sel10 <- essential.topo(df=subset(df.10, Gen==max(df.10$Gen) & envir=="Control_sel"),
+topo.sel10 <- essential.topo(df=subset(df.10, Gen==gen & envir=="Control_sel"),
                              treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3:10))
 
 
 ################
-cutoff.max <- 3
+cutoff.max <- 2
 cutoff.min <- 1
 ##### Loop count
 Anticor10_n <- loops_n.count(topo.anticor10, cutoff.max = cutoff.max, cutoff.min = cutoff.min)
@@ -53,10 +54,10 @@ dev.off()
 
 ################
 ##### Coherence
-Anticor10 <- c.count(topo.anticor10, cutoff.max = cutoff.max, cutoff.min = cutoff.min, randomFF=TRUE)
-Corr10 <- c.count(topo.corr10, cutoff.max = cutoff.max, cutoff.min = cutoff.min, randomFF=TRUE)
-No_sel10 <- c.count(topo.no_sel10, cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = 2, randomFF=TRUE) #
-Sel10 <- c.count(topo.sel10, cutoff.max = cutoff.max, cutoff.min = cutoff.min, randomFF=TRUE)
+Anticor10 <- FFL.coherence(topo.anticor10, cutoff.max = cutoff.max, cutoff.min = cutoff.min, randomFF=TRUE)
+Corr10 <- FFL.coherence(topo.corr10, cutoff.max = cutoff.max, cutoff.min = cutoff.min, randomFF=TRUE)
+No_sel10 <- FFL.coherence(topo.no_sel10, cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = 2, randomFF=TRUE) #
+Sel10 <- FFL.coherence(topo.sel10, cutoff.max = cutoff.max, cutoff.min = cutoff.min, randomFF=TRUE)
 
 df <- rbind(colSums(Anticor10), colSums(Corr10), colSums(No_sel10), colSums(Sel10))
 rownames(df) <- c("Anticor10", "Corr10", "No_sel10", "Sel10")
@@ -67,6 +68,99 @@ pdf(paste0(pdfname,"_coherence_loops",".pdf"), width=6.5, height=6)
   legend("bottomleft", box.lty=0,  bg="transparent", fill=c(7,3,"grey"),
          legend=c("Coherent FFL", "Incoherent FFL","No Loop"))
 dev.off()
+
+
+################
+##### Type
+Anticor10 <- FFL.type(topo.anticor10, cutoff.max = cutoff.max, cutoff.min = cutoff.min, frequencies=TRUE)
+Corr10 <- FFL.type(topo.corr10, cutoff.max = cutoff.max, cutoff.min = cutoff.min, frequencies=TRUE)
+No_sel10 <- FFL.type(topo.no_sel10, cutoff.max = cutoff.max, cutoff.min = cutoff.min, frequencies=TRUE) #
+Sel10 <- FFL.type(topo.sel10, cutoff.max = cutoff.max, cutoff.min = cutoff.min, frequencies=TRUE)
+
+df <- rbind(colSums(Anticor10), colSums(Corr10), colSums(No_sel10), colSums(Sel10))
+
+pdf(paste0(pdfname,"_type_FFL_feq",".pdf"), width=6.5, height=6)
+layout(matrix(c(1:1), 1, 1, byrow = TRUE))
+barplot(t(df[,1:5])*100/300, col=c("darkolivegreen","yellowgreen","darkblue","lightblue","grey"))
+legend("bottomleft", box.lty=0,  bg="transparent", fill=c("darkolivegreen","yellowgreen","darkblue","lightblue","grey"),
+       legend=c( "Activating","Inhibiting","Z_act","Z_inh","No FFL"))
+dev.off()
+
+################
+##### Type
+Anticor10 <- FFL.type2(topo.anticor10, cutoff.max = 3, cutoff.min = 1)
+Corr10 <- FFL.type2(topo.corr10, cutoff.max = 3, cutoff.min = 1)
+No_sel10 <- FFL.type2(topo.no_sel10, cutoff.max = 3, cutoff.min = 1) #
+Sel10 <- FFL.type2(topo.sel10, cutoff.max = 3, cutoff.min = 1)
+
+df <- as.data.frame(rbind(colSums(Anticor10), colSums(Corr10), colSums(No_sel10), colSums(Sel10)))
+rownames(df) <- c("Anticor","Cor","No_sel","Sel")
+df$coherent <- rowSums2(as.matrix(df[,c(3:6)])) #Count of 
+df$incoherent <- rowSums2(as.matrix(df[,c(7:10)]))
+df$homogenous <- rowSums2(as.matrix(df[,c(3,4,7,8)]))
+df$heterogenous <- rowSums2(as.matrix(df[,c(5,6,9,10)]))
+
+
+pdfname <- "figures/10g"
+pdf(paste0(pdfname,"_type_FFL2_cutoff_3",".pdf"), width=6.5, height=6)
+layout(matrix(c(1:1), 1, 1, byrow = TRUE))
+  #Each motif topology
+  barplot(t(df[,2:10])*100/300, col=c("grey","darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1"))
+  legend("bottomleft", box.lty=0,  bg="transparent", fill=c("grey","darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1"),
+         legend=c( "No_FFL","Input_Dep_Amplifying_neg","Input_Dep_Amplifying_pos","Input_Dep_Disruptive_neg","Input_Dep_Disruptive_pos","Input_Ind_Amplifying_neg","Input_Ind_Amplifying_pos","Input_Ind_Disruptive_neg","Input_Ind_Disruptive_pos") )
+  #Coherence
+  barplot(t(df[,c(2,11,12)])*100/300, col=c("grey","indianred1","dodgerblue"))
+  legend("bottomleft", box.lty=0,  bg="transparent", fill=c("grey","indianred1","dodgerblue"),
+         legend=c( "No_FFL","Coherent","Incoherent") )
+  #Homogeneity
+  barplot(t(df[,c(2,13,14)])*100/300, col=c("grey","orange","yellowgreen"))
+  legend("bottomleft", box.lty=0,  bg="transparent", fill=c("grey","orange","yellowgreen"),
+         legend=c( "No_FFL","Homogenous","Heterogenous") )
+dev.off()
+
+#
+Anticor10 <- FFL.type2(topo.anticor10, cutoff.max = 4, cutoff.min = 2)
+Corr10 <- FFL.type2(topo.corr10, cutoff.max = 4, cutoff.min = 2)
+No_sel10 <- FFL.type2(topo.no_sel10, cutoff.max = 4, cutoff.min = 2) #
+Sel10 <- FFL.type2(topo.sel10, cutoff.max = 4, cutoff.min = 2)
+
+df <- rbind(colSums(Anticor10), colSums(Corr10), colSums(No_sel10), colSums(Sel10))
+rownames(df) <- c("Anticor","Cor","No_sel","Sel")
+df$coherent <- rowSums2(as.matrix(df[,c(3,5,6,8,10,11)])) #Count of 
+df$incoherent <- rowSums2(as.matrix(df[,c(4,7,9,12)]))
+df$homogenous_pos <- rowSums2(as.matrix(df[,c(3,6,9)]))
+df$homogenous_neg <- rowSums2(as.matrix(df[,c(5,8,12)]))
+df$heterogenous <- rowSums2(as.matrix(df[,c(4,7,10,11)]))
+
+pdfname <- "figures/10g"
+pdf(paste0(pdfname,"_type_FFL2_cutoff_4",".pdf"), width=6.5, height=6)
+layout(matrix(c(1:1), 1, 1, byrow = TRUE))
+  #Each motif topology
+  barplot(t(df[,2:12])*100/300, col=c("grey","darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1"))
+  legend("bottomleft", box.lty=0,  bg="transparent", fill=c("grey","darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1"),
+         legend=c( "No_FFL","Input_Dep_Amplifying_neg","Input_Dep_Amplifying_pos","Input_Dep_Disruptive_neg","Input_Dep_Disruptive_pos","Input_Ind_Amplifying_neg","Input_Ind_Amplifying_pos","Input_Ind_Disruptive_neg","Input_Ind_Disruptive_pos") )
+  #Coherence
+  barplot(t(df[,c(2,13,14)])*100/300, col=c("grey","indianred1","dodgerblue"))
+  legend("bottomleft", box.lty=0,  bg="transparent", fill=c("grey","indianred1","dodgerblue"),
+         legend=c( "No_FFL","Coherent","Incoherent") )
+  #Homogeneity
+  barplot(t(df[,c(2,15:17)])*100/300, col=c("grey","orange","yellowgreen"))
+  legend("bottomleft", box.lty=0,  bg="transparent", fill=c("grey","orange","yellowgreen"),
+         legend=c( "No_FFL","Homogenous","Heterogenous") )
+dev.off()
+
+# df <- as.data.frame(dplyr::bind_rows(table(Anticor10$Motif_sign), table(Corr10$Motif_sign), table(No_sel10$Motif_sign), table(Sel10$Motif_sign)))
+# rownames(df) <- c("Anticor","Cor","No_sel","Sel")
+# df[is.na(df)] <- 0
+# df <- df[, sort(colnames(df))]
+# 
+# pdf(paste0(pdfname,"_type_FFL2_sign",".pdf"), width=6.5, height=6)
+# layout(matrix(c(1:1), 1, 1, byrow = TRUE))
+# barplot(t(df)*100/300, col=c("grey","darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1"))
+# legend("bottomleft", box.lty=0,  bg="transparent", fill=c("grey","darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1"),
+#        legend=c( "No_FFL","Input_Dep_Amplifying_neg","Input_Dep_Amplifying_pos","Input_Dep_Disruptive_neg","Input_Dep_Disruptive_pos","Input_Ind_Amplifying_neg","Input_Ind_Amplifying_pos","Input_Ind_Disruptive_neg","Input_Ind_Disruptive_pos") )
+# dev.off()
+
 
 
 ################

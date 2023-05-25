@@ -1,4 +1,5 @@
 #TEST DEBUG OSKOUR
+source("scripts/functions/detectloops.R")
 
 igraph_options(return.vs.es=F)
 #Loop and loop coherence count
@@ -60,6 +61,17 @@ cc <- feedforward.to(g, to=10, cutoff.max=5, cutoff.min=1)
 
 
 
+loops <- lapply(phgenes, function(gene) {
+  #To avoid igraph::all_simple_paths to take days and weeks, we subset the regulatory networks. Only target genes and connected TFs are kept.
+  gg <- induced.subgraph(g, vids = c(which(colnames(E_coli_mat)==gene), which(colnames(E_coli_mat)%in%TF_genes)) )
+  E_coli_mat2 <- t((get.adjacency(gg, sparse=FALSE, attr='V3')))
+  ggg <- induced.subgraph(gg, vids = as.vector(unlist(neighborhood(gg, cutoff.max-1, nodes = which(colnames(E_coli_mat2)==gene), mode = 'all'))))
+  E_coli_mat3 <- t((get.adjacency(ggg, sparse=FALSE, attr='V3')))
+  E_coli_mat3 <- matrix(as.numeric(E_coli_mat3), ncol = ncol(E_coli_mat3), dimnames = dimnames(E_coli_mat3)) #convert to numeric matrix
+  E_coli_mat3[is.na(E_coli_mat3)] <- 0
+  print(ncol( E_coli_mat3))
+  #Here, insert writing c(gene,cc) in a txt file
+})
 
 
 

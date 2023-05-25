@@ -32,7 +32,7 @@ igraph_options(return.vs.es=F)
 # summaryRprof()
 #########################################
 #Analyses of plastic genes from different sources
-cutoff.max <- 5
+cutoff.max <- 3
 cutoff.min <- 1
 all_plast_genes <- data.frame()
 #########################################
