@@ -36,6 +36,7 @@ topo.sel10 <- essential.topo(df=subset(df.10, Gen==gen & envir=="Control_sel"),
 
 
 ################
+# Cutoffs are number of NODES
 cutoff.max <- 2
 cutoff.min <- 1
 ##### Loop count
@@ -88,10 +89,10 @@ dev.off()
 
 ################
 ##### Type
-Anticor10 <- FFL.type2(topo.anticor10, cutoff.max = 3, cutoff.min = 1)
-Corr10 <- FFL.type2(topo.corr10, cutoff.max = 3, cutoff.min = 1)
-No_sel10 <- FFL.type2(topo.no_sel10, cutoff.max = 3, cutoff.min = 1) #
-Sel10 <- FFL.type2(topo.sel10, cutoff.max = 3, cutoff.min = 1)
+Anticor10 <- FFL.type2(topo.anticor10, cutoff.max = 3, cutoff.min = 2)
+Corr10 <- FFL.type2(topo.corr10, cutoff.max = 3, cutoff.min = 2)
+No_sel10 <- FFL.type2(topo.no_sel10, cutoff.max = 3, cutoff.min = 2) #
+Sel10 <- FFL.type2(topo.sel10, cutoff.max = 3, cutoff.min = 2)
 
 df <- as.data.frame(rbind(colSums(Anticor10), colSums(Corr10), colSums(No_sel10), colSums(Sel10)))
 rownames(df) <- c("Anticor","Cor","No_sel","Sel")
@@ -119,12 +120,12 @@ layout(matrix(c(1:1), 1, 1, byrow = TRUE))
 dev.off()
 
 #
-Anticor10 <- FFL.type2(topo.anticor10, cutoff.max = 4, cutoff.min = 2)
-Corr10 <- FFL.type2(topo.corr10, cutoff.max = 4, cutoff.min = 2)
-No_sel10 <- FFL.type2(topo.no_sel10, cutoff.max = 4, cutoff.min = 2) #
-Sel10 <- FFL.type2(topo.sel10, cutoff.max = 4, cutoff.min = 2)
+Anticor10 <- FFL.type2(topo.anticor10, cutoff.max = 3, cutoff.min = 3)
+Corr10 <- FFL.type2(topo.corr10, cutoff.max = 3, cutoff.min = 3)
+No_sel10 <- FFL.type2(topo.no_sel10, cutoff.max = 3, cutoff.min = 3) #
+Sel10 <- FFL.type2(topo.sel10, cutoff.max = 3, cutoff.min = 3)
 
-df <- rbind(colSums(Anticor10), colSums(Corr10), colSums(No_sel10), colSums(Sel10))
+df <- as.data.frame(rbind(colSums(Anticor10), colSums(Corr10), colSums(No_sel10), colSums(Sel10)))
 rownames(df) <- c("Anticor","Cor","No_sel","Sel")
 df$coherent <- rowSums2(as.matrix(df[,c(3,5,6,8,10,11)])) #Count of 
 df$incoherent <- rowSums2(as.matrix(df[,c(4,7,9,12)]))
@@ -133,20 +134,22 @@ df$homogenous_neg <- rowSums2(as.matrix(df[,c(5,8,12)]))
 df$heterogenous <- rowSums2(as.matrix(df[,c(4,7,10,11)]))
 
 pdfname <- "figures/10g"
-pdf(paste0(pdfname,"_type_FFL2_cutoff_4",".pdf"), width=6.5, height=6)
+pdf(paste0(pdfname,"_type_FFL2_diamond",".pdf"), width=6.5, height=6)
 layout(matrix(c(1:1), 1, 1, byrow = TRUE))
   #Each motif topology
-  barplot(t(df[,2:12])*100/300, col=c("grey","darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1"))
-  legend("bottomleft", box.lty=0,  bg="transparent", fill=c("grey","darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1"),
-         legend=c( "No_FFL","Input_Dep_Amplifying_neg","Input_Dep_Amplifying_pos","Input_Dep_Disruptive_neg","Input_Dep_Disruptive_pos","Input_Ind_Amplifying_neg","Input_Ind_Amplifying_pos","Input_Ind_Disruptive_neg","Input_Ind_Disruptive_pos") )
+  barplot(t(df[,2:12])*100/300, col=c("grey","darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1","darkorchid1","plum1"))
+  legend("bottomleft", box.lty=0,  bg="transparent", fill=c("grey","darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1","darkorchid1","plum1"),
+         legend=c( "No_FFL","Pos_pos","Pos_mixt","Pos_neg",
+                   "Neg_pos","Neg_mixt","Neg_neg",
+                   "Mixt_pos","Mixt_mixt_hom","Mixt_mixt_het","Mixt_neg") )
   #Coherence
   barplot(t(df[,c(2,13,14)])*100/300, col=c("grey","indianred1","dodgerblue"))
   legend("bottomleft", box.lty=0,  bg="transparent", fill=c("grey","indianred1","dodgerblue"),
          legend=c( "No_FFL","Coherent","Incoherent") )
   #Homogeneity
-  barplot(t(df[,c(2,15:17)])*100/300, col=c("grey","orange","yellowgreen"))
-  legend("bottomleft", box.lty=0,  bg="transparent", fill=c("grey","orange","yellowgreen"),
-         legend=c( "No_FFL","Homogenous","Heterogenous") )
+  barplot(t(df[,c(2,15:17)])*100/300, col=c("grey","darkseagreen","yellowgreen","dodgerblue","deepskyblue3"))
+  legend("bottomleft", box.lty=0,  bg="transparent", fill=c("grey","darkseagreen","yellowgreen","dodgerblue","deepskyblue3"),
+         legend=c( "No_FFL","Homogenous_pos","Homogenous_neg","Heterogenous") )
 dev.off()
 
 # df <- as.data.frame(dplyr::bind_rows(table(Anticor10$Motif_sign), table(Corr10$Motif_sign), table(No_sel10$Motif_sign), table(Sel10$Motif_sign)))

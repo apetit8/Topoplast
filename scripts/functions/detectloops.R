@@ -33,14 +33,18 @@ feedback.from <- function(graph, from, cutoff = -1) {
 	return(ans)
 }
 
+#BUG: get 
 feedforward.from.to <- function(graph, from, to, cutoff.max = -1, cutoff.min = 1) {
-	path.from.to <- my_all_simple_paths(graph=graph, from=from[1], to=to[1], mode="out", cutoff=cutoff.max)
+	path.from.to <- my_all_simple_paths(graph=graph, from=from[1], to=to[1], mode="out", cutoff=cutoff.max) 
 	
-	which.small <- which(sapply(path.from.to, length) <= cutoff.min + 1)
+	# which.small <- which(sapply(path.from.to, length) <= cutoff.min + 1 ) #Plus petit que le minimum ? Cutoff.min = longueur max de la plus petite branche ?
+	which.small <- which(sapply(path.from.to, length) == cutoff.min )
 	ans <- unlist(lapply(which.small, function(i) {
 						relevant.path <- NULL
 						for (j in seq_along(path.from.to)) {
-							if (j != i && (j > i || !j%in%which.small) && sum(duplicated(c(path.from.to[[i]], path.from.to[[j]]))) == 2)
+						  #Problem: what if both branches are of the same length ? It does not count it ?
+						  if (j != i && j >= i && length(path.from.to[[j]]) <= cutoff.max && sum(duplicated(c(path.from.to[[i]], path.from.to[[j]]))) == 2)
+							#if (j != i && (j > i || !j%in%which.small) && sum(duplicated(c(path.from.to[[i]], path.from.to[[j]]))) == 2)
 								relevant.path <- append(relevant.path, j)
 						}
 						if (length(relevant.path) > 0) {
@@ -157,30 +161,6 @@ FFL.type <- function(list.w, cutoff.max=3, cutoff.min=1, target=2, frequencies=T
 }
 
 
-# #Custom motif categories : adapted to our simulation model with constitutive expression different from 0
-# #change everything to get a tab ? 5 column, "Loop","No loop", "Z_sign", "In/Coherence" and "True/False" and column of concatenate last 3 columns
-# FFL.type2 <- function(list.w, cutoff.max=3, cutoff.min=1, target=2){
-#   df <- data.frame(FFL=c(rep(0, length(list.w))), No_FFL=c(rep(0, length(list.w))),
-#                    Input_Dep=c(rep(0, length(list.w))), Type=c(rep(0, length(list.w))), Sign=c(rep(0, length(list.w))) )
-#   for(i in 1:length(list.w)){
-#     g <- graph.adjacency(abs(t(list.w[[i]])), mode="directed") 
-#     E(g)$sign <- (list.w[[i]])[list.w[[i]] != 0] 
-#     if(is.null(feedforward.to(g, to=target, cutoff.max=cutoff.max, cutoff.min=cutoff.min))){
-#       df[i,2] <- 1 } else{
-#         df[i,1] <- 1
-#         ff <- feedforward.to(g, to=target, cutoff.max=cutoff.max, cutoff.min=cutoff.min)
-#         #OUPS: TAKING ONLY THE LAST LOOP !!!! HAVE TO GO BACK TO FRACTION SYSTEM YOU DUMBASS
-#           for(m in ff) {
-#             df[i,3] <- ifelse(prod(c(E(g, path=m[[1]])$sign,E(g, path=m[[2]])$sign))==-1, "Input_Ind", "Input_Dep")
-#             df[i,4] <- ifelse(E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)]==E(g, path=m[[2]])$sign[length(E(g, path=m[[2]])$sign)], "Amplifying","Disruptive") #Environment Dependent and Environment Independent
-#             df[i,5] <- ifelse(E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)]==-1, "neg","pos")
-#           }
-#       }}
-#   df$Motif <- paste0(df$Input_Dep,"_",df$Type) #Might not work since "_" is 1 rep
-#   df$Motif_sign <- paste0(df$Input_Dep,"_",df$Type,"_",df$Sign)
-#   return(df)
-# }
-
 #Custom motif categories : adapted to our simulation model with constitutive expression different from 0
 #change everything to get a tab ? 5 column, "Loop","No loop", "Z_sign", "In/Coherence" and "True/False" and column of concatenate last 3 columns
 FFL.type2 <- function(list.w, cutoff.max=3, cutoff.min=1, target=2){
@@ -190,12 +170,11 @@ FFL.type2 <- function(list.w, cutoff.max=3, cutoff.min=1, target=2){
     ID_A_N=c(rep(0, length(list.w))), ID_A_P=c(rep(0, length(list.w))), ID_D_N=c(rep(0, length(list.w))), ID_D_N=c(rep(0, length(list.w))),
     II_A_N=c(rep(0, length(list.w))), II_A_P=c(rep(0, length(list.w))), II_D_N=c(rep(0, length(list.w))), II_D_N=c(rep(0, length(list.w))) )   }
  
-   if(cutoff.max==4 && cutoff.min==2){
+   if(cutoff.max==3 && cutoff.min==3){
     df <- data.frame(FFL=c(rep(0, length(list.w))), No_FFL=c(rep(0, length(list.w))),
     Pos_pos=c(rep(0, length(list.w))), Pos_mixt=c(rep(0, length(list.w))), Pos_neg=c(rep(0, length(list.w))), Neg_pos=c(rep(0, length(list.w))),
     Neg_mixt=c(rep(0, length(list.w))), Neg_neg=c(rep(0, length(list.w))), Mixt_pos=c(rep(0, length(list.w))), Mixt_mixt_hom=c(rep(0, length(list.w))),
     Mixt_mixt_het=c(rep(0, length(list.w))), Mixt_neg=c(rep(0, length(list.w))))   }
-  
   for(i in 1:length(list.w)){
     g <- graph.adjacency(abs(t(list.w[[i]])), mode="directed") 
     E(g)$sign <- (list.w[[i]])[list.w[[i]] != 0] 
@@ -218,27 +197,27 @@ FFL.type2 <- function(list.w, cutoff.max=3, cutoff.min=1, target=2){
           if(B1==B0 && E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)]!=E(g, path=m[[2]])$sign[length(E(g, path=m[[2]])$sign)] && (E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)])==-1) df[i,9] <- df[i,9] + 1/length(ff)
           if(B1==B0 && E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)]!=E(g, path=m[[2]])$sign[length(E(g, path=m[[2]])$sign)] && (E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)])==1) df[i,10] <- df[i,10] + 1/length(ff)
         }}
-        if(cutoff.max==4 && cutoff.min==2){
+        if(cutoff.max==3 && cutoff.min==3){
           for(m in ff) {
-            if(length(E(g, path=m[[1]])$sign)>2 && length(E(g, path=m[[2]])$sign)>2) stop("Wrong cut.offs")
+            if(length(E(g, path=m[[1]])$sign)!=2 || length(E(g, path=m[[2]])$sign)!=2) stop("Wrong cut.offs")
             reg_j1 <- E(g, path=m[[1]])$sign[1]
             reg_j2 <- E(g, path=m[[1]])$sign[2]
             reg_i1 <- E(g, path=m[[2]])$sign[1]
             reg_i2 <- E(g, path=m[[2]])$sign[2]
-            browser()
-            #For each condition, fill more than 1 column, for the different categories ? Relou but at the same time not many other way to have fractions ...
-            if(reg_j1==1 && reg_j1==reg_i1 && reg_j1==reg_j2 && reg_i1==reg_i2) df[i,3] + 1/length(ff)
-            if(reg_j1==1 && reg_j1==reg_i1 && reg_j2!=reg_i2) df[i,4] + 1/length(ff)
-            if(reg_j1==1 && reg_j1==reg_i1 && reg_j2==-1 && reg_j2==reg_i2) df[i,5] + 1/length(ff)
+            # browser()
+            #BUG : Cutoffs are not working !!
+            if(reg_j1==1 && reg_i1==1 && reg_j2==1 && reg_i2==1) df[i,3] <- df[i,3] + 1/length(ff)
+            if(reg_j1==1 && reg_i1==1 && reg_j2!=reg_i2) df[i,4] <- df[i,4] + 1/length(ff)
+            if(reg_j1==1 && reg_i1==1 && reg_j2==-1 && reg_i2==-1) df[i,5] <- df[i,5] + 1/length(ff)
             #
-            if(reg_j1==-1 && reg_j1==reg_i1 && reg_j1==reg_j2 && reg_i1==reg_i2) df[i,6] + 1/length(ff)
-            if(reg_j1==-1 && reg_j1==reg_i1 && reg_j2!=reg_i2) df[i,7] + 1/length(ff)
-            if(reg_j1==-1 && reg_j1==reg_i1 && reg_j2==-1 && reg_j2==reg_i2) df[i,8] + 1/length(ff)
+            if(reg_j1==-1 && reg_i1==-1 && reg_j2==1 && reg_i2==1) df[i,6] <- df[i,6] + 1/length(ff)
+            if(reg_j1==-1 && reg_i1==-1 && reg_j2!=reg_i2) df[i,7] <- df[i,7] + 1/length(ff)
+            if(reg_j1==-1 && reg_i1==-1 && reg_j2==-1 && reg_i2==-1) df[i,8] <- df[i,8] + 1/length(ff)
             #
-            if(reg_j1!=reg_i1 && reg_j1==reg_j2 && reg_i1==reg_i2) df[i,9] + 1/length(ff)
-            if(reg_j1!=reg_i1 && reg_j2!=reg_i2 && reg_j1==reg_j2) df[i,10] + 1/length(ff)
-            if(reg_j1!=reg_i1 && reg_j2!=reg_i2 && reg_j1!=reg_j2) df[i,11] + 1/length(ff)
-            if(reg_j1!=reg_i1 && reg_j2==-1 && reg_j2==reg_i2) df[i,12] + 1/length(ff)
+            if(reg_j1!=reg_i1 && reg_j2==1 && reg_i2==1) df[i,9] <- df[i,9] + 1/length(ff)
+            if(reg_j1!=reg_i1 && reg_j2!=reg_i2 && reg_j1==reg_j2) df[i,10] <- df[i,10] + 1/length(ff)
+            if(reg_j1!=reg_i1 && reg_j2!=reg_i2 && reg_j1!=reg_j2) df[i,11] <- df[i,11] + 1/length(ff)
+            if(reg_j1!=reg_i1 && reg_j2==-1 && reg_i2==-1) df[i,12] <- df[i,12] + 1/length(ff)
           }}
       }}
   return(df)
