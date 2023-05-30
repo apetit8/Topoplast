@@ -421,7 +421,7 @@ for (sim.name in rownames(all.sims)) {
 ################################################################################
 param.dir <- file.path("templates/10g_a0")
 ifelse(!dir.exists(file.path("simul/10g_a0")), dir.create("simul/10g_a0"), FALSE)#burning_andreas folder
-cache.dir <- normalizePath(file.path("simul/10g"))
+cache.dir <- normalizePath(file.path("simul/10g_a0"))
 
 overwrite <- FALSE
 # options(warn=1)
