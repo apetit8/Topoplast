@@ -45,7 +45,7 @@ feedback.from <- function(graph, from, cutoff = -1) {
 	ans <- list()
 	for (i in 1:(length(paths)-1)) {
 		for (j in (i+1):length(paths)) {
-			if (sum(duplicated(c(paths[[i]], paths[[j]]))) == 2)
+			if (length(setdiff(paths[[i]], paths[[j]])) == length(paths[[i]]) - 2) # no nodes in both paths
 				ans[[length(ans)+1]] <- list(paths[[i]], paths[[j]])
 		}
 	}
