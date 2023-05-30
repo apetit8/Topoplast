@@ -33,27 +33,48 @@ feedback.from <- function(graph, from, cutoff = -1) {
 	return(ans)
 }
 
-#BUG: get 
-feedforward.from.to <- function(graph, from, to, cutoff.max = -1, cutoff.min = 1) {
-	path.from.to <- my_all_simple_paths(graph=graph, from=from[1], to=to[1], mode="out", cutoff=cutoff.max) 
+.ff.from.paths <- function(paths) {
+	# Computes a list of feedforward loops from a list of paths
+	if (length(paths) < 2) return(NULL)
+	stopifnot(
+		is.list(paths), 
+		all(sapply(paths, length) >= 2),                 # Paths must be at least of length 2 (from, to)
+		length(unique(sapply(paths, "[", 1)))      == 1, # All paths start with the same element
+		length(unique(sapply(rev(paths), "[", 1))) == 1  # All paths end with the same element
+	)
+	ans <- list()
+	for (i in 1:(length(paths)-1)) {
+		for (j in (i+1):length(paths)) {
+			if (sum(duplicated(c(paths[[i]], paths[[j]]))) == 2)
+				ans[[length(ans)+1]] <- list(paths[[i]], paths[[j]])
+		}
+	}
+	ans
+}
+
+feedforward.from.to <- function(graph, from, to, cutoff.max = -1, cutoff.min = 1, keep.min=TRUE) {
+	# cutoff.max: max size of the full ff loop (including both sides). No limit if < 0
+	# cutoff.min: min size of the full ff loop (including both sides).
 	
-	# which.small <- which(sapply(path.from.to, length) <= cutoff.min + 1 ) #Plus petit que le minimum ? Cutoff.min = longueur max de la plus petite branche ?
-	which.small <- which(sapply(path.from.to, length) == cutoff.min )
-	ans <- unlist(lapply(which.small, function(i) {
-						relevant.path <- NULL
-						for (j in seq_along(path.from.to)) {
-						  #Problem: what if both branches are of the same length ? It does not count it ?
-						  if (j != i && j >= i && length(path.from.to[[j]]) <= cutoff.max && sum(duplicated(c(path.from.to[[i]], path.from.to[[j]]))) == 2)
-							#if (j != i && (j > i || !j%in%which.small) && sum(duplicated(c(path.from.to[[i]], path.from.to[[j]]))) == 2)
-								relevant.path <- append(relevant.path, j)
-						}
-						if (length(relevant.path) > 0) {
-							return(lapply(relevant.path, function(p) list(path.from.to[[i]], path.from.to[[p]])))
-						} else {
-							return(NULL)
-						}
-					}
-				 ), recursive=FALSE)
+	if (cutoff.max < 0)
+		cutoff.max <- length(V(graph))
+	
+	cutoff <- 1
+	paths  <- list()
+	while(TRUE) {
+		paths[[cutoff]] <- my_all_simple_paths(graph=graph, from=from[1], to=to[1], mode="out", cutoff=cutoff)
+		ff <- .ff.from.paths(unlist(paths, recursive=FALSE))
+		if (cutoff > 1 && length(ff) > 0) {
+			ff.size <- sapply(ff, function(l) length(l[[1]]) + length(l[[2]]) - 2)
+			ff <- ff[ff.size >= cutoff.min & ff.size <= cutoff.max & ifelse(keep.min, ff.size == min(ff.size), TRUE)]
+			if (length(ff) > 0)
+				break
+		}
+		cutoff <- cutoff + 1
+		if (cutoff > cutoff.max - 1)
+			break
+	}
+	ff
 }
 
 feedforward.to <- function(graph, to, cutoff.max = -1, cutoff.min = 1) {
