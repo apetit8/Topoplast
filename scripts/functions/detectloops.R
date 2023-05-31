@@ -12,55 +12,84 @@ my_all_simple_paths <- function(graph, from, to=igraph::V(graph), mode=c("out", 
 		a
 }}
 
-feedback.from.to <- function(graph, from, to, cutoff = -1) {
-  path.from <- my_all_simple_paths(graph=graph, from=from[1], to=to[1], mode="out", cutoff=cutoff)
-	path.to   <- my_all_simple_paths(graph=graph, from=to[1], to=from[1], mode="out", cutoff=cutoff)
-	if (length(path.from) == 0 || length(path.to) == 0)
-		return(NULL)
-	ee <- expand.grid(seq_along(path.from), seq_along(path.to))
-	ans <- lapply(1:nrow(ee), function(i) c(path.from[[ee[i,1]]], path.to[[ee[i,2]]][-1]))
-	if (cutoff > 0) 
-		ans <- ans[sapply(ans, length) <= cutoff]
-	if (length(ans) > 0) 	# Remove answers with duplcated nodes (beyond "from")
-		ans <- ans[sapply(ans, function(x) sum(duplicated(x)) == 1)]
+.loops.from.paths <- function(paths1, paths2 = NULL) {
+	# Computes a list of loops from two lists of paths
+	# Loops with duplicated nodes are removed
+	# The logic of the for loops is different:
+	# * both paths1 and paths2 provided: all combinations of paths1 and paths2 elements are returned
+	# * only paths1 is provided: all pairs of paths from paths1 are returned
+	
+	if (length(paths1) < 1 || (!is.null(paths2) && length(paths2) < 1)) return(NULL)
+	
+	ans <- list()
+	
+	loop1 <- if(is.null(paths2))
+		     seq(1, length(path1)-1)
+		else seq_along(paths1)
+		
+	for (i in loop1) {
+		
+		loop2 <- if(is.null(paths2))
+		     seq(i+1, length(paths1))
+		else seq_along(paths2)
+		
+		for (j in loop2) {
+			p1 <- paths1[[i]]
+			p2 <- if(is.null(paths2))
+			     paths1[[j]]
+			else paths2[[j]]
+			if (length(setdiff(p1, p2)) == length(p1) - 2) # no duplicated nodes
+				ans[[length(ans)+1]] <- list(p1, p2)
+		}
+	}
+	ans
+}
+
+feedback.from.to <- function(
+	graph, 
+	from, 
+	to, 
+	cutoff.path1 = c(1, igraph::gorder(graph)-1), 
+	cutoff.path2 = c(1, igraph::gorder(graph)-1))
+{
+	# path1 is from "from" to "to", path2 from "to" to "from"
+	path.from <- my_all_simple_paths(graph=graph, from=from[1], to=to[1], mode="out", cutoff=max(cutoff.path1))
+	path.to   <- my_all_simple_paths(graph=graph, from=to[1], to=from[1], mode="out", cutoff=max(cutoff.path2))
+	
+	path.from.list <- lapply(seq_len(max(cutoff.path1)), function(i) path.from[sapply(path.from, length) == i + 1])
+	path.to.list   <- lapply(seq_len(max(cutoff.path2)), function(i) path.to  [sapply(path.to  , length) == i + 1])
+	
+	seq.path1     <- seq(cutoff.path1[1], cutoff.path1[2])
+	seq.path2     <- seq(cutoff.path2[1], cutoff.path2[2])
+	
+	ans <- list()
+	
+	for (i in seq.path1) {
+		for (j in seq.path2) {
+			ans <- c(ans, .loops.from.paths(path.from.list[[i]], path.to.list[[j]]))
+		}
+	}
 	return(ans)
 }
 
-feedback.from <- function(graph, from, cutoff = -1) {
-	ans <- do.call(c, lapply(igraph::V(graph), feedback.from.to, graph=graph, from=from, cutoff=cutoff))
+feedback.from <- function(
+	graph, 
+	from, 
+	cutoff.path = c(1, igraph::gorder(graph)-1))
+{
+	ans <- do.call(c, lapply(
+			               igraph::V(graph), 
+			FUN          = feedback.from.to, 
+			graph        = graph, 
+			from         = from, 
+			cutoff.path1 = c(1,1), 
+			cutoff.path2 = c(min(cutoff.path)-1, max(cutoff.path)-1)
+		))
+			
 		# Remove duplicated path -- this is a trick, because unique() does not work for lists
+		# It cannot be avoided, as several pairs (from, to) might give the same feedback loop
 	ans <- ans[!duplicated(sapply(ans, paste0, collapse="-"))]
 	return(ans)
-}
-
-.ff.from.2paths <- function(paths1, paths2) {
-	# Computes a list of feedforward loops from two lists of paths
-	# Loops with duplicated nodes are removed
-	if (length(paths1) < 1 || length(paths2) < 1) return(NULL)
-	
-	ans <- list()
-	for (i in seq_along(paths1)) {
-		for (j in seq_along(paths2)) {
-			if (length(setdiff(paths1[[i]], paths2[[j]])) == length(paths1[[i]]) - 2) # no duplicated nodes
-				ans[[length(ans)+1]] <- list(paths1[[i]], paths2[[j]])
-		}
-	}
-	ans
-}
-
-.ff.from.1paths <- function(paths) {
-	# Computes a list of feedforward loops from a list of paths
-	# Loops with duplicated nodes are removed
-	if (length(paths) < 2) return(NULL)
-	
-	ans <- list()
-	for (i in 1:(length(paths)-1)) {
-		for (j in (i+1):length(paths)) {
-			if (length(setdiff(paths[[i]], paths[[j]])) == length(paths[[i]]) - 2) # no duplicated nodes
-				ans[[length(ans)+1]] <- list(paths[[i]], paths[[j]])
-		}
-	}
-	ans
 }
 
 feedforward.from.to <- function(
@@ -90,8 +119,8 @@ feedforward.from.to <- function(
 		for (p2 in seq.path2) {
 			if (!p2 %in% seq.path1 || p2 >= p1) # Avoids mirror loops
 				ans <- c(ans, 
-					if (p1 == p2) .ff.from.1paths(path.list[[p1]])
-					else          .ff.from.2paths(path.list[[p1]], path.list[[p2]])
+					if (p1 == p2) .loops.from.paths(path.list[[p1]])
+					else          .loops.from.paths(path.list[[p1]], path.list[[p2]])
 				)
 		}
 	}
