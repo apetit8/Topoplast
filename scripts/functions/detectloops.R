@@ -33,53 +33,85 @@ feedback.from <- function(graph, from, cutoff = -1) {
 	return(ans)
 }
 
-.ff.from.paths <- function(paths) {
+.ff.from.2paths <- function(paths1, paths2) {
+	# Computes a list of feedforward loops from two lists of paths
+	# Loops with duplicated nodes are removed
+	if (length(paths1) < 1 || length(paths2) < 1) return(NULL)
+	
+	ans <- list()
+	for (i in seq_along(paths1)) {
+		for (j in seq_along(paths2)) {
+			if (length(setdiff(paths1[[i]], paths2[[j]])) == length(paths1[[i]]) - 2) # no duplicated nodes
+				ans[[length(ans)+1]] <- list(paths1[[i]], paths2[[j]])
+		}
+	}
+	ans
+}
+
+.ff.from.1paths <- function(paths) {
 	# Computes a list of feedforward loops from a list of paths
+	# Loops with duplicated nodes are removed
 	if (length(paths) < 2) return(NULL)
-	stopifnot(
-		is.list(paths), 
-		all(sapply(paths, length) >= 2),                 # Paths must be at least of length 2 (from, to)
-		length(unique(sapply(paths, "[", 1)))      == 1, # All paths start with the same element
-		length(unique(sapply(rev(paths), "[", 1))) == 1  # All paths end with the same element
-	)
+	
 	ans <- list()
 	for (i in 1:(length(paths)-1)) {
 		for (j in (i+1):length(paths)) {
-			if (length(setdiff(paths[[i]], paths[[j]])) == length(paths[[i]]) - 2) # no nodes in both paths
+			if (length(setdiff(paths[[i]], paths[[j]])) == length(paths[[i]]) - 2) # no duplicated nodes
 				ans[[length(ans)+1]] <- list(paths[[i]], paths[[j]])
 		}
 	}
 	ans
 }
 
-feedforward.from.to <- function(graph, from, to, cutoff.max = -1, cutoff.min = 1, keep.min=TRUE) {
-	# cutoff.max: max size of the full ff loop (including both sides). No limit if < 0
-	# cutoff.min: min size of the full ff loop (including both sides).
+feedforward.from.to <- function(
+	graph, 
+	from, 
+	to, 
+	cutoff.path1 = c(1, gorder(graph)-1), 
+	cutoff.path2 = c(1, gorder(graph)-1)) 
+{
+	ans <- list()
 	
-	if (cutoff.max < 0)
-		cutoff.max <- length(V(graph))
+	seq.path1     <- seq(cutoff.path1[1], cutoff.path1[2])
+	seq.path2     <- seq(cutoff.path2[1], cutoff.path2[2])
+	shortest.path <- min(seq.path1, seq.path2)
+	longest.path  <- max(seq.path1, seq.path2)
 	
-	cutoff <- 1
-	paths  <- list()
-	while(TRUE) {
-		paths[[cutoff]] <- my_all_simple_paths(graph=graph, from=from[1], to=to[1], mode="out", cutoff=cutoff)
-		ff <- .ff.from.paths(unlist(paths, recursive=FALSE))
-		if (cutoff > 1 && length(ff) > 0) {
-			ff.size <- sapply(ff, function(l) length(l[[1]]) + length(l[[2]]) - 2)
-			ff <- ff[ff.size >= cutoff.min & ff.size <= cutoff.max & ifelse(keep.min, ff.size == min(ff.size), TRUE)]
-			if (length(ff) > 0)
-				break
+	paths <- my_all_simple_paths(
+		graph = graph, 
+		from  = from[1], 
+		to    = to[1], 
+		mode  = "out", 
+		cutoff= longest.path)
+	
+	path.list <- split(paths, sapply(paths, length)-1)
+	
+	for (p1 in seq.path1) {
+		for (p2 in seq.path2) {
+			if (!p2 %in% seq.path1 || p2 >= p1) # Avoids mirror loops
+				ans <- c(ans, 
+					if (p1 == p2) .ff.from.1paths(path.list[[p1]])
+					else          .ff.from.2paths(path.list[[p1]], path.list[[p2]])
+				)
 		}
-		cutoff <- cutoff + 1
-		if (cutoff > cutoff.max - 1)
-			break
 	}
-	ff
+	ans
 }
 
-feedforward.to <- function(graph, to, cutoff.max = -1, cutoff.min = 1) {
-  #test <- feedforward.from.to(graph=graph, V(graph), to=to, cutoff.max=cutoff.max, cutoff.min=cutoff.min)
-	ans <- unlist(lapply(V(graph), feedforward.from.to, graph=graph, to=to, cutoff.max=cutoff.max, cutoff.min=cutoff.min), recursive=FALSE)
+feedforward.to <- function(
+	graph, 
+	to, 
+	cutoff.path1 = c(1, gorder(graph)-1), 
+	cutoff.path2 = c(1, gorder(graph)-1)) 
+{
+	unlist(lapply(
+			               V(graph), 
+			FUN          = feedforward.from.to, 
+			graph        = graph, 
+			to           = to, 
+			cutoff.path1 = cutoff.path1, 
+			cutoff.path2 = cutoff.path2), 
+		recursive=FALSE)
 }
 
 
