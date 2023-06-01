@@ -1,14 +1,14 @@
 library(igraph)
 library(signnet)
 
-my_all_simple_paths <- function(graph, from, to=igraph::V(graph), mode=c("out", "in", "all", "total"),  cutoff = -1) {
-	# Technical function to deal with old versions of igraph::all_simple_paths that does not have the cutoff argument
+.my_all_simple_paths <- function(graph, from, to=igraph::V(graph), mode=c("out", "in", "all", "total"),  cutoff = -1) {
+	# Technical function to deal with old versions of igraph::all_simple_paths that do not have the cutoff argument
 	if ("cutoff" %in% names(formals(igraph::all_simple_paths))) {
 		igraph::all_simple_paths(graph=graph, from=from, to=to, mode=mode, cutoff=cutoff)
 	} else {
 		a <- igraph::all_simple_paths(graph=graph, from=from, to=to, mode=mode)
 		if (cutoff > 0) 
-			a <- a[sapply(a, length) <= cutoff]
+			a <- a[sapply(a, length) <= cutoff + 1]
 		a
 }}
 
@@ -19,12 +19,15 @@ my_all_simple_paths <- function(graph, from, to=igraph::V(graph), mode=c("out", 
 	# * both paths1 and paths2 provided: all combinations of paths1 and paths2 elements are returned
 	# * only paths1 is provided: all pairs of paths from paths1 are returned
 	
-	if (length(paths1) < 1 || (!is.null(paths2) && length(paths2) < 1)) return(NULL)
+	if (
+		( is.null(paths2) && length(paths1) < 2) || 
+		(!is.null(paths2) && (length(paths1) < 1 || length(paths2) < 1)))
+		return(list())
 	
 	ans <- list()
 	
 	loop1 <- if(is.null(paths2))
-		     seq(1, length(path1)-1)
+		     seq(1, length(paths1)-1)
 		else seq_along(paths1)
 		
 	for (i in loop1) {
@@ -49,18 +52,18 @@ feedback.from.to <- function(
 	graph, 
 	from, 
 	to, 
-	cutoff.path1 = c(1, igraph::gorder(graph)-1), 
-	cutoff.path2 = c(1, igraph::gorder(graph)-1))
+	edges1 = c(1, igraph::gorder(graph)-1), 
+	edges2 = c(1, igraph::gorder(graph)-1))
 {
 	# path1 is from "from" to "to", path2 from "to" to "from"
-	path.from <- my_all_simple_paths(graph=graph, from=from[1], to=to[1], mode="out", cutoff=max(cutoff.path1))
-	path.to   <- my_all_simple_paths(graph=graph, from=to[1], to=from[1], mode="out", cutoff=max(cutoff.path2))
+	path.from <- .my_all_simple_paths(graph=graph, from=from[1], to=to[1], mode="out", cutoff=max(edges1))
+	path.to   <- .my_all_simple_paths(graph=graph, from=to[1], to=from[1], mode="out", cutoff=max(edges2))
 	
-	path.from.list <- lapply(seq_len(max(cutoff.path1)), function(i) path.from[sapply(path.from, length) == i + 1])
-	path.to.list   <- lapply(seq_len(max(cutoff.path2)), function(i) path.to  [sapply(path.to  , length) == i + 1])
+	path.from.list <- lapply(seq_len(max(edges1)), function(i) path.from[sapply(path.from, length) == i + 1])
+	path.to.list   <- lapply(seq_len(max(edges2)), function(i) path.to  [sapply(path.to  , length) == i + 1])
 	
-	seq.path1     <- seq(cutoff.path1[1], cutoff.path1[2])
-	seq.path2     <- seq(cutoff.path2[1], cutoff.path2[2])
+	seq.path1     <- seq(min(edges1), max(edges1))
+	seq.path2     <- seq(min(edges2), max(edges2))
 	
 	ans <- list()
 	
@@ -75,20 +78,26 @@ feedback.from.to <- function(
 feedback.from <- function(
 	graph, 
 	from, 
-	cutoff.path = c(1, igraph::gorder(graph)-1))
+	edges    = c(2, igraph::gorder(graph)),
+	collapse = TRUE)
 {
 	ans <- do.call(c, lapply(
 			               igraph::V(graph), 
 			FUN          = feedback.from.to, 
 			graph        = graph, 
 			from         = from, 
-			cutoff.path1 = c(1,1), 
-			cutoff.path2 = c(min(cutoff.path)-1, max(cutoff.path)-1)
+			edges1 = c(1,1), 
+			edges2 = c(min(edges)-1, max(edges)-1)
 		))
 			
 		# Remove duplicated path -- this is a trick, because unique() does not work for lists
-		# It cannot be avoided, as several pairs (from, to) might give the same feedback loop
+		# This step can hardly be avoided, as several pairs (from, to) might give the same feedback loop
+
 	ans <- ans[!duplicated(sapply(ans, paste0, collapse="-"))]
+	
+	if (collapse)
+		ans <- lapply(ans, function(x) c(x[[1]][1:2], x[[2]][2:length(x[[2]])]))
+	
 	return(ans)
 }
 
@@ -96,25 +105,28 @@ feedforward.from.to <- function(
 	graph, 
 	from, 
 	to, 
-	cutoff.path1 = c(1, gorder(graph)-1), 
-	cutoff.path2 = c(1, gorder(graph)-1)) 
+	edges1 = c(1, gorder(graph)-1), 
+	edges2 = c(1, gorder(graph)-1)) 
 {
 	ans <- list()
 	
-	seq.path1     <- seq(cutoff.path1[1], cutoff.path1[2])
-	seq.path2     <- seq(cutoff.path2[1], cutoff.path2[2])
+	seq.path1     <- seq(min(edges1), max(edges1))
+	seq.path2     <- seq(min(edges2), max(edges2))
 	shortest.path <- min(seq.path1, seq.path2)
 	longest.path  <- max(seq.path1, seq.path2)
 	
-	paths <- my_all_simple_paths(
+	paths <- .my_all_simple_paths(
 		graph = graph, 
 		from  = from[1], 
 		to    = to[1], 
 		mode  = "out", 
 		cutoff= longest.path)
 	
-	path.list <- split(paths, sapply(paths, length)-1)
-	
+	if (length(paths) < 2)
+		return(list())
+		
+	path.list <- lapply(seq_len(longest.path), function(i) paths[sapply(paths, length) == i + 1])
+
 	for (p1 in seq.path1) {
 		for (p2 in seq.path2) {
 			if (!p2 %in% seq.path1 || p2 >= p1) # Avoids mirror loops
@@ -130,16 +142,16 @@ feedforward.from.to <- function(
 feedforward.to <- function(
 	graph, 
 	to, 
-	cutoff.path1 = c(1, gorder(graph)-1), 
-	cutoff.path2 = c(1, gorder(graph)-1)) 
+	edges1 = c(1, igraph::gorder(graph)-1), 
+	edges2 = c(1, igraph::gorder(graph)-1)) 
 {
 	unlist(lapply(
-			               V(graph), 
-			FUN          = feedforward.from.to, 
-			graph        = graph, 
-			to           = to, 
-			cutoff.path1 = cutoff.path1, 
-			cutoff.path2 = cutoff.path2), 
+			         igraph::V(graph), 
+			FUN    = feedforward.from.to, 
+			graph  = graph, 
+			to     = to, 
+			edges1 = edges1, 
+			edges2 = edges2), 
 		recursive=FALSE)
 }
 
