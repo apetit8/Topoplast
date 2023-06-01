@@ -32,8 +32,8 @@ igraph_options(return.vs.es=F)
 # summaryRprof()
 #########################################
 #Analyses of plastic genes from different sources
-cutoff.max <- 3
-cutoff.min <- 1
+edges1 <- 2
+edges2 <- 1
 all_plast_genes <- data.frame()
 #########################################
 #
@@ -43,7 +43,7 @@ all_plast_genes <- data.frame()
 phgenes <- read.table("e_coli/Plast_genes/Ph/plastic_genes.txt", sep ="\t", header=FALSE)
 phgenes <- phgenes[(phgenes[,1] %in% colnames(E_coli_mat)),] 
 
-phloops <- e_coli_prep_analyses(phgenes[1], g, E_coli_mat, fun="FFL", cores=1)
+phloops <- e_coli_prep_analyses(phgenes, g, E_coli_mat, fun="FFL", edges1=edges1, edges2=edges2, cores=1)
 
 write.csv(rbind(phloops, subset(all_plast_genes, V1 %in% phgenes)), "scripts/data/ph_plast_FFL.csv")
 all_plast_genes <- rbind(all_plast_genes, as.data.frame(phloops))
@@ -56,7 +56,7 @@ medgrowth_genes <- read.csv("e_coli/Plast_genes/Growth_envir/Supp_tables_S1.csv"
 medgrowth_genes <- medgrowth_genes[(medgrowth_genes[,1] %in% colnames(E_coli_mat)),] 
 medgrowth_genes <- medgrowth_genes[!(medgrowth_genes[,1] %in% all_plast_genes$V1),1]
 #
-plast_medgrowthloops <- e_coli_prep_analyses(medgrowth_genes, g, E_coli_mat, fun="FFL", cores=50)
+plast_medgrowthloops <- e_coli_prep_analyses(medgrowth_genes, g, E_coli_mat, fun="FFL", edges1=edges1, edges2=edges2, cores=1)
 
 write.csv(rbind(plast_medgrowthloops, subset(all_plast_genes, V1 %in% medgrowth_genes)), "scripts/data/plast_medium_growth_FFL.csv")
 all_plast_genes <- rbind(all_plast_genes, as.data.frame(plast_medgrowthloops))
@@ -68,7 +68,7 @@ non_envir_genes <- read.csv("e_coli/Plast_genes/Growth_envir/Supp_tables_S3.csv"
 non_envir_genes <- non_envir_genes[(non_envir_genes[,1] %in% colnames(E_coli_mat)),] 
 non_envir_genes <- non_envir_genes[(non_envir_genes[,1] %in% all_plast_genes$V1),1] 
 #
-np_medgrowthloops <- e_coli_prep_analyses(non_envir_genes, g, E_coli_mat, fun="FFL", cores=50)
+np_medgrowthloops <- e_coli_prep_analyses(non_envir_genes, g, E_coli_mat, fun="FFL", edges1=edges1, edges2=edges2, cores=1)
 
 write.csv(rbind(np_medgrowthloops, subset(all_plast_genes, V1 %in% non_envir_genes)), "scripts/data/np_medium_growth_FFL.csv")
 all_plast_genes <- rbind(all_plast_genes, as.data.frame(np_medgrowthloops))
@@ -81,7 +81,7 @@ mg_c_genes <- as.data.frame(unique(subset(read.csv("e_coli/Plast_genes/C_Mg_Na/4
 mg_c_genes <- mg_c_genes[(mg_c_genes[,1] %in% colnames(E_coli_mat)),]
 mg_c_genes <- mg_c_genes[!(mg_c_genes %in% all_plast_genes$V1)] 
 
-plast_mg_c  <- e_coli_prep_analyses(mg_c_genes, g, E_coli_mat, fun="FFL", cores=50)
+plast_mg_c  <- e_coli_prep_analyses(mg_c_genes, g, E_coli_mat, fun="FFL", edges1=edges1, edges2=edges2, cores=1)
   
 write.csv(rbind(plast_mg_c , subset(all_plast_genes, V1 %in% mg_c_genes)), "scripts/data/mg_c_growth_FFL.csv")
 all_plast_genes <- rbind(all_plast_genes, as.data.frame(plast_mg_c))
@@ -94,7 +94,7 @@ ox_genes <- read.csv("e_coli/Plast_genes/Oxydative_stress/table_5_genes_updated_
 ox_genes <- ox_genes[(ox_genes[,1] %in% colnames(E_coli_mat)),] 
 ox_genes <- ox_genes[!(ox_genes %in% all_plast_genes$V1)] 
 
-plast_ox <- e_coli_prep_analyses(ox_genes, E_coli_mat, fun="FFL", cores=50)
+plast_ox <- e_coli_prep_analyses(ox_genes, g, E_coli_mat, fun="FFL", edges1=edges1, edges2=edges2, cores=1)
 write.csv(rbind(plast_ox, subset(all_plast_genes, V1 %in% ox_genes)), "scripts/data/plast_ox_FFL.csv")
 all_plast_genes <- rbind(all_plast_genes, as.data.frame(plast_ox))
 
@@ -106,7 +106,7 @@ aero_genes <- read.table("e_coli/Plast_genes/Aero_liquid/Table_2_3_4.txt", sep =
 aero_genes <- aero_genes[(aero_genes[,1] %in% colnames(E_coli_mat)),] 
 aero_genes <- aero_genes[!(aero_genes %in% all_plast_genes$V1)] 
 
-plast_aero <- e_coli_prep_analyses(aero_genes, E_coli_mat, fun="FFL", cores=50)
+plast_aero <- e_coli_prep_analyses(aero_genes, g, E_coli_mat, fun="FFL", edges1=edges1, edges2=edges2, cores=1)
 write.csv(rbind(plast_aero, subset(all_plast_genes, V1 %in% aero_genes)), "scripts/data/plast_aero_FFL.csv")
 all_plast_genes <- rbind(all_plast_genes, as.data.frame(plast_aero))
 
@@ -119,7 +119,7 @@ juice_genes <- juice_genes[(juice_genes[,1] %in% colnames(E_coli_mat)),]
 juice_genes <- juice_genes[!(juice_genes %in% all_plast_genes$V1)] 
 
 
-plast_juice <- e_coli_prep_analyses(juice_genes, E_coli_mat, fun="FFL", cores=50)
+plast_juice <- e_coli_prep_analyses(juice_genes, g, E_coli_mat, fun="FFL", edges1=edges1, edges2=edges2, cores=1)
 write.csv(rbind(plast_juice, subset(all_plast_genes, V1 %in% juice_genes)), "scripts/data/plast_juice_FFL.csv")
 all_plast_genes <- rbind(all_plast_genes, as.data.frame(plast_juice))
 
@@ -131,7 +131,7 @@ temptr_genes <- read.table("e_coli/Plast_genes/human_temp/Table_1_genes_updated_
 temptr_genes <- temptr_genes[(temptr_genes[,1] %in% colnames(E_coli_mat)),] 
 temptr_genes <- temptr_genes[!(temptr_genes %in% all_plast_genes$V1)] 
 
-plast_temptr <- e_coli_prep_analyses(temptr_genes, E_coli_mat, fun="FFL", cores=50)
+plast_temptr <- e_coli_prep_analyses(temptr_genes, g, E_coli_mat, fun="FFL", edges1=edges1, edges2=edges2, cores=1)
 write.csv(rbind(plast_temptr, subset(all_plast_genes, V1 %in% temptr_genes)), "scripts/data/plast_temptr_FFL.csv")
 all_plast_genes <- rbind(all_plast_genes, as.data.frame(plast_temptr))
 
@@ -143,7 +143,7 @@ stringent_genes <- as.data.frame(unique(read.table("e_coli/Plast_genes/Stringent
 stringent_genes <- stringent_genes[(stringent_genes[,1] %in% colnames(E_coli_mat)),] 
 stringent_genes <- stringent_genes[!(stringent_genes %in% all_plast_genes$V1)] 
 
-plast_stringent <- e_coli_prep_analyses(stringent_genes, E_coli_mat, fun="FFL", cores=50)
+plast_stringent <- e_coli_prep_analyses(stringent_genes, g, E_coli_mat, fun="FFL", edges1=edges1, edges2=edges2, cores=1)
 write.csv(rbind(plast_stringent, subset(all_plast_genes, V1 %in% stringent_genes)), "scripts/data/plast_stringent_FFL.csv")
 all_plast_genes <- rbind(all_plast_genes, as.data.frame(plast_stringent))
 
@@ -159,7 +159,7 @@ stress_genes <- as.data.frame(unique(c(subset(read.csv("e_coli/Plast_genes/Mult_
 stress_genes <- stress_genes[(stress_genes[,1] %in% colnames(E_coli_mat)),] 
 stress_genes <- stress_genes[!(stress_genes %in% all_plast_genes$V1)] 
 
-plast_stress <- e_coli_prep_analyses(stress_genes, E_coli_mat, fun="FFL", cores=50)
+plast_stress <- e_coli_prep_analyses(stress_genes, g, E_coli_mat, fun="FFL", edges1=edges1, edges2=edges2, cores=1)
 write.csv(rbind(plast_stress, subset(all_plast_genes, V1 %in% stress_genes)), "scripts/data/plast_stress_FFL.csv")
 all_plast_genes <- rbind(all_plast_genes, as.data.frame(plast_stress))
 
@@ -174,7 +174,7 @@ print("All plastic genes done!")
 nonplast_genes <- as.data.frame(colnames(E_coli_mat))
 nonplast_genes <- nonplast_genes[!(nonplast_genes[,1] %in% all_plast_genes$V1),]
 
-nonplast_FFL <- e_coli_prep_analyses(nonplast_genes, E_coli_mat, fun="FFL", cores=50)
+nonplast_FFL <- e_coli_prep_analyses(nonplast_genes, g, E_coli_mat, fun="FFL", edges1=edges1, edges2=edges2, cores=1)
 write.csv(nonplast_FFL, "scripts/data/nonplast_FFL.csv")
 
 print("Non plastic genes done!")

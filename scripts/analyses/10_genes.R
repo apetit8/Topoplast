@@ -37,8 +37,8 @@ topo.sel10 <- essential.topo(df=subset(df.10, Gen==gen & envir=="Control_sel"),
 
 ################
 # Cutoffs are number of NODES
-cutoff.max <- 2
-cutoff.min <- 1
+cutoff.path1 <- 2
+cutoff.path2 <- 1
 ##### Loop count
 Anticor10_n <- loops_n.count(topo.anticor10, cutoff.max = cutoff.max, cutoff.min = cutoff.min)
 Corr10_n <- loops_n.count(topo.corr10, cutoff.max = cutoff.max, cutoff.min = cutoff.min)
@@ -53,46 +53,13 @@ pdf(paste0(pdfname,"_N_loops",".pdf"))
   hist(Sel10_n$Loop_number, main = "Sel Stable", ylim = c(0, 300))
 dev.off()
 
-################
-##### Coherence
-Anticor10 <- FFL.coherence(topo.anticor10, cutoff.max = cutoff.max, cutoff.min = cutoff.min, randomFF=TRUE)
-Corr10 <- FFL.coherence(topo.corr10, cutoff.max = cutoff.max, cutoff.min = cutoff.min, randomFF=TRUE)
-No_sel10 <- FFL.coherence(topo.no_sel10, cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = 2, randomFF=TRUE) #
-Sel10 <- FFL.coherence(topo.sel10, cutoff.max = cutoff.max, cutoff.min = cutoff.min, randomFF=TRUE)
-
-df <- rbind(colSums(Anticor10), colSums(Corr10), colSums(No_sel10), colSums(Sel10))
-rownames(df) <- c("Anticor10", "Corr10", "No_sel10", "Sel10")
-
-pdf(paste0(pdfname,"_coherence_loops",".pdf"), width=6.5, height=6)
-  layout(matrix(c(1:1), 1, 1, byrow = TRUE))
-  barplot(t(df[,1:3])*100/300, col=c(7,3,"grey"))
-  legend("bottomleft", box.lty=0,  bg="transparent", fill=c(7,3,"grey"),
-         legend=c("Coherent FFL", "Incoherent FFL","No Loop"))
-dev.off()
-
 
 ################
 ##### Type
-Anticor10 <- FFL.type(topo.anticor10, cutoff.max = cutoff.max, cutoff.min = cutoff.min, frequencies=TRUE)
-Corr10 <- FFL.type(topo.corr10, cutoff.max = cutoff.max, cutoff.min = cutoff.min, frequencies=TRUE)
-No_sel10 <- FFL.type(topo.no_sel10, cutoff.max = cutoff.max, cutoff.min = cutoff.min, frequencies=TRUE) #
-Sel10 <- FFL.type(topo.sel10, cutoff.max = cutoff.max, cutoff.min = cutoff.min, frequencies=TRUE)
-
-df <- rbind(colSums(Anticor10), colSums(Corr10), colSums(No_sel10), colSums(Sel10))
-
-pdf(paste0(pdfname,"_type_FFL_feq",".pdf"), width=6.5, height=6)
-layout(matrix(c(1:1), 1, 1, byrow = TRUE))
-barplot(t(df[,1:5])*100/300, col=c("darkolivegreen","yellowgreen","darkblue","lightblue","grey"))
-legend("bottomleft", box.lty=0,  bg="transparent", fill=c("darkolivegreen","yellowgreen","darkblue","lightblue","grey"),
-       legend=c( "Activating","Inhibiting","Z_act","Z_inh","No FFL"))
-dev.off()
-
-################
-##### Type
-Anticor10 <- FFL.type2(topo.anticor10, cutoff.max = 3, cutoff.min = 2)
-Corr10 <- FFL.type2(topo.corr10, cutoff.max = 3, cutoff.min = 2)
-No_sel10 <- FFL.type2(topo.no_sel10, cutoff.max = 3, cutoff.min = 2) #
-Sel10 <- FFL.type2(topo.sel10, cutoff.max = 3, cutoff.min = 2)
+Anticor10 <- FFL.type2(topo.anticor10, edges1 = 2, edges2 = 1)
+Corr10 <- FFL.type2(topo.corr10, edges1 = 2, edges2 = 1)
+No_sel10 <- FFL.type2(topo.no_sel10, edges1 = 2, edges2 = 1)
+Sel10 <- FFL.type2(topo.sel10, edges1 = 2, edges2 = 1)
 
 df <- as.data.frame(rbind(colSums(Anticor10), colSums(Corr10), colSums(No_sel10), colSums(Sel10)))
 rownames(df) <- c("Anticor","Cor","No_sel","Sel")
@@ -103,7 +70,7 @@ df$heterogenous <- rowSums2(as.matrix(df[,c(5,6,9,10)]))
 
 
 pdfname <- "figures/10g"
-pdf(paste0(pdfname,"_type_FFL2_cutoff_3",".pdf"), width=6.5, height=6)
+pdf(paste0(pdfname,"_type_FFL2_2_1_edges",".pdf"), width=6.5, height=6)
 layout(matrix(c(1:1), 1, 1, byrow = TRUE))
   #Each motif topology
   barplot(t(df[,2:10])*100/300, col=c("grey","darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1"))
@@ -120,10 +87,10 @@ layout(matrix(c(1:1), 1, 1, byrow = TRUE))
 dev.off()
 
 #
-Anticor10 <- FFL.type2(topo.anticor10, cutoff.max = 3, cutoff.min = 3)
-Corr10 <- FFL.type2(topo.corr10, cutoff.max = 3, cutoff.min = 3)
-No_sel10 <- FFL.type2(topo.no_sel10, cutoff.max = 3, cutoff.min = 3) #
-Sel10 <- FFL.type2(topo.sel10, cutoff.max = 3, cutoff.min = 3)
+Anticor10 <- FFL.type2(topo.anticor10, edges1 = 2, edges2 = 2)
+Corr10 <- FFL.type2(topo.corr10, edges1 = 2, edges2 = 2)
+No_sel10 <- FFL.type2(topo.no_sel10, edges1 = 2, edges2 = 2) #
+Sel10 <- FFL.type2(topo.sel10, edges1 = 2, edges2 = 2)
 
 df <- as.data.frame(rbind(colSums(Anticor10), colSums(Corr10), colSums(No_sel10), colSums(Sel10)))
 rownames(df) <- c("Anticor","Cor","No_sel","Sel")

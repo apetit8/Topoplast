@@ -257,14 +257,14 @@ FFL.type <- function(list.w, cutoff.max=3, cutoff.min=1, target=2, frequencies=T
 
 #Custom motif categories : adapted to our simulation model with constitutive expression different from 0
 #change everything to get a tab ? 5 column, "Loop","No loop", "Z_sign", "In/Coherence" and "True/False" and column of concatenate last 3 columns
-FFL.type2 <- function(list.w, cutoff.max=3, cutoff.min=1, target=2){
+FFL.type2 <- function(list.w, edges1=2, edges2=1, target=2){
   
-  if(cutoff.max==3 && cutoff.min==1){
+  if(edges1==2 && edges2==1){
     df <- data.frame(FFL=c(rep(0, length(list.w))), No_FFL=c(rep(0, length(list.w))),
     ID_A_N=c(rep(0, length(list.w))), ID_A_P=c(rep(0, length(list.w))), ID_D_N=c(rep(0, length(list.w))), ID_D_N=c(rep(0, length(list.w))),
     II_A_N=c(rep(0, length(list.w))), II_A_P=c(rep(0, length(list.w))), II_D_N=c(rep(0, length(list.w))), II_D_N=c(rep(0, length(list.w))) )   }
  
-   if(cutoff.max==3 && cutoff.min==3){
+   if(edges1==2 && edges2==2){
     df <- data.frame(FFL=c(rep(0, length(list.w))), No_FFL=c(rep(0, length(list.w))),
     Pos_pos=c(rep(0, length(list.w))), Pos_mixt=c(rep(0, length(list.w))), Pos_neg=c(rep(0, length(list.w))), Neg_pos=c(rep(0, length(list.w))),
     Neg_mixt=c(rep(0, length(list.w))), Neg_neg=c(rep(0, length(list.w))), Mixt_pos=c(rep(0, length(list.w))), Mixt_mixt_hom=c(rep(0, length(list.w))),
@@ -272,12 +272,12 @@ FFL.type2 <- function(list.w, cutoff.max=3, cutoff.min=1, target=2){
   for(i in 1:length(list.w)){
     g <- graph.adjacency(abs(t(list.w[[i]])), mode="directed") 
     E(g)$sign <- (list.w[[i]])[list.w[[i]] != 0] 
-    if(is.null(feedforward.to(g, to=target, cutoff.max=cutoff.max, cutoff.min=cutoff.min))){
+    if(length(feedforward.to(g, to=target, edges1=edges1, edges2=edges2))==0){
       df[i,2] <- 1 } else{
         df[i,1] <- 1
         
-        ff <- feedforward.to(g, to=target, cutoff.max=cutoff.max, cutoff.min=cutoff.min)
-        if(cutoff.max==3 && cutoff.min==1){
+        ff <- feedforward.to(g, to=target, edges1=edges1, edges2=edges2)
+        if(edges1==2 && edges2==1){
         for(m in ff) {
           if(length(E(g, path=m[[1]])$sign)>1 && length(E(g, path=m[[2]])$sign)>2) stop("Wrong cut.offs")
           B1 <- FFL_Z_reg(g, m, Input=1)
@@ -291,7 +291,7 @@ FFL.type2 <- function(list.w, cutoff.max=3, cutoff.min=1, target=2){
           if(B1==B0 && E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)]!=E(g, path=m[[2]])$sign[length(E(g, path=m[[2]])$sign)] && (E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)])==-1) df[i,9] <- df[i,9] + 1/length(ff)
           if(B1==B0 && E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)]!=E(g, path=m[[2]])$sign[length(E(g, path=m[[2]])$sign)] && (E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)])==1) df[i,10] <- df[i,10] + 1/length(ff)
         }}
-        if(cutoff.max==3 && cutoff.min==3){
+        if(edges1==2 && edges2==2){
           for(m in ff) {
             if(length(E(g, path=m[[1]])$sign)!=2 || length(E(g, path=m[[2]])$sign)!=2) stop("Wrong cut.offs")
             reg_j1 <- E(g, path=m[[1]])$sign[1]
@@ -378,18 +378,20 @@ FBL.type <- function(list.w, cutoff=3, target=2, randomFF=FALSE){
 
 
 
-e_coli_prep_analyses <- function(genes_list, g, g_mat, fun="FFL", cores=50){
+e_coli_prep_analyses <- function(genes_list, g, g_mat, fun="FFL", edges1=2, edges2=1, cores=2){
+  # edges1 is supposed to be the longer edge
   stopifnot(fun=="FFL" || fun=="FBL")
   #here, create txt file, name=paste0(filename,"_",fun,".csv")
   loops <- mclapply(genes_list, function(gene) {
     #To avoid igraph::all_simple_paths to take days and weeks, we subset the regulatory networks. Only target genes and connected TFs are kept.
     gg <- induced.subgraph(g, vids = c(which(colnames(E_coli_mat)==gene), which(colnames(E_coli_mat)%in%TF_genes)) )
     E_coli_mat2 <- t((get.adjacency(gg, sparse=FALSE, attr='V3')))
-    ggg <- induced.subgraph(gg, vids = as.vector(unlist(neighborhood(gg, cutoff.max-1, nodes = which(colnames(E_coli_mat2)==gene), mode = 'all'))))
+    ggg <- induced.subgraph(gg, vids = as.vector(unlist(neighborhood(gg, edges1, nodes = which(colnames(E_coli_mat2)==gene), mode = 'all'))))
     E_coli_mat3 <- t((get.adjacency(ggg, sparse=FALSE, attr='V3')))
     E_coli_mat3 <- matrix(as.numeric(E_coli_mat3), ncol = ncol(E_coli_mat3), dimnames = dimnames(E_coli_mat3)) #convert to numeric matrix
     E_coli_mat3[is.na(E_coli_mat3)] <- 0
-    if(fun=="FFL") cc <- FFL.coherence(list(E_coli_mat3), cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = which(colnames(E_coli_mat3)==gene))
+    print(paste0(gene," ; network size ", ncol(E_coli_mat3)))
+    if(fun=="FFL") cc <- FFL.type2(list(E_coli_mat3), edges1 = edges1, edges2 = edges2, target = which(colnames(E_coli_mat3)==gene))
     if(fun=="FBL") cc <- FBL.type(list(E_coli_mat3), cutoff = cutoff, target = which(colnames(E_coli_mat3)==gene))
     #Here, insert writing c(gene,cc) in a txt file
     return(c(gene,cc))
