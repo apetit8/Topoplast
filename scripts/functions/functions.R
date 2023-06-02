@@ -892,16 +892,18 @@ essential.topo <- function(df, min=0.15, max=0.85, target=2, treshold_coeff=0.05
     RN_W_og <- getSlope.ALR(W=W, n.env=30, target.gene=target, min=min, max=max, giveback=1, a=basal)
     for(Wij in 1:length(W)){  #(but diagonal)
       W_test <- W
-      W_test[Wij] <- 0
-      RN_Wij_coeff <- getSlope.ALR(W=W_test, n.env=30, target.gene=target, min=min, max=max, a=basal)
-      RN_Wij_og <- getSlope.ALR(W=W_test, n.env=30, target.gene=target, min=min, max=max, giveback=1, a=basal)
-      # W2[Wij] <- ifelse(RN_Wij_coeff >= (RN_W_coeff-treshold_coeff) &
-      #                     RN_Wij_coeff <= (RN_W_coeff+treshold_coeff) &
-      #                     RN_Wij_og >= (RN_W_og-treshold_og)&
-      #                     RN_Wij_og <= (RN_W_og+treshold_og), 0, 1) * sign(W2[Wij])
-      W2[Wij] <- ifelse(treshold_coeff > (abs(RN_W_coeff-RN_Wij_coeff)) ||
-                          treshold_og > (abs(RN_W_og-RN_Wij_og)), 0, 1) * sign(W2[Wij])
-    }
+      if(W_test[Wij]!=0){
+        W_test[Wij] <- 0
+        RN_Wij_coeff <- getSlope.ALR(W=W_test, n.env=30, target.gene=target, min=min, max=max, a=basal)
+        RN_Wij_og <- getSlope.ALR(W=W_test, n.env=30, target.gene=target, min=min, max=max, giveback=1, a=basal)
+        # W2[Wij] <- ifelse(RN_Wij_coeff >= (RN_W_coeff-treshold_coeff) &
+        #                     RN_Wij_coeff <= (RN_W_coeff+treshold_coeff) &
+        #                     RN_Wij_og >= (RN_W_og-treshold_og)&
+        #                     RN_Wij_og <= (RN_W_og+treshold_og), 0, 1) * sign(W2[Wij])
+        W2[Wij] <- ifelse(treshold_coeff > (abs(RN_W_coeff-RN_Wij_coeff)) ||
+                            treshold_og > (abs(RN_W_og-RN_Wij_og)), 0, 1) * sign(W2[Wij])
+        }
+      }
     return(W2)})
   
    simul.topo <- lapply(1:length(essential_Ws), function(i){

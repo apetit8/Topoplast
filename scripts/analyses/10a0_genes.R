@@ -1,100 +1,52 @@
 source("scripts/functions/functions.R")
 source("scripts/functions/detectloops.R")
 #####################
-sims.dirs1 <- list.dirs("simul/10g_a0", recursive = TRUE)
+sims.dirs1 <- list.dirs("simul/10g_a0.15", recursive = TRUE)
 genes <- 10
 min <- 0.15
 max <- 0.85
 target <- 2 # Target gene in the network
-pdfname <- "figures/10g_a0"
+pdfname <- "figures/10g_a0.15"
 #####################
 #DATA
 ##################
-df.10a0 <- df.simul(sims.dirs1, all.gen = TRUE)
-df.10a0$envir <- str_split(df.10a0$data.dir, "/", n=8, simplify = TRUE)[,3]
-df.10a0$anc_id <- str_split(str_split(df.10a0$data.dir, "/", n=8, simplify = TRUE)[,4], "-", simplify = TRUE)[,2]
+df.10_a0_15 <- df.simul(sims.dirs1, all.gen = TRUE)
+df.10_a0_15$envir <- str_split(df.10_a0_15$data.dir, "/", n=8, simplify = TRUE)[,3]
+df.10_a0_15$anc_id <- str_split(str_split(df.10_a0_15$data.dir, "/", n=8, simplify = TRUE)[,4], "-", simplify = TRUE)[,2]
 
 ################################################################################
 #Keep "essential" connections. Test every connection to see impact on target gene RN, and draw from that.
 #Inspired by Burda et al., 2011
 treshold_coeff <- 0.001 # difference accepted in the Reaction Norm linear regression slope
 treshold_og <- 0.001    # difference accepted in the RN linear regression intercept
-gen <- 3000 #max(df.10a0$Gen)
+gen <- 3000 #max(df.10_a0_15$Gen)
 #############
 
-topo.anticor10a0 <- essential.topo(df=subset(df.10a0, Gen==gen & envir=="Anticorrelated"),
+topo.anticor10_a0_15 <- essential.topo(df=subset(df.10_a0_15, Gen==gen & envir=="Anticorrelated"),
                                  treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3:10))
 
-topo.corr10a0 <- essential.topo(df=subset(df.10a0, Gen==gen & envir=="Correlated"),
+topo.corr10_a0_15 <- essential.topo(df=subset(df.10_a0_15, Gen==gen & envir=="Correlated"),
                               treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3:10))
 
-topo.no_sel10a0 <- essential.topo(df=subset(df.10a0, Gen==gen & envir=="Control_no_sel"),
+topo.no_sel10_a0_15 <- essential.topo(df=subset(df.10_a0_15, Gen==gen & envir=="Control_no_sel"),
                                 treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3:10))
 
-topo.sel10a0 <- essential.topo(df=subset(df.10a0, Gen==gen & envir=="Control_sel"),
+topo.sel10_a0_15 <- essential.topo(df=subset(df.10_a0_15, Gen==gen & envir=="Control_sel"),
                              treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3:10))
 
-
-################
-# Cutoffs are number of NODES
-cutoff.max <- 2
-cutoff.min <- 1
-##### Loop count
-Anticor10a0_n <- loops_n.count(topo.anticor10a0, cutoff.max = cutoff.max, cutoff.min = cutoff.min)
-Corr10a0_n <- loops_n.count(topo.corr10a0, cutoff.max = cutoff.max, cutoff.min = cutoff.min)
-No_sel10a0_n <- loops_n.count(topo.no_sel10a0, cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = 2) #
-Sel10a0_n <- loops_n.count(topo.sel10a0, cutoff.max = cutoff.max, cutoff.min = cutoff.min)
-
-pdf(paste0(pdfname,"_N_loops",".pdf"))
-layout(matrix(c(1:4), 2, 2, byrow = TRUE))
-hist(Anticor10a0_n$Loop_number, main = "Anticor Plast", ylim = c(0, 300))
-hist(Corr10a0_n$Loop_number, main = "Cor Plast", ylim = c(0, 300))
-hist(No_sel10a0_n$Loop_number, main = "No Sel", ylim = c(0, 300))
-hist(Sel10a0_n$Loop_number, main = "Sel Stable", ylim = c(0, 300))
-dev.off()
-
-################
-##### Coherence
-Anticor10a0 <- FFL.coherence(topo.anticor10a0, cutoff.max = cutoff.max, cutoff.min = cutoff.min, randomFF=TRUE)
-Corr10a0 <- FFL.coherence(topo.corr10a0, cutoff.max = cutoff.max, cutoff.min = cutoff.min, randomFF=TRUE)
-No_sel10a0 <- FFL.coherence(topo.no_sel10a0, cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = 2, randomFF=TRUE) #
-Sel10a0 <- FFL.coherence(topo.sel10a0, cutoff.max = cutoff.max, cutoff.min = cutoff.min, randomFF=TRUE)
-
-df <- rbind(colSums(Anticor10a0), colSums(Corr10a0), colSums(No_sel10a0), colSums(Sel10a0))
-rownames(df) <- c("Anticor10a0", "Corr10a0", "No_sel10a0", "Sel10a0")
-
-pdf(paste0(pdfname,"_coherence_loops",".pdf"), width=6.5, height=6)
-layout(matrix(c(1:1), 1, 1, byrow = TRUE))
-barplot(t(df[,1:3])*100/300, col=c(7,3,"grey"))
-legend("bottomleft", box.lty=0,  bg="transparent", fill=c(7,3,"grey"),
-       legend=c("Coherent FFL", "Incoherent FFL","No Loop"))
-dev.off()
-
-
+ifelse(!dir.exists(file.path("scripts/data/essential_motif")), dir.create("scripts/data/essential_motif"), FALSE)#burning_andreas folder
+lapply(topo.anticor10_a0_15, function(x) write.table( data.frame(x), 'scripts/data/essential_motif/topo.anticor10_a0_15.csv'  , append= T, sep=',' ))
+lapply(topo.anticor10_a0_15, function(x) write.table( data.frame(x), 'scripts/data/essential_motif/topo.corr10_a0_15.csv'  , append= T, sep=',' ))
+lapply(topo.anticor10_a0_15, function(x) write.table( data.frame(x), 'scripts/data/essential_motif/topo.no_sel10_a0_15.csv'  , append= T, sep=',' ))
+lapply(topo.anticor10_a0_15, function(x) write.table( data.frame(x), 'scripts/data/essential_motif/topo.sel10_a0_15.csv'  , append= T, sep=',' ))
 ################
 ##### Type
-Anticor10a0 <- FFL.type(topo.anticor10a0, cutoff.max = cutoff.max, cutoff.min = cutoff.min, frequencies=TRUE)
-Corr10a0 <- FFL.type(topo.corr10a0, cutoff.max = cutoff.max, cutoff.min = cutoff.min, frequencies=TRUE)
-No_sel10a0 <- FFL.type(topo.no_sel10a0, cutoff.max = cutoff.max, cutoff.min = cutoff.min, frequencies=TRUE) #
-Sel10a0 <- FFL.type(topo.sel10a0, cutoff.max = cutoff.max, cutoff.min = cutoff.min, frequencies=TRUE)
+Anticor10_a0_15 <- FFL.type2(topo.anticor10_a0_15, edges1 = 2, edges2 = 1)
+Corr10_a0_15 <- FFL.type2(topo.corr10_a0_15, edges1 = 2, edges2 = 1)
+No_sel10_a0_15 <- FFL.type2(topo.no_sel10_a0_15, edges1 = 2, edges2 = 1) #
+Sel10_a0_15 <- FFL.type2(topo.sel10_a0_15, edges1 = 2, edges2 = 1)
 
-df <- rbind(colSums(Anticor10a0), colSums(Corr10a0), colSums(No_sel10a0), colSums(Sel10a0))
-
-pdf(paste0(pdfname,"_type_FFL_feq",".pdf"), width=6.5, height=6)
-layout(matrix(c(1:1), 1, 1, byrow = TRUE))
-barplot(t(df[,1:5])*100/300, col=c("darkolivegreen","yellowgreen","darkblue","lightblue","grey"))
-legend("bottomleft", box.lty=0,  bg="transparent", fill=c("darkolivegreen","yellowgreen","darkblue","lightblue","grey"),
-       legend=c( "Activating","Inhibiting","Z_act","Z_inh","No FFL"))
-dev.off()
-
-################
-##### Type
-Anticor10a0 <- FFL.type2(topo.anticor10a0, edges1 = 2, edges2 = 1)
-Corr10a0 <- FFL.type2(topo.corr10a0, edges1 = 2, edges2 = 1)
-No_sel10a0 <- FFL.type2(topo.no_sel10a0, edges1 = 2, edges2 = 1) #
-Sel10a0 <- FFL.type2(topo.sel10a0, edges1 = 2, edges2 = 1)
-
-df <- as.data.frame(rbind(colSums(Anticor10a0), colSums(Corr10a0), colSums(No_sel10a0), colSums(Sel10a0)))
+df <- as.data.frame(rbind(colSums(Anticor10_a0_15), colSums(Corr10_a0_15), colSums(No_sel10_a0_15), colSums(Sel10_a0_15)))
 rownames(df) <- c("Anticor","Cor","No_sel","Sel")
 df$coherent <- rowSums2(as.matrix(df[,c(3:6)])) #Count of 
 df$incoherent <- rowSums2(as.matrix(df[,c(7:10)]))
@@ -102,7 +54,7 @@ df$homogenous <- rowSums2(as.matrix(df[,c(3,4,7,8)]))
 df$heterogenous <- rowSums2(as.matrix(df[,c(5,6,9,10)]))
 
 
-pdfname <- "figures/10ga0"
+pdfname <- "figures/10g_a0_15"
 pdf(paste0(pdfname,"_type_FFL2_cutoff_3",".pdf"), width=6.5, height=6)
 layout(matrix(c(1:1), 1, 1, byrow = TRUE))
 #Each motif topology
@@ -120,12 +72,12 @@ legend("bottomleft", box.lty=0,  bg="transparent", fill=c("grey","orange","yello
 dev.off()
 
 #
-Anticor10a0 <- FFL.type2(topo.anticor10a0, edges1 = 2, edges2 = 2)
-Corr10a0 <- FFL.type2(topo.corr10a0, edges1 = 2, edges2 = 2)
-No_sel10a0 <- FFL.type2(topo.no_sel10a0, edges1 = 2, edges2 = 2) #
-Sel10a0 <- FFL.type2(topo.sel10a0, edges1 = 2, edges2 = 2)
+Anticor10_a0_15 <- FFL.type2(topo.anticor10_a0_15, edges1 = 2, edges2 = 2)
+Corr10_a0_15 <- FFL.type2(topo.corr10_a0_15, edges1 = 2, edges2 = 2)
+No_sel10_a0_15 <- FFL.type2(topo.no_sel10_a0_15, edges1 = 2, edges2 = 2) #
+Sel10_a0_15 <- FFL.type2(topo.sel10_a0_15, edges1 = 2, edges2 = 2)
 
-df <- as.data.frame(rbind(colSums(Anticor10a0), colSums(Corr10a0), colSums(No_sel10a0), colSums(Sel10a0)))
+df <- as.data.frame(rbind(colSums(Anticor10_a0_15), colSums(Corr10_a0_15), colSums(No_sel10_a0_15), colSums(Sel10_a0_15)))
 rownames(df) <- c("Anticor","Cor","No_sel","Sel")
 df$coherent <- rowSums2(as.matrix(df[,c(3,5,6,8,10,11)])) #Count of 
 df$incoherent <- rowSums2(as.matrix(df[,c(4,7,9,12)]))
@@ -133,7 +85,7 @@ df$homogenous_pos <- rowSums2(as.matrix(df[,c(3,6,9)]))
 df$homogenous_neg <- rowSums2(as.matrix(df[,c(5,8,12)]))
 df$heterogenous <- rowSums2(as.matrix(df[,c(4,7,10,11)]))
 
-pdfname <- "figures/10ga0"
+pdfname <- "figures/10g_a0_15"
 pdf(paste0(pdfname,"_type_FFL2_diamond",".pdf"), width=6.5, height=6)
 layout(matrix(c(1:1), 1, 1, byrow = TRUE))
 #Each motif topology
@@ -152,39 +104,6 @@ legend("bottomleft", box.lty=0,  bg="transparent", fill=c("grey","darkseagreen",
        legend=c( "No_FFL","Homogenous_pos","Homogenous_neg","Heterogenous") )
 dev.off()
 
-# df <- as.data.frame(dplyr::bind_rows(table(Anticor10$Motif_sign), table(Corr10$Motif_sign), table(No_sel10$Motif_sign), table(Sel10$Motif_sign)))
-# rownames(df) <- c("Anticor","Cor","No_sel","Sel")
-# df[is.na(df)] <- 0
-# df <- df[, sort(colnames(df))]
-# 
-# pdf(paste0(pdfname,"_type_FFL2_sign",".pdf"), width=6.5, height=6)
-# layout(matrix(c(1:1), 1, 1, byrow = TRUE))
-# barplot(t(df)*100/300, col=c("grey","darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1"))
-# legend("bottomleft", box.lty=0,  bg="transparent", fill=c("grey","darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1"),
-#        legend=c( "No_FFL","Input_Dep_Amplifying_neg","Input_Dep_Amplifying_pos","Input_Dep_Disruptive_neg","Input_Dep_Disruptive_pos","Input_Ind_Amplifying_neg","Input_Ind_Amplifying_pos","Input_Ind_Disruptive_neg","Input_Ind_Disruptive_pos") )
-# dev.off()
-
-
-
-################
-##### Homogeneity
-Anticor10a0 <- homog.count(topo.anticor10a0, cutoff.max = cutoff.max, cutoff.min = cutoff.min, randomFF=FALSE)
-Corr10a0 <- homog.count(topo.corr10a0, cutoff.max = cutoff.max, cutoff.min = cutoff.min, randomFF=FALSE)
-No_sel10a0 <- homog.count(topo.no_sel10a0, cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = 2, randomFF=FALSE) #
-Sel10a0 <- homog.count(topo.sel10a0, cutoff.max = cutoff.max, cutoff.min = cutoff.min, randomFF=FALSE)
-
-df <- rbind(colSums(Anticor10a0), colSums(Corr10a0), colSums(No_sel10a0), colSums(Sel10a0))
-rownames(df) <- c(paste0("Anticor\n m loop = ", round(mean(Anticor10a0_n$Loop_number), 1)),
-                  paste0("Corr\n m loop =  ", round(mean(Corr10a0_n$Loop_number), 1)),
-                  paste0("No_sel\n m loop =  ", round(mean(No_sel10a0_n$Loop_number), 1)),
-                  paste0("Sel\n m loop =  ", round(mean(Sel10a0_n$Loop_number), 1)))
-
-pdf(paste0(pdfname,"_homog_loops",".pdf"), width=6.5, height=6)
-layout(matrix(c(1:1), 1, 1, byrow = TRUE))
-barplot(t(df[,1:3])*100/300, col=c(2,4,"grey"))
-legend("bottomleft", box.lty=0,  bg="transparent", fill=c(2,4,"grey"),
-       legend=c("Het FFL", "Hom FFL","No FFL"))
-dev.off()
 
 ################################################################################
 ################################################################################
@@ -196,31 +115,31 @@ dev.off()
 ################
 cutoff <- 3
 ##### Loop count
-Anticor10a0_n <- FBL_n.count(topo.anticor10a0, cutoff = cutoff, target = 2)
-Corr10a0_n <- FBL_n.count(topo.corr10a0, cutoff = cutoff, target = 2)
-No_sel10a0_n <- FBL_n.count(topo.no_sel10a0, cutoff = cutoff, target = 2) #
-Sel10a0_n <- FBL_n.count(topo.sel10a0, cutoff = cutoff, target = 2)
+Anticor10_a0_15_n <- FBL_n.count(topo.anticor10_a0_15, cutoff = cutoff, target = 2)
+Corr10_a0_15_n <- FBL_n.count(topo.corr10_a0_15, cutoff = cutoff, target = 2)
+No_sel10_a0_15_n <- FBL_n.count(topo.no_sel10_a0_15, cutoff = cutoff, target = 2) #
+Sel10_a0_15_n <- FBL_n.count(topo.sel10_a0_15, cutoff = cutoff, target = 2)
 
 pdf(paste0(pdfname,"_N_FBL",".pdf"))
 layout(matrix(c(1:4), 2, 2, byrow = TRUE))
-hist(Anticor10a0_n$FBL_number, main = "Anticor Plast", ylim = c(0, 300))
-hist(Corr10a0_n$FBL_number, main = "Cor Plast", ylim = c(0, 300))
-hist(No_sel10a0_n$FBL_number, main = "No Sel", ylim = c(0, 300))
-hist(Sel10a0_n$FBL_number, main = "Sel Stable", ylim = c(0, 300))
+hist(Anticor10_a0_15_n$FBL_number, main = "Anticor Plast", ylim = c(0, 300))
+hist(Corr10_a0_15_n$FBL_number, main = "Cor Plast", ylim = c(0, 300))
+hist(No_sel10_a0_15_n$FBL_number, main = "No Sel", ylim = c(0, 300))
+hist(Sel10_a0_15_n$FBL_number, main = "Sel Stable", ylim = c(0, 300))
 dev.off()
 
 ################
 ##### Homogeneity
-Anticor10a0 <- FBL.type(topo.anticor10a0, cutoff = cutoff, target = 2, randomFF=FALSE)
-Corr10a0 <- FBL.type(topo.corr10a0, cutoff = cutoff, target = 2, randomFF=FALSE)
-No_sel10a0 <- FBL.type(topo.no_sel10a0, cutoff = cutoff, target = 2, randomFF=FALSE) #
-Sel10a0 <- FBL.type(topo.sel10a0, cutoff = cutoff, target = 2, randomFF=FALSE)
+Anticor10_a0_15 <- FBL.type(topo.anticor10_a0_15, cutoff = cutoff, target = 2, randomFF=FALSE)
+Corr10_a0_15 <- FBL.type(topo.corr10_a0_15, cutoff = cutoff, target = 2, randomFF=FALSE)
+No_sel10_a0_15 <- FBL.type(topo.no_sel10_a0_15, cutoff = cutoff, target = 2, randomFF=FALSE) #
+Sel10_a0_15 <- FBL.type(topo.sel10_a0_15, cutoff = cutoff, target = 2, randomFF=FALSE)
 
-df <- rbind(colSums(Anticor10a0), colSums(Corr10a0), colSums(No_sel10a0), colSums(Sel10a0))
-rownames(df) <- c(paste0("Anticor\n m loop = ", round(mean(Anticor10a0_n$FBL_number), 1)),
-                  paste0("Corr\n m loop =  ", round(mean(Corr10a0_n$FBL_number), 1)),
-                  paste0("No_sel\n m loop =  ", round(mean(No_sel10a0_n$FBL_number), 1)),
-                  paste0("Sel\n m loop =  ", round(mean(Sel10a0_n$FBL_number), 1)))
+df <- rbind(colSums(Anticor10_a0_15), colSums(Corr10_a0_15), colSums(No_sel10_a0_15), colSums(Sel10_a0_15))
+rownames(df) <- c(paste0("Anticor\n m loop = ", round(mean(Anticor10_a0_15_n$FBL_number), 1)),
+                  paste0("Corr\n m loop =  ", round(mean(Corr10_a0_15_n$FBL_number), 1)),
+                  paste0("No_sel\n m loop =  ", round(mean(No_sel10_a0_15_n$FBL_number), 1)),
+                  paste0("Sel\n m loop =  ", round(mean(Sel10_a0_15_n$FBL_number), 1)))
 
 pdf(paste0(pdfname,"_type_FBL",".pdf"), width=6.5, height=6)
 layout(matrix(c(1:1), 1, 1, byrow = TRUE))

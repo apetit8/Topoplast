@@ -37,8 +37,8 @@ topo.sel10 <- essential.topo(df=subset(df.10, Gen==gen & envir=="Control_sel"),
 
 ################
 # Cutoffs are number of NODES
-cutoff.path1 <- 2
-cutoff.path2 <- 1
+edges1 <- 2
+edges2 <- 1
 ##### Loop count
 Anticor10_n <- loops_n.count(topo.anticor10, cutoff.max = cutoff.max, cutoff.min = cutoff.min)
 Corr10_n <- loops_n.count(topo.corr10, cutoff.max = cutoff.max, cutoff.min = cutoff.min)
