@@ -19,7 +19,7 @@ df.10$anc_id <- str_split(str_split(df.10$data.dir, "/", n=8, simplify = TRUE)[,
 #Inspired by Burda et al., 2011
 treshold_coeff <- 0.001 # difference accepted in the Reaction Norm linear regression slope
 treshold_og <- 0.001    # difference accepted in the RN linear regression intercept
-gen <- 3000 #max(df.10$Gen)
+gen <- 10000 #max(df.10$Gen)
 #############
 
 topo.anticor10 <- essential.topo(df=subset(df.10, Gen==gen & envir=="Anticorrelated"),

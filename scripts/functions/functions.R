@@ -797,9 +797,43 @@ slope.stablefrom <- function(df, thresh=0.001, window=5, ...) {
 #TOPOLOGIES#####################################################################
 
 # redefining the combinat::permn function, for exactly the same reason
+permn <- function (x, fun = NULL, ...) 
+{
+  if (is.numeric(x) && length(x) == 1 && x > 0 && trunc(x) == 
+      x) 
+    x <- seq(x)
+  n <- length(x)
+  nofun <- is.null(fun)
+  out <- vector("list", gamma(n + 1))
+  p <- ip <- seqn <- 1:n
+  d <- rep(-1, n)
+  d[1] <- 0
+  m <- n + 1
+  p <- c(m, p, m)
+  i <- 1
+  use <- -c(1, n + 2)
+  while (m != 1) {
+    out[[i]] <- if (nofun) 
+      x[p[use]]
+    else fun(x[p[use]], ...)
+    i <- i + 1
+    m <- n
+    chk <- (p[ip + d + 1] > seqn)
+    m <- max(seqn[!chk])
+    if (m < n) 
+      d[(m + 1):n] <- -d[(m + 1):n]
+    index1 <- ip[m] + 1
+    index2 <- p[index1] <- p[index1 + d[m]]
+    p[index1 + d[m]] <- m
+    tmp <- ip[index2]
+    ip[index2] <- ip[m]
+    ip[m] <- tmp
+  }
+  out
+}
 my.permn <- function(x, fun=NULL, ...) {
   if (length(x) == 1 ) return(x)
-  combinat::permn(x, fun, ...)
+  permn(x, fun, ...)
 }
 
 netw.group <- function(df, Ss=1, Pg=1, Sg=1, Tf=7, start=7, target=2){
@@ -876,7 +910,7 @@ equiv.topos <- function(topo, groups=as.list(1:ncol(topo)), sorted=TRUE, unique=
 #Keep "essential" connections. Test every connection to see effect on target gene RN.
 #Inspired by Burda et al., 2011
 essential.topo <- function(df, min=0.15, max=0.85, target=2, treshold_coeff=0.05,
-                           treshold_og=0.05, genes=4, groups=list(1,2,3:4), basal=0.5){
+                           treshold_og=0.05, genes=4, groups=list(1,2,3:4), basal=0.5, cores=2){
   #
   # target = Target gene in the network which RN will be tested
   # treshold_coeff = difference accepted in the Reaction Norm linear regression slope
@@ -902,10 +936,8 @@ essential.topo <- function(df, min=0.15, max=0.85, target=2, treshold_coeff=0.05
         #                     RN_Wij_og <= (RN_W_og+treshold_og), 0, 1) * sign(W2[Wij])
         W2[Wij] <- ifelse(treshold_coeff > (abs(RN_W_coeff-RN_Wij_coeff)) ||
                             treshold_og > (abs(RN_W_og-RN_Wij_og)), 0, 1) * sign(W2[Wij])
-        }
-      }
+        }}
     return(W2)})
-  
    simul.topo <- lapply(1:length(essential_Ws), function(i){
      untopo <- unique.topo(essential_Ws[[i]], groups=groups)
      # untopo <- equiv.topos(essential_Ws[[i]], groups)[[1]]
