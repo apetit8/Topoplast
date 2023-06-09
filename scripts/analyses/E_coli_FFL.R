@@ -40,9 +40,13 @@
 #
 ##PH
 #Tucker et al., 2002 ; DOI : 10.1128/JB.184.23.6551-6558.2002
+#Maur
 
-phgenes <- read.table("e_coli/Plast_genes/Ph/plastic_genes.txt", sep ="\t", header=FALSE)
-phgenes <- phgenes[(phgenes[,1] %in% colnames(E_coli_mat)),] 
+phgenes1 <- read.table("e_coli/Plast_genes/Ph/plastic_genes.txt", sep ="\t", header=FALSE)
+phgenes1 <- phgenes1[(phgenes1[,1] %in% colnames(E_coli_mat)),] 
+phgenes2 <- read.table("e_coli/Plast_genes/pH_2/plastic_genes.txt", sep ="\t", header=FALSE)
+phgenes2 <- phgenes2[(phgenes2[,1] %in% colnames(E_coli_mat)),] 
+phgenes <- c(phgenes1, phgenes2)
 
 phloops <- e_coli_prep_analyses(phgenes, g, E_coli_mat, fun="FFL", edges1=edges1, edges2=edges2, cores=1, from = from)
 

@@ -29,20 +29,19 @@ df1 <- as.data.frame(rbind(colSums(rbind(non_plast,all_plast)[,3:12])*100/(nrow(
             colSums(plast_stress[,3:12])*100/nrow(plast_stress),
             colSums(plast_ox[,3:12])*100/nrow(plast_ox)
             ))
-rownames(df1) <- c("All","NP", "All_plast","NP_Medgth", "Medgth", "pH","Aero","Mg_C","Stringent","T°","Juice","Stress","Ox")
+rownames(df1) <- c("All","Non-plastic\ngenes", "Plastic\ngenes","NP_Medgth", "Medgth", "pH","Aero","Mg_C","Stringent","T°","Juice","Stress","Ox")
 df1$coherent <- rowSums2(as.matrix(df1[,c(3:6)])) #Count of 
 df1$incoherent <- rowSums2(as.matrix(df1[,c(7:10)]))
 df1$homogenous <- rowSums2(as.matrix(df1[,c(3,4,7,8)]))
 df1$heterogenous <- rowSums2(as.matrix(df1[,c(5,6,9,10)]))
 
-
 pdfname <- "figures/E_coli"
-pdf(paste0(pdf1name,"_type_FFL",".pdf"), width=14, height=6)
+pdf(paste0(pdfname,"_type_FFL",".pdf"), width=14, height=6)
 layout(matrix(c(1:1), 1, 1, byrow = TRUE))
 #Each motif topology
 barplot(t(df1[,2:10]), col=c("grey","darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1"))
 legend("bottomleft", box.lty=0,  bg="transparent", fill=c("grey","darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1"),
-       legend=c( "No_FFL","Input_Dep_Amplifying_neg","Input_Dep_Amplifying_pos","Input_Dep_Disruptive_neg","Input_Dep_Disruptive_pos","Input_Ind_Amplifying_neg","Input_Ind_Amplifying_pos","Input_Ind_Disruptive_neg","Input_Ind_Disruptive_pos") )
+       legend=c( "No_FFL","C_Ho_neg","C_Ho_pos","C_He_neg","C_He_pos","I_Ho_neg","I_Ho_pos","I_He_neg","I_He_pos") )
 #Coherence
 barplot(t(df1[,c(2,11,12)]), col=c("grey","indianred1","dodgerblue"))
 legend("bottomleft", box.lty=0,  bg="transparent", fill=c("grey","indianred1","dodgerblue"),
@@ -81,7 +80,7 @@ layout(matrix(c(1:1), 1, 1, byrow = TRUE))
 #Each motif topology
 barplot(t(df[,3:10]), col=c("darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1"))
 legend("bottomleft", box.lty=0,  bg="transparent", fill=c("darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1"),
-       legend=c( "No_FFL","Input_Dep_Amplifying_neg","Input_Dep_Amplifying_pos","Input_Dep_Disruptive_neg","Input_Dep_Disruptive_pos","Input_Ind_Amplifying_neg","Input_Ind_Amplifying_pos","Input_Ind_Disruptive_neg","Input_Ind_Disruptive_pos") )
+       legend=c( "No_FFL","C_Ho_neg","C_Ho_pos","C_He_neg","C_He_pos","I_Ho_neg","I_Ho_pos","I_He_neg","I_He_pos") )
 #Coherence
 barplot(t(df[,c(11,12)]), col=c("indianred1","dodgerblue"))
 legend("bottomleft", box.lty=0,  bg="transparent", fill=c("indianred1","dodgerblue"),
@@ -134,7 +133,7 @@ layout(matrix(c(1:1), 1, 1, byrow = TRUE))
 #Each motif topology
 barplot(t(df2[,2:11]), col=c("grey","darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1","lightslategrey"))
 legend("bottomleft", box.lty=0,  bg="transparent", fill=c("grey","darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1","lightslategrey"),
-       legend=c( "No_FFL","Input_Dep_Amplifying_neg","Input_Dep_Amplifying_pos","Input_Dep_Disruptive_neg","Input_Dep_Disruptive_pos","Input_Ind_Amplifying_neg","Input_Ind_Amplifying_pos","Input_Ind_Disruptive_neg","Input_Ind_Disruptive_pos","FFL_from_NP") )
+       legend=c( "No_FFL","C_Ho_neg","C_Ho_pos","C_He_neg","C_He_pos","I_Ho_neg","I_Ho_pos","I_He_neg","I_He_pos","FFL_from_NP") )
 #Coherence
 barplot(t(df2[,c(2,12,13)]), col=c("grey","indianred1","dodgerblue"))
 legend("bottomleft", box.lty=0,  bg="transparent", fill=c("grey","indianred1","dodgerblue"),
@@ -174,7 +173,59 @@ layout(matrix(c(1:1), 1, 1, byrow = TRUE))
 #Each motif topology
 barplot(t(df[,3:10]), col=c("darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1","lightslategrey"))
 legend("bottomleft", box.lty=0,  bg="transparent", fill=c("darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1","lightslategrey"),
-       legend=c( "Input_Dep_Amplifying_neg","Input_Dep_Amplifying_pos","Input_Dep_Disruptive_neg","Input_Dep_Disruptive_pos","Input_Ind_Amplifying_neg","Input_Ind_Amplifying_pos","Input_Ind_Disruptive_neg","Input_Ind_Disruptive_pos","NP_FFL") )
+       legend=c( "C_Ho_neg","C_Ho_pos","C_He_neg","C_He_pos","I_Ho_neg","I_Ho_pos","I_He_neg","I_He_pos","NP_FFL") )
+#Coherence
+barplot(t(df[,c(12,13)]), col=c("indianred1","dodgerblue"))
+legend("bottomleft", box.lty=0,  bg="transparent", fill=c("indianred1","dodgerblue"),
+       legend=c("Coherent","Incoherent") )
+#Homogeneity
+barplot(t(df[,c(14,15)]), col=c("orange","yellowgreen"))
+legend("bottomleft", box.lty=0,  bg="transparent", fill=c("orange","yellowgreen"),
+       legend=c("Homogenous","Heterogenous") )
+dev.off()
+##
+#FFL FROM percent
+non_plast <- read.csv("scripts/data/nonplast_E_coli_FFL_from_allplast.csv", sep = ",")
+all_plast <- read.csv("scripts/data/plast_genes_E_coli_FFL_from_allplast.csv", sep = ",")
+np_medgrowthloops <- read.csv("scripts/data/np_medium_growth_E_coli_FFL_from_allplast.csv", sep = ",")
+plast_medgrowthloops <- read.csv("scripts/data/plast_medium_E_coli_FFL_from_allplast.csv", sep = ",")
+plast_ph <- read.csv("scripts/data/ph_plast_E_coli_FFL_from_allplast.csv", sep = ",")
+plast_mg_c <- read.csv("scripts/data/mg_c_growth_E_coli_FFL_from_allplast.csv", sep = ",")
+plast_aero <- read.csv("scripts/data/plast_aero_E_coli_FFL_from_allplast.csv", sep = ",")
+plast_stringent <- read.csv("scripts/data/plast_stringent_E_coli_FFL_from_allplast.csv", sep = ",")
+plast_tempr <- read.csv("scripts/data/plast_temptr_E_coli_FFL_from_allplast.csv", sep = ",")
+plast_juice <- read.csv("scripts/data/plast_juice_E_coli_FFL_from_allplast.csv", sep = ",")
+plast_stress <- read.csv("scripts/data/plast_stress_E_coli_FFL_from_allplast.csv", sep = ",")
+plast_ox <- read.csv("scripts/data/plast_ox_E_coli_FFL_from_allplast.csv", sep = ",")
+
+df <- as.data.frame(rbind(colSums(rbind(non_plast,all_plast)[,3:13]),
+                          colSums(non_plast[,3:13]),
+                          colSums(all_plast[,3:13]),
+                          colSums(np_medgrowthloops[,3:13]),
+                          colSums(plast_medgrowthloops[,3:13]),
+                          colSums(plast_ph[,3:13]),
+                          colSums(plast_aero[,3:13]),
+                          colSums(plast_mg_c[,3:13]),
+                          colSums(plast_stringent[,3:13]),
+                          colSums(plast_tempr[,3:13]),
+                          colSums(plast_juice[,3:13]),
+                          colSums(plast_stress[,3:13]),
+                          colSums(plast_ox[,3:13])
+))
+rownames(df) <- c("All","NP", "All_plast","NP_Medgth", "Medgth", "pH","Aero","Mg_C","Stringent","T°","Juice","Stress","Ox")
+df$coherent <- rowSums2(as.matrix(df[,c(3:6)])) #Count of 
+df$incoherent <- rowSums2(as.matrix(df[,c(7:10)]))
+df$homogenous <- rowSums2(as.matrix(df[,c(3,4,7,8)]))
+df$heterogenous <- rowSums2(as.matrix(df[,c(5,6,9,10)]))
+
+
+pdfname <- "figures/E_coli"
+pdf(paste0(pdfname,"_percent_FFL_from_allplast",".pdf"), width=14, height=6)
+layout(matrix(c(1:1), 1, 1, byrow = TRUE))
+#Each motif topology
+barplot(t(df[,3:10]), col=c("darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1","lightslategrey"))
+legend("bottomleft", box.lty=0,  bg="transparent", fill=c("darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1","lightslategrey"),
+       legend=c( "C_Ho_neg","C_Ho_pos","C_He_neg","C_He_pos","I_Ho_neg","I_Ho_pos","I_He_neg","I_He_pos","NP_FFL") )
 #Coherence
 barplot(t(df[,c(12,13)]), col=c("indianred1","dodgerblue"))
 legend("bottomleft", box.lty=0,  bg="transparent", fill=c("indianred1","dodgerblue"),
@@ -229,7 +280,7 @@ layout(matrix(c(1:1), 1, 1, byrow = TRUE))
 #Each motif topology
 barplot(t(df[,3:10]), col=c("darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1","lightslategrey"))
 legend("bottomleft", box.lty=0,  bg="transparent", fill=c("darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1","lightslategrey"),
-       legend=c( "Input_Dep_Amplifying_neg","Input_Dep_Amplifying_pos","Input_Dep_Disruptive_neg","Input_Dep_Disruptive_pos","Input_Ind_Amplifying_neg","Input_Ind_Amplifying_pos","Input_Ind_Disruptive_neg","Input_Ind_Disruptive_pos","NP_FFL") )
+       legend=c("C_Ho_neg","C_Ho_pos","C_He_neg","C_He_pos","I_Ho_neg","I_Ho_pos","I_He_neg","I_He_pos","NP_FFL") )
 #Coherence
 barplot(t(df[,c(12,13)]), col=c("indianred1","dodgerblue"))
 legend("bottomleft", box.lty=0,  bg="transparent", fill=c("indianred1","dodgerblue"),

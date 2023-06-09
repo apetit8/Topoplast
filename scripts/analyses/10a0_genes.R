@@ -19,7 +19,7 @@ df.10_a0_15$anc_id <- str_split(str_split(df.10_a0_15$data.dir, "/", n=8, simpli
 #Inspired by Burda et al., 2011
 treshold_coeff <- 0.001 # difference accepted in the Reaction Norm linear regression slope
 treshold_og <- 0.001    # difference accepted in the RN linear regression intercept
-gen <- 3000 #max(df.10_a0_15$Gen)
+gen <- 10000 #max(df.10_a0_15$Gen)
 #############
 
 topo.anticor10_a0_15 <- essential.topo(df=subset(df.10_a0_15, Gen==gen & envir=="Anticorrelated"),
@@ -34,51 +34,127 @@ topo.no_sel10_a0_15 <- essential.topo(df=subset(df.10_a0_15, Gen==gen & envir=="
 topo.sel10_a0_15 <- essential.topo(df=subset(df.10_a0_15, Gen==gen & envir=="Control_sel"),
                              treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3:10))
 
-ifelse(!dir.exists(file.path("scripts/data/essential_motif")), dir.create("scripts/data/essential_motif"), FALSE)#burning_andreas folder
-lapply(topo.anticor10_a0_15, function(x) write.table( data.frame(x), 'scripts/data/essential_motif/topo.anticor10_a0_15.csv'  , append= T, sep=',' ))
-lapply(topo.anticor10_a0_15, function(x) write.table( data.frame(x), 'scripts/data/essential_motif/topo.corr10_a0_15.csv'  , append= T, sep=',' ))
-lapply(topo.anticor10_a0_15, function(x) write.table( data.frame(x), 'scripts/data/essential_motif/topo.no_sel10_a0_15.csv'  , append= T, sep=',' ))
-lapply(topo.anticor10_a0_15, function(x) write.table( data.frame(x), 'scripts/data/essential_motif/topo.sel10_a0_15.csv'  , append= T, sep=',' ))
+# ifelse(!dir.exists(file.path("scripts/data/essential_motif")), dir.create("scripts/data/essential_motif"), FALSE)
+# lapply(topo.anticor10_a0_15, function(x) write.table( data.frame(x), 'scripts/data/essential_motif/topo.anticor10_a0_15.csv'  , append= T, sep=',' ))
+# lapply(topo.anticor10_a0_15, function(x) write.table( data.frame(x), 'scripts/data/essential_motif/topo.corr10_a0_15.csv'  , append= T, sep=',' ))
+# lapply(topo.anticor10_a0_15, function(x) write.table( data.frame(x), 'scripts/data/essential_motif/topo.no_sel10_a0_15.csv'  , append= T, sep=',' ))
+# lapply(topo.anticor10_a0_15, function(x) write.table( data.frame(x), 'scripts/data/essential_motif/topo.sel10_a0_15.csv'  , append= T, sep=',' ))
 ################
-##### Type
+##### FFL
 Anticor10_a0_15 <- FFL.type2(topo.anticor10_a0_15, edges1 = 2, edges2 = 1)
 Corr10_a0_15 <- FFL.type2(topo.corr10_a0_15, edges1 = 2, edges2 = 1)
 No_sel10_a0_15 <- FFL.type2(topo.no_sel10_a0_15, edges1 = 2, edges2 = 1) #
 Sel10_a0_15 <- FFL.type2(topo.sel10_a0_15, edges1 = 2, edges2 = 1)
 
-df <- as.data.frame(rbind(colSums(Anticor10_a0_15), colSums(Corr10_a0_15), colSums(No_sel10_a0_15), colSums(Sel10_a0_15)))
-rownames(df) <- c("Anticor","Cor","No_sel","Sel")
+df <- as.data.frame(rbind(colSums(rbind(Anticor10_a0_15,Corr10_a0_15))/2, colSums(Anticor10_a0_15), colSums(Corr10_a0_15), colSums(No_sel10_a0_15), colSums(Sel10_a0_15)))
+rownames(df) <- c("Plastic\ngenes","Anticor","Cor","No_sel","Non-plastic\ngenes")
 df$coherent <- rowSums2(as.matrix(df[,c(3:6)])) #Count of 
 df$incoherent <- rowSums2(as.matrix(df[,c(7:10)]))
 df$homogenous <- rowSums2(as.matrix(df[,c(3,4,7,8)]))
 df$heterogenous <- rowSums2(as.matrix(df[,c(5,6,9,10)]))
 
-
 pdfname <- "figures/10g_a0_15"
-pdf(paste0(pdfname,"_type_FFL2_cutoff_3",".pdf"), width=6.5, height=6)
+pdf(paste0(pdfname,"prop_FFL",".pdf"), width=3.5, height=4)
 layout(matrix(c(1:1), 1, 1, byrow = TRUE))
 #Each motif topology
-barplot(t(df[,2:10])*100/300, col=c("grey","darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1"))
+barplot(t(df[c(5,1),1:2])*100/nrow(Anticor10_a0_15), col=c("gold", "grey"), main="Theoretical Prediction")
+legend("bottomleft", box.lty=0,  bg="transparent", fill=c("gold", "grey"),
+       legend=c( "at least 1 FFL","No FFL") )
+dev.off()
+
+pdfname <- "figures/10g_a0_15"
+pdf(paste0(pdfname,"_FFL",".pdf"), width=6.5, height=6)
+layout(matrix(c(1:1), 1, 1, byrow = TRUE))
+#Each motif topology
+barplot(t(df[,2:10])*100/nrow(Anticor10_a0_15), col=c("grey","darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1"))
 legend("bottomleft", box.lty=0,  bg="transparent", fill=c("grey","darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1"),
-       legend=c( "No_FFL","Input_Dep_Amplifying_neg","Input_Dep_Amplifying_pos","Input_Dep_Disruptive_neg","Input_Dep_Disruptive_pos","Input_Ind_Amplifying_neg","Input_Ind_Amplifying_pos","Input_Ind_Disruptive_neg","Input_Ind_Disruptive_pos") )
+       legend=c( "No_FFL","C_Ho_neg","C_Ho_pos","C_He_neg","C_He_pos","I_Ho_neg","I_Ho_pos","I_He_neg","I_He_pos") )
 #Coherence
-barplot(t(df[,c(2,11,12)])*100/300, col=c("grey","indianred1","dodgerblue"))
+barplot(t(df[,c(2,12,13)])*100/nrow(Anticor10_a0_15), col=c("grey","indianred1","dodgerblue"))
 legend("bottomleft", box.lty=0,  bg="transparent", fill=c("grey","indianred1","dodgerblue"),
        legend=c( "No_FFL","Coherent","Incoherent") )
 #Homogeneity
-barplot(t(df[,c(2,13,14)])*100/300, col=c("grey","orange","yellowgreen"))
+barplot(t(df[,c(2,14,15)])*100/nrow(Anticor10_a0_15), col=c("grey","orange","yellowgreen"))
 legend("bottomleft", box.lty=0,  bg="transparent", fill=c("grey","orange","yellowgreen"),
        legend=c( "No_FFL","Homogenous","Heterogenous") )
 dev.off()
 
-#
+##### FFL from plastic gene
+Anticor10_a0_15 <- FFL.type2(topo.anticor10_a0_15, edges1 = 2, edges2 = 1, from = c(1))
+Corr10_a0_15 <- FFL.type2(topo.corr10_a0_15, edges1 = 2, edges2 = 1, from = c(1))
+No_sel10_a0_15 <- FFL.type2(topo.no_sel10_a0_15, edges1 = 2, edges2 = 1, from = c(1)) #
+Sel10_a0_15 <- FFL.type2(topo.sel10_a0_15, edges1 = 2, edges2 = 1, from = c(1))
+
+df <- as.data.frame(rbind(colSums(rbind(Anticor10_a0_15,Corr10_a0_15))*100/sum(rbind(Anticor10_a0_15,Corr10_a0_15)[,1]),
+                          colSums(Anticor10_a0_15)*100/sum(Anticor10_a0_15[,1]),
+                          colSums(Corr10_a0_15)*100/sum(Corr10_a0_15[,1]),
+                          colSums(No_sel10_a0_15)*100/sum(No_sel10_a0_15[,1]),
+                          colSums(Sel10_a0_15)*100/sum(Sel10_a0_15[,1])))
+rownames(df) <- c("All_plast","Anticor","Cor","No_sel","Sel")
+df$coherent <- rowSums2(as.matrix(df[,c(3:6)])) #Count of 
+df$incoherent <- rowSums2(as.matrix(df[,c(7:10)]))
+df$homogenous <- rowSums2(as.matrix(df[,c(3,4,7,8)]))
+df$heterogenous <- rowSums2(as.matrix(df[,c(5,6,9,10)]))
+
+pdfname <- "figures/10g_a0_15"
+pdf(paste0(pdfname,"_FFL_from",".pdf"), width=6.5, height=6)
+layout(matrix(c(1:1), 1, 1, byrow = TRUE))
+#Each motif topology
+barplot(t(df[,3:11]), col=c("darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1","lightslategrey"))
+legend("bottomleft", box.lty=0,  bg="transparent", fill=c("darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1","lightslategrey"),
+       legend=c("C_Ho_neg","C_Ho_pos","C_He_neg","C_He_pos","I_Ho_neg","I_Ho_pos","I_He_neg","I_He_pos","NP_FFL") )
+#Coherence
+barplot(t(df[,c(11,12,13)]), col=c("lightslategrey","indianred1","dodgerblue"))
+legend("bottomleft", box.lty=0,  bg="transparent", fill=c("lightslategrey","indianred1","dodgerblue"),
+       legend=c( "No_FFL","Coherent","Incoherent") )
+#Homogeneity
+barplot(t(df[,c(11,14,15)]), col=c("lightslategrey","orange","yellowgreen"))
+legend("bottomleft", box.lty=0,  bg="transparent", fill=c("lightslategrey","orange","yellowgreen"),
+       legend=c( "No_FFL","Homogenous","Heterogenous") )
+dev.off()
+
+##### FFL from NP genes
+Anticor10_a0_15 <- FFL.type2(topo.anticor10_a0_15, edges1 = 2, edges2 = 1, from = c(3:10))
+Corr10_a0_15 <- FFL.type2(topo.corr10_a0_15, edges1 = 2, edges2 = 1, from = c(3:10))
+No_sel10_a0_15 <- FFL.type2(topo.no_sel10_a0_15, edges1 = 2, edges2 = 1, from = c(3:10)) #
+Sel10_a0_15 <- FFL.type2(topo.sel10_a0_15, edges1 = 2, edges2 = 1, from = c(3:10))
+
+df <- as.data.frame(rbind(colSums(rbind(Anticor10_a0_15,Corr10_a0_15))*100/sum(rbind(Anticor10_a0_15,Corr10_a0_15)[,1]),
+                          colSums(Anticor10_a0_15)*100/sum(Anticor10_a0_15[,1]),
+                          colSums(Corr10_a0_15)*100/sum(Corr10_a0_15[,1]),
+                          colSums(No_sel10_a0_15)*100/sum(No_sel10_a0_15[,1]),
+                          colSums(Sel10_a0_15)*100/sum(Sel10_a0_15[,1])))
+rownames(df) <- c("All_plast","Anticor","Cor","No_sel","Sel")
+df$coherent <- rowSums2(as.matrix(df[,c(3:6)])) #Count of 
+df$incoherent <- rowSums2(as.matrix(df[,c(7:10)]))
+df$homogenous <- rowSums2(as.matrix(df[,c(3,4,7,8)]))
+df$heterogenous <- rowSums2(as.matrix(df[,c(5,6,9,10)]))
+
+pdfname <- "figures/10g_a0_15"
+pdf(paste0(pdfname,"_FFL_from_NP",".pdf"), width=6.5, height=6)
+layout(matrix(c(1:1), 1, 1, byrow = TRUE))
+#Each motif topology
+barplot(t(df[,3:11]), col=c("darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1","lightslategrey"))
+legend("bottomleft", box.lty=0,  bg="transparent", fill=c("darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1","lightslategrey"),
+       legend=c("C_Ho_neg","C_Ho_pos","C_He_neg","C_He_pos","I_Ho_neg","I_Ho_pos","I_He_neg","I_He_pos","NP_FFL") )
+#Coherence
+barplot(t(df[,c(11,12,13)]), col=c("lightslategrey","indianred1","dodgerblue"))
+legend("bottomleft", box.lty=0,  bg="transparent", fill=c("lightslategrey","indianred1","dodgerblue"),
+       legend=c( "No_FFL","Coherent","Incoherent") )
+#Homogeneity
+barplot(t(df[,c(11,14,15)]), col=c("lightslategrey","orange","yellowgreen"))
+legend("bottomleft", box.lty=0,  bg="transparent", fill=c("lightslategrey","orange","yellowgreen"),
+       legend=c( "No_FFL","Homogenous","Heterogenous") )
+dev.off()
+
+############Diamond
 Anticor10_a0_15 <- FFL.type2(topo.anticor10_a0_15, edges1 = 2, edges2 = 2)
 Corr10_a0_15 <- FFL.type2(topo.corr10_a0_15, edges1 = 2, edges2 = 2)
 No_sel10_a0_15 <- FFL.type2(topo.no_sel10_a0_15, edges1 = 2, edges2 = 2) #
 Sel10_a0_15 <- FFL.type2(topo.sel10_a0_15, edges1 = 2, edges2 = 2)
 
-df <- as.data.frame(rbind(colSums(Anticor10_a0_15), colSums(Corr10_a0_15), colSums(No_sel10_a0_15), colSums(Sel10_a0_15)))
-rownames(df) <- c("Anticor","Cor","No_sel","Sel")
+df <- as.data.frame(rbind(colSums(rbind(Anticor10_a0_15,Corr10_a0_15))/2, colSums(Anticor10_a0_15), colSums(Corr10_a0_15), colSums(No_sel10_a0_15), colSums(Sel10_a0_15)))
+rownames(df) <- c("All_plast","Anticor","Cor","No_sel","Sel")
 df$coherent <- rowSums2(as.matrix(df[,c(3,5,6,8,10,11)])) #Count of 
 df$incoherent <- rowSums2(as.matrix(df[,c(4,7,9,12)]))
 df$homogenous_pos <- rowSums2(as.matrix(df[,c(3,6,9)]))
@@ -86,20 +162,20 @@ df$homogenous_neg <- rowSums2(as.matrix(df[,c(5,8,12)]))
 df$heterogenous <- rowSums2(as.matrix(df[,c(4,7,10,11)]))
 
 pdfname <- "figures/10g_a0_15"
-pdf(paste0(pdfname,"_type_FFL2_diamond",".pdf"), width=6.5, height=6)
+pdf(paste0(pdfname,"_diamond",".pdf"), width=6.5, height=6)
 layout(matrix(c(1:1), 1, 1, byrow = TRUE))
 #Each motif topology
-barplot(t(df[,2:12])*100/300, col=c("grey","darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1","darkorchid1","plum1"))
+barplot(t(df[,2:12])*100/nrow(Anticor10_a0_15), col=c("grey","darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1","darkorchid1","plum1"))
 legend("bottomleft", box.lty=0,  bg="transparent", fill=c("grey","darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1","darkorchid1","plum1"),
        legend=c( "No_FFL","Pos_pos","Pos_mixt","Pos_neg",
                  "Neg_pos","Neg_mixt","Neg_neg",
                  "Mixt_pos","Mixt_mixt_hom","Mixt_mixt_het","Mixt_neg") )
 #Coherence
-barplot(t(df[,c(2,13,14)])*100/300, col=c("grey","indianred1","dodgerblue"))
+barplot(t(df[,c(2,14,15)])*100/nrow(Anticor10_a0_15), col=c("grey","indianred1","dodgerblue"))
 legend("bottomleft", box.lty=0,  bg="transparent", fill=c("grey","indianred1","dodgerblue"),
        legend=c( "No_FFL","Coherent","Incoherent") )
 #Homogeneity
-barplot(t(df[,c(2,15:17)])*100/300, col=c("grey","darkseagreen","yellowgreen","dodgerblue","deepskyblue3"))
+barplot(t(df[,c(2,16:18)])*100/nrow(Anticor10_a0_15), col=c("grey","darkseagreen","yellowgreen","dodgerblue","deepskyblue3"))
 legend("bottomleft", box.lty=0,  bg="transparent", fill=c("grey","darkseagreen","yellowgreen","dodgerblue","deepskyblue3"),
        legend=c( "No_FFL","Homogenous_pos","Homogenous_neg","Heterogenous") )
 dev.off()

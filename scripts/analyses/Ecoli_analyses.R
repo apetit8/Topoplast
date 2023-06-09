@@ -35,17 +35,6 @@ csvname <- "E_coli_FFL"
 ##
 source("scripts/analyses/E_coli_FFL.R")
 #########################################
-#FROM = FALSE ; Diamond motifs
-#########################################
-#Analyses of plastic genes from different sources
-edges1 <- 2
-edges2 <- 2
-from <- FALSE
-all_plast_genes <- data.frame()
-csvname <- "E_coli_diamond"
-##
-source("scripts/analyses/E_coli_FFL.R")
-#########################################
 #FROM = TRUE ; meaning that the output will be the the FFLS coming from and to plastic genes.
 #########################################
 #Analyses of plastic genes from different sources
@@ -62,6 +51,17 @@ nonplast_FFL <- e_coli_prep_analyses(nonplast_genes, g, E_coli_mat, fun="FFL", e
 write.csv(nonplast_FFL, paste0("scripts/data/nonplast_",csvname,".csv"))
 print("Non plastic genes done!")
 #########################################
+#FROM = TRUE ; meaning that the output will be the the FFLS coming from and to plastic genes.
+#########################################
+#Analyses of plastic genes from different sources
+edges1 <- 2
+edges2 <- 1
+from <- all_plast_genes$V1
+all_plast_genes <- data.frame()
+csvname <- "E_coli_FFL_from_allplast"
+##
+source("scripts/analyses/E_coli_FFL.R")
+#########################################
 #FROM = Non plastic gene names
 #########################################
 #Analyses of plastic genes from different sources
@@ -70,6 +70,44 @@ edges2 <- 1
 from <- nonplast_genes
 all_plast_genes <- data.frame()
 csvname <- "E_coli_FFL_from_NP"
+##
+source("scripts/analyses/E_coli_FFL.R")
+#########################################
+#FROM = FALSE ; Diamond motifs
+#########################################
+#Analyses of plastic genes from different sources
+edges1 <- 2
+edges2 <- 2
+from <- FALSE
+all_plast_genes <- data.frame()
+csvname <- "E_coli_diamond"
+##
+source("scripts/analyses/E_coli_FFL.R")
+#########################################
+#FROM = TRUE ; Diamond motifs
+#########################################
+#Analyses of plastic genes from different sources
+edges1 <- 2
+edges2 <- 2
+from <- TRUE
+all_plast_genes <- data.frame()
+csvname <- "E_coli_diamond"
+##
+source("scripts/analyses/E_coli_diamond_from.R")
+from <- all_plast_genes$V1
+#Genes that were not find as responding to the environment in our data corpus
+nonplast_FFL <- e_coli_prep_analyses(nonplast_genes, g, E_coli_mat, fun="FFL", edges1=edges1, edges2=edges2, cores=1, from = from)
+write.csv(nonplast_FFL, paste0("scripts/data/nonplast_",csvname,".csv"))
+print("Non plastic genes done!")
+#########################################
+#FROM = Non plastic gene names
+#########################################
+#Analyses of plastic genes from different sources
+edges1 <- 2
+edges2 <- 2
+from <- nonplast_genes
+all_plast_genes <- data.frame()
+csvname <- "E_coli_diamond_from_NP"
 ##
 source("scripts/analyses/E_coli_FFL.R")
 
