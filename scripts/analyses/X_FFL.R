@@ -20,7 +20,7 @@ FFL.from <- function(list.w, edges1=2, edges2=1, target=2, from=(1:ncol(list.w[[
               if(prod(c(E(g, path=m[[1]])$sign,E(g, path=m[[2]])$sign))==-1 && E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)]==E(g, path=m[[2]])$sign[length(E(g, path=m[[2]])$sign)] && (E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)])==1) motif <- "I_Ho_pos"
               if(prod(c(E(g, path=m[[1]])$sign,E(g, path=m[[2]])$sign))==-1 && E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)]!=E(g, path=m[[2]])$sign[length(E(g, path=m[[2]])$sign)] && (E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)])==-1) motif <- "I_He_neg"
               if(prod(c(E(g, path=m[[1]])$sign,E(g, path=m[[2]])$sign))==-1 && E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)]!=E(g, path=m[[2]])$sign[length(E(g, path=m[[2]])$sign)] && (E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)])==1) motif <- "I_He_pos"
-              df <- rbind(df, data.frame(V1=m[[1]][1], V2=motif))
+              df <- rbind(df, data.frame(V1=colnames(list.w[[i]])[m[[1]][1]], V2=motif))
               }
           }}
     }
@@ -59,10 +59,42 @@ X_from <- e_coli_prep_analyses(c(all_plast_genes$V1, nonplast_genes), g, E_coli_
 #Doesn't work ; problem = loose the gene number (dumb)
 df <- data.frame()
 for (gene in unique(X_from$V1)) {
- df <- rbind.fill(df, as.data.frame.matrix(table(subset(X_from, V1==gene))))
+ df <- rbind.fill(df, as.data.frame.matrix(table(subset(X_from, V1==gene)))  )
 }
+df$gene <- unique(X_from$V1)
+rownames(df) <- unique(X_from$V1)
 
-barplot(t(df[,3:10]), col=c("darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1","lightslategrey"))
-legend("bottomleft", box.lty=0,  bg="transparent", fill=c("darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1","lightslategrey"),
-       legend=c( "C_Ho_neg","C_Ho_pos","C_He_neg","C_He_pos","I_Ho_neg","I_Ho_pos","I_He_neg","I_He_pos","NP_FFL") )
+barplot(t(df[,1:7]), col=c("darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1"))
+legend("bottomleft", box.lty=0,  bg="transparent", fill=c("darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1"),
+       legend=c( "C_Ho_neg","C_Ho_pos","C_He_neg","C_He_pos","I_Ho_neg","I_Ho_pos","I_He_neg","I_He_pos") )
+
+
+pdfname <- "figures/E_coli"
+pdf(paste0(pdfname,"_X_FFL",".pdf"), width=100, height=6)
+layout(matrix(c(1:1), 1, 1, byrow = TRUE))
+barplot(t(df[,1:7]), col=c("darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1"))
+legend("bottomleft", box.lty=0,  bg="transparent", fill=c("darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1"),
+       legend=colnames(df) )
+dev.off()
+
+
+df[is.na(df)] <- 0
+rowSums(df[,1:7])*100/sum(df[,1:7])
+#Works BUT: should keep gene name instead of number.
+
+rowSums(df[,1:7])*100/colSums(df[,1:7])
+
+
+df[,1]/sum(df[,1])
+df[,2]/sum(df[,2])
+df[,3]/sum(df[,3])
+df[,4]/sum(df[,4])
+df[,5]/sum(df[,5])
+
+
+
+
+
+
+
 

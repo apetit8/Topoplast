@@ -36,7 +36,7 @@ phloops <- mclapply(phgenes, function(gene) {
   cc <- loops_n.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = which(colnames(E_coli_mat)==gene))
   return(cc)
 },mc.cores=20)
-write.csv(rbindlist(phloops), "scripts/data/ph_plast_nloops.csv")
+write.csv(rbindlist(phloops), "scripts/data/ph_plast_nffl.csv")
 
 ########################################
 ##Medium of growth
@@ -52,14 +52,14 @@ plast_medgrowthloops <- mclapply(medgrowth_genes, function(gene) {
   cc <- loops_n.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = which(colnames(E_coli_mat)==gene))
   return(cc)
 }, mc.cores = 50)
-write.csv(rbindlist(plast_medgrowthloops), "scripts/data/plast_medium_growth_nloops.csv")
+write.csv(rbindlist(plast_medgrowthloops), "scripts/data/plast_medium_growth_nffl.csv")
 
 #Non plastic genes (expression depending on strains and not on tested environment)
 np_medgrowthloops <- mclapply(non_envir_genes, function(gene) {
   cc <- loops_n.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = which(colnames(E_coli_mat)==gene))
   return(cc)
 }, mc.cores = 50)
-write.csv(rbindlist(np_medgrowthloops), "scripts/data/np_medium_growth_nloops.csv")
+write.csv(rbindlist(np_medgrowthloops), "scripts/data/np_medium_growth_nffl.csv")
 
 
 ########################################
@@ -72,7 +72,7 @@ plast_mg_c <- mclapply(mg_c_genes, function(gene) {
   cc <- loops_n.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = which(colnames(E_coli_mat)==gene))
   return(cc)
 }, mc.cores = 50)
-write.csv(rbindlist(plast_mg_c), "scripts/data/plast_mg_c_nloops.csv")
+write.csv(rbindlist(plast_mg_c), "scripts/data/plast_mg_c_nffl.csv")
 
 ########################################
 #10.1128/AEM.00914-09
@@ -84,7 +84,7 @@ plast_ox <- mclapply(ox_genes, function(gene) {
   cc <- loops_n.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = which(colnames(E_coli_mat)==gene))
   return(cc)
 }, mc.cores = 50)
-write.csv(rbindlist(plast_ox), "scripts/data/plast_ox_nloops.csv")
+write.csv(rbindlist(plast_ox), "scripts/data/plast_ox_nffl.csv")
 
 ########################################
 #10.1007/s00253-018-9083-5
@@ -96,7 +96,7 @@ plast_aero <- mclapply(aero_genes, function(gene) {
   cc <- loops_n.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = which(colnames(E_coli_mat)==gene))
   return(cc)
 }, mc.cores = 50)
-write.csv(rbindlist(plast_aero), "scripts/data/plast_aero_nloops.csv")
+write.csv(rbindlist(plast_aero), "scripts/data/plast_aero_nffl.csv")
 
 ########################################
 #10.1128/AEM.02841-08
@@ -108,7 +108,7 @@ plast_juice <- mclapply(juice_genes, function(gene) {
   cc <- loops_n.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = which(colnames(E_coli_mat)==gene))
   return(cc)
 }, mc.cores = 50)
-write.csv(rbindlist(plast_juice), "scripts/data/plast_juice_nloops.csv")
+write.csv(rbindlist(plast_juice), "scripts/data/plast_juice_nffl.csv")
 
 ########################################
 #10.1128/JB.01929-06
@@ -120,7 +120,7 @@ plast_temptr <- mclapply(temptr_genes, function(gene) {
   cc <- loops_n.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = which(colnames(E_coli_mat)==gene))
   return(cc)
 }, mc.cores = 50)
-write.csv(rbindlist(plast_temptr), "scripts/data/plast_temptr_nloops.csv")
+write.csv(rbindlist(plast_temptr), "scripts/data/plast_temptr_nffl.csv")
 
 ########################################
 #10.1038/s41598-022-12463-3
@@ -132,7 +132,7 @@ plast_stringent <- mclapply(stringent_genes, function(gene) {
   cc <- loops_n.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = which(colnames(E_coli_mat)==gene))
   return(cc)
 }, mc.cores = 50)
-write.csv(rbindlist(plast_stringent), "scripts/data/plast_stringent_nloops.csv")
+write.csv(rbindlist(plast_stringent), "scripts/data/plast_stringent_nffl.csv")
 
 ########################################
 #10.1128/JB.01092-07
@@ -148,7 +148,7 @@ plast_stress <- mclapply(stress_genes, function(gene) {
   cc <- loops_n.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = which(colnames(E_coli_mat)==gene))
   return(cc)
 }, mc.cores = 50)
-write.csv(rbindlist(plast_stress), "scripts/data/plast_stress_nloops.csv")
+write.csv(rbindlist(plast_stress), "scripts/data/plast_stress_nffl.csv")
 
 ########################################
 #Every plastic genes
@@ -165,21 +165,21 @@ write.csv(rbindlist(plast_ffloops), "scripts/data/plast_genes_ffloops.csv")
 non_plast_genes <- as.data.frame(colnames(E_coli_mat))
 nonplast_genes <- non_plast_genes[!(non_plast_genes[,1] %in% c(mg_c_genes,medgrowth_genes,phgenes$V1,ox_genes,aero_genes,juice_genes,temptr_genes)),]
 
-nonplast_nloops <- mclapply(nonplast_genes, function(gene) {
+nonplast_nffl <- mclapply(nonplast_genes, function(gene) {
   cc <- loops_n.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = which(colnames(E_coli_mat)==gene))
   return(cc)
 }, mc.cores = 50)
-write.csv(rbindlist(nonplast_nloops), "scripts/data/nonplast_nloops.csv")
+write.csv(rbindlist(nonplast_nffl), "scripts/data/nonplast_nffl.csv")
 
 
 ########################################
 #Control : every genes
 
-all_nloops <- mclapply(colnames(E_coli_mat), function(gene) {
+all_nffl <- mclapply(colnames(E_coli_mat), function(gene) {
   cc <- loops_n.count(list(E_coli_mat), cutoff.max = cutoff.max, cutoff.min = cutoff.min, target = which(colnames(E_coli_mat)==gene))
   return(cc)
 }, mc.cores = 100)
-write.csv(rbindlist(all_nloops), "scripts/data/all_genes_nloops.csv")
+write.csv(rbindlist(all_nffl), "scripts/data/all_genes_nffl.csv")
 
 
 

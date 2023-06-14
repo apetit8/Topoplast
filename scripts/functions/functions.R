@@ -917,7 +917,7 @@ essential.topo <- function(df, min=0.15, max=0.85, target=2, treshold_coeff=0.05
   # treshold_og = difference accepted in the RN linear regression intercept
   # genes = number of genes in the network
   #
-  essential_Ws <- lapply(1:nrow(df), function(i){ #df : 
+  essential_Ws <- mclapply(1:nrow(df), function(i){ #df : 
     W <-  t(matrix(as.numeric(df[i,7:(genes*genes+6)]), ncol = genes))
     W2 <- W
     #basal <- if(grepl("Down", df[i,(ncol(df)-1)])) 0.8 else if(grepl("Up", df[i,(ncol(df)-1)])) 0.2 else 0.5
@@ -937,13 +937,14 @@ essential.topo <- function(df, min=0.15, max=0.85, target=2, treshold_coeff=0.05
         W2[Wij] <- ifelse(treshold_coeff > (abs(RN_W_coeff-RN_Wij_coeff)) ||
                             treshold_og > (abs(RN_W_og-RN_Wij_og)), 0, 1) * sign(W2[Wij])
         }}
-    return(W2)})
-   simul.topo <- lapply(1:length(essential_Ws), function(i){
-     untopo <- unique.topo(essential_Ws[[i]], groups=groups)
-     # untopo <- equiv.topos(essential_Ws[[i]], groups)[[1]]
-     return(untopo)
-  })
-  return(simul.topo)
+    return(W2)}, mc.cores=cores)
+  #  simul.topo <- lapply(1:length(essential_Ws), function(i){
+  #    untopo <- unique.topo(essential_Ws[[i]], groups=groups)
+  #    # untopo <- equiv.topos(essential_Ws[[i]], groups)[[1]]
+  #    return(untopo)
+  # })
+  # return(simul.topo)
+  return(essential_Ws)
 }
 
 

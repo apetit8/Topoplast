@@ -1,6 +1,5 @@
 source("scripts/functions/functions.R")
 source("scripts/functions/detectloops.R")
-memory.limit(size=2500)
 #########################################
 #Genetic data
 ec_cyc <- read.csv("e_coli/ECOLI-regulatory-network_cyc_editd.csv") #List of regulations from Ecocyc
@@ -27,13 +26,14 @@ igraph_options(return.vs.es=F)
 #FROM = FALSE ; meaning that the output will be the the FFLS coming from and to plastic genes.
 #########################################
 #Analyses of plastic genes from different sources
+fun <- "FFL"
 edges1 <- 2
 edges2 <- 1
 from <- FALSE
 all_plast_genes <- data.frame()
 csvname <- "E_coli_FFL"
 ##
-source("scripts/analyses/E_coli_FFL.R")
+source("scripts/analyses/E_coli.R")
 #########################################
 #FROM = TRUE ; meaning that the output will be the the FFLS coming from and to plastic genes.
 #########################################
@@ -44,7 +44,7 @@ from <- TRUE
 all_plast_genes <- data.frame()
 csvname <- "E_coli_FFL_from"
 ##
-source("scripts/analyses/E_coli_FFL.R")
+source("scripts/analyses/E_coli.R")
 from <- all_plast_genes$V1
 #Genes that were not find as responding to the environment in our data corpus
 nonplast_FFL <- e_coli_prep_analyses(nonplast_genes, g, E_coli_mat, fun="FFL", edges1=edges1, edges2=edges2, cores=1, from = from)
@@ -60,7 +60,7 @@ from <- all_plast_genes$V1
 all_plast_genes <- data.frame()
 csvname <- "E_coli_FFL_from_allplast"
 ##
-source("scripts/analyses/E_coli_FFL.R")
+source("scripts/analyses/E_coli.R")
 #########################################
 #FROM = Non plastic gene names
 #########################################
@@ -71,7 +71,7 @@ from <- nonplast_genes
 all_plast_genes <- data.frame()
 csvname <- "E_coli_FFL_from_NP"
 ##
-source("scripts/analyses/E_coli_FFL.R")
+source("scripts/analyses/E_coli.R")
 #########################################
 #FROM = FALSE ; Diamond motifs
 #########################################
@@ -82,7 +82,7 @@ from <- FALSE
 all_plast_genes <- data.frame()
 csvname <- "E_coli_diamond"
 ##
-source("scripts/analyses/E_coli_FFL.R")
+source("scripts/analyses/E_coli.R")
 #########################################
 #FROM = TRUE ; Diamond motifs
 #########################################
@@ -109,8 +109,32 @@ from <- nonplast_genes
 all_plast_genes <- data.frame()
 csvname <- "E_coli_diamond_from_NP"
 ##
-source("scripts/analyses/E_coli_FFL.R")
+source("scripts/analyses/E_coli.R")
+#########################################
+#FROM = FALSE ; meaning that the output will be the the FFLS coming from and to plastic genes.
+#########################################
+#Analyses of plastic genes from different sources
+fun <- "FFLcount"
+edges1 <- 2
+edges2 <- 1
+from <- FALSE
+all_plast_genes <- data.frame()
+csvname <- "E_coli_nffl"
+##
+source("scripts/analyses/E_coli.R")
 
+#########################################
+#FBL
+#########################################
+#Analyses of plastic genes from different sources
+fun <- "FBL"
+edges1 <- 3 #More FBL with edges1=3 than=2 ; why ?
+edges2 <- 0
+from <- FALSE
+all_plast_genes <- data.frame()
+csvname <- "E_coli_FBL"
+##
+source("scripts/analyses/E_coli.R")
 
 
 

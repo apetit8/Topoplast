@@ -142,8 +142,8 @@ dev.off()
 
 #########################
 ##Diamond
-non_plast <- read.csv("scripts/data/nonplast_diamond.csv", sep = ",")
-all_plast <- read.csv("scripts/data/plast_genes_diamond.csv", sep = ",")
+non_plast <- read.csv("scripts/data/nonplast_E_coli_diamond.csv", sep = ",")
+all_plast <- read.csv("scripts/data/plast_genes_E_coli_diamond.csv", sep = ",")
 
 df <- as.data.frame(rbind(colSums(colSums(non_plast[,3:14])*100/nrow(non_plast),
                           colSums(all_plast[,3:14])*100/nrow(all_plast))
@@ -156,7 +156,7 @@ df$homogenous_neg <- rowSums2(as.matrix(df[,c(5,8,12)]))
 df$heterogenous <- rowSums2(as.matrix(df[,c(4,7,10,11)]))
 
 
-pdf(paste0(pdfname,"_diamond_from",".pdf"), width=14, height=6)
+pdf(paste0(pdfname,"_diamond_from",".pdf"), width=6, height=6)
 layout(matrix(c(1:1), 1, 1, byrow = TRUE))
 #Each motif topology
 barplot(t(df[,2:12]), col=c("grey","darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1","darkorchid1","plum1"))

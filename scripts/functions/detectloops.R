@@ -155,120 +155,18 @@ feedforward.to <- function(
 		recursive=FALSE)
 }
 
-
-# 
-# #Loop and loop coherence count
-# FFL.coherence <- function(list.w, cutoff.max=3, cutoff.min=1, target=2, randomFF=FALSE){
-#   df <- data.frame(Coherent=c(rep(0, length(list.w))), Incoherent=c(rep(0, length(list.w))), No_loop=c(rep(0, length(list.w))), Loop=c(rep(0, length(list.w))))
-#   for(i in 1:length(list.w)){
-#     g <- graph.adjacency(t(list.w[[i]]), weighted = TRUE)
-#     #E(g)$sign <- (list.w[[i]])[list.w[[i]] != 0] #signs ; does not work with signed=TRUE because of the negative values. 
-#     if(is.null(feedforward.to(g, to=target, cutoff.max=cutoff.max, cutoff.min=cutoff.min))){
-#       df[i,3] <- 1  } else{
-#         df[i,4] <- 1
-#         ff <- feedforward.to(g, to=target, cutoff.max=cutoff.max, cutoff.min=cutoff.min)
-#         if(randomFF==TRUE){
-#           n <- ff[[sample(length(ff),1)]]
-#           reg1 <- E(g, path=n[[1]])$weight[length(E(g, path=n[[1]])$weight)] #Take the last weight since it's the x -> Target
-#           reg2 <- E(g, path=n[[2]])$weight[length(E(g, path=n[[2]])$weight)] #Take the last weight since it's the x -> Target
-#           df[i,1] <- df[i,1] + ifelse(reg1==reg2, 1, 0)
-#           df[i,2] <- df[i,2] + ifelse(reg1!=reg2, 1, 0)
-#         }else{
-#           for(n in ff) {
-#             reg1 <- E(g, path=n[[1]])$weight[length(E(g, path=n[[1]])$weight)] #Take the last weight since it's the x -> Target
-#             reg2 <- E(g, path=n[[2]])$weight[length(E(g, path=n[[2]])$weight)] #Take the last weight since it's the x -> Target
-#             df[i,1] <- df[i,1] + ifelse(reg1==reg2, 1/length(ff), 0)
-#             df[i,2] <- df[i,2] + ifelse(reg1!=reg2, 1/length(ff), 0)
-#           }}
-#       }}
-#   return(df)
-# }
-
-FFL.coherence <- function(list.w, cutoff.max=3, cutoff.min=1, target=2, randomFF=FALSE){
-  df <- data.frame(Coherent=c(rep(0, length(list.w))), Incoherent=c(rep(0, length(list.w))), No_loop=c(rep(0, length(list.w))), Loop=c(rep(0, length(list.w))))
-  for(i in 1:length(list.w)){
-    g <- graph.adjacency(abs(t(list.w[[i]])), mode="directed") # abs(list.w[[i]]) mode="directed"
-    E(g)$sign <- (list.w[[i]])[list.w[[i]] != 0] #signs ; does not work with signed=TRUE because of the negative values. 
-    # OK: with directed, when reg=5, count it 5x ... Change how matrix is encoded !!
-    if(is.null(feedforward.to(g, to=target, cutoff.max=cutoff.max, cutoff.min=cutoff.min))){
-      df[i,3] <- 1  } else{
-        df[i,4] <- 1
-        ff <- feedforward.to(g, to=target, cutoff.max=cutoff.max, cutoff.min=cutoff.min)
-        if(randomFF==TRUE){
-          n <- ff[[sample(length(ff),1)]]
-          reg1 <- E(g, path=n[[1]])$sign[length(E(g, path=n[[1]])$sign)] #Take the last sign since it's the x -> Target
-          reg2 <- E(g, path=n[[2]])$sign[length(E(g, path=n[[2]])$sign)] #Take the last sign since it's the x -> Target
-          df[i,1] <- df[i,1] + ifelse(reg1==reg2, 1, 0)
-          df[i,2] <- df[i,2] + ifelse(reg1!=reg2, 1, 0)
-        }else{
-          for(n in ff) {
-            reg1 <- E(g, path=n[[1]])$sign[length(E(g, path=n[[1]])$sign)] #Take the last sign since it's the x -> Target
-            reg2 <- E(g, path=n[[2]])$sign[length(E(g, path=n[[2]])$sign)] #Take the last sign since it's the x -> Target
-            df[i,1] <- df[i,1] + ifelse(reg1==reg2, 1/length(ff), 0)
-            df[i,2] <- df[i,2] + ifelse(reg1!=reg2, 1/length(ff), 0)
-          }}
-      }}
-  return(df)
-}
-
-#Frequency = FALSE : the most represented motif "win"
-FFL.type <- function(list.w, cutoff.max=3, cutoff.min=1, target=2, frequencies=TRUE){
-  df <- data.frame(Activating=c(rep(0, length(list.w))), Inhibiting=c(rep(0, length(list.w))), Z_act=c(rep(0, length(list.w))), Z_inh=c(rep(0, length(list.w))), No_loop=c(rep(0, length(list.w))), Loop=c(rep(0, length(list.w))))
-  for(i in 1:length(list.w)){
-    g <- graph.adjacency(abs(t(list.w[[i]])), mode="directed") # abs(list.w[[i]]) mode="directed"
-    E(g)$sign <- (list.w[[i]])[list.w[[i]] != 0] #signs ; does not work with signed=TRUE because of the negative values. 
-    if(is.null(feedforward.to(g, to=target, cutoff.max=cutoff.max, cutoff.min=cutoff.min))){
-      df[i,5] <- 1  } else{
-        df[i,6] <- 1
-        ff <- feedforward.to(g, to=target, cutoff.max=cutoff.max, cutoff.min=cutoff.min)
-        if(frequencies==FALSE){
-          act   <- 0
-          inh   <- 0
-          z_act <- 0
-          z_inh <- 0
-          #for n in ff
-            for (n in ff) {
-              reg1 <- E(g, path=n[[1]])$sign[length(E(g, path=n[[1]])$sign)] #Take the last sign since it's the x -> Target
-              reg2 <- E(g, path=n[[2]])$sign[length(E(g, path=n[[2]])$sign)]
-              act   <- act + ifelse(reg1==reg2 && reg2==1, 1, 0)
-              inh   <- inh + ifelse(reg1==reg2 && reg2==-1, 1, 0)
-              z_act <- z_act + ifelse(reg1!=reg2 && reg2==-1, 1, 0)
-              z_inh <-  z_inh + ifelse(reg1!=reg2 && reg2==1, 1, 0)
-            }
-          fract <- length(which(c(act, inh, z_act, z_inh)==max(c(act, inh, z_act, z_inh))))
-          df[i,1] <- df[i,1] + ifelse(act >= inh && act >= z_act && act >= z_inh, 1/fract, 0)
-          df[i,2] <- df[i,2] + ifelse(inh >= act && inh >= z_act && inh >= z_inh, 1/fract, 0)
-          df[i,3] <- df[i,3] + ifelse(z_act >= act && z_act >= z_inh && z_act >= inh, 1/fract, 0)
-          df[i,4] <- df[i,4] + ifelse(z_inh >= act && z_inh >= z_act && z_inh >= inh, 1/fract, 0)
-          
-        }else{
-          for(n in ff) {
-            reg1 <- E(g, path=n[[1]])$sign[length(E(g, path=n[[1]])$sign)] #Take the last sign since it's the x -> Target
-            reg2 <- E(g, path=n[[2]])$sign[length(E(g, path=n[[2]])$sign)] #Take the last sign since it's the x -> Target
-            df[i,1] <- df[i,1] + ifelse(reg1==reg2 && reg2==1, 1/length(ff), 0)
-            df[i,2] <- df[i,2] + ifelse(reg1==reg2 && reg2==-1, 1/length(ff), 0)
-            df[i,3] <- df[i,3] + ifelse(reg1!=reg2 && reg2==-1, 1/length(ff), 0)
-            df[i,4] <- df[i,4] + ifelse(reg1!=reg2 && reg2==1, 1/length(ff), 0)
-          }}
-      }}
-  return(df)
-}
-
-
-#Custom motif categories : adapted to our simulation model with constitutive expression different from 0
-#change everything to get a tab ? 5 column, "Loop","No loop", "Z_sign", "In/Coherence" and "True/False" and column of concatenate last 3 columns
 FFL.type2 <- function(list.w, edges1=2, edges2=1, target=2, from=(1:ncol(list.w[[1]]))){
   
   if(edges1==2 && edges2==1){
     df <- data.frame(FFL=c(rep(0, length(list.w))), No_FFL=c(rep(0, length(list.w))),
-    C_Ho_N=c(rep(0, length(list.w))), C_Ho_P=c(rep(0, length(list.w))), C_He_N=c(rep(0, length(list.w))), C_He_N=c(rep(0, length(list.w))),
-    I_Ho_N=c(rep(0, length(list.w))), I_Ho_P=c(rep(0, length(list.w))), I_He_N=c(rep(0, length(list.w))), I_He_N=c(rep(0, length(list.w))), NP_X=c(rep(0, length(list.w))))   }
+    C3=c(rep(0, length(list.w))), C1=c(rep(0, length(list.w))), C2=c(rep(0, length(list.w))), C4=c(rep(0, length(list.w))),
+    I2=c(rep(0, length(list.w))), I4=c(rep(0, length(list.w))), I3=c(rep(0, length(list.w))), I1=c(rep(0, length(list.w))), NonPl_X=c(rep(0, length(list.w))))   }
  
    if(edges1==2 && edges2==2){
     df <- data.frame(FFL=c(rep(0, length(list.w))), No_FFL=c(rep(0, length(list.w))),
-    Pos_pos=c(rep(0, length(list.w))), Pos_mixt=c(rep(0, length(list.w))), Pos_neg=c(rep(0, length(list.w))), Neg_pos=c(rep(0, length(list.w))),
-    Neg_mixt=c(rep(0, length(list.w))), Neg_neg=c(rep(0, length(list.w))), Mixt_pos=c(rep(0, length(list.w))), Mixt_mixt_hom=c(rep(0, length(list.w))),
-    Mixt_mixt_het=c(rep(0, length(list.w))), Mixt_neg=c(rep(0, length(list.w))), NP_X=c(rep(0, length(list.w))))   }
+    PP=c(rep(0, length(list.w))), PM=c(rep(0, length(list.w))), PN=c(rep(0, length(list.w))), NP=c(rep(0, length(list.w))),
+    NM=c(rep(0, length(list.w))), NN=c(rep(0, length(list.w))), MP=c(rep(0, length(list.w))), MM2=c(rep(0, length(list.w))),
+    MM1=c(rep(0, length(list.w))), MN=c(rep(0, length(list.w))), NonPl_X=c(rep(0, length(list.w))))   }
   for(i in 1:length(list.w)){
     g <- graph.adjacency(abs(t(list.w[[i]])), mode="directed") 
     E(g)$sign <- (list.w[[i]])[list.w[[i]] != 0] 
@@ -320,15 +218,15 @@ FFL.type2 <- function(list.w, edges1=2, edges2=1, target=2, from=(1:ncol(list.w[
 
 
 #Count number of loop for each gene
-loops_n.count <- function(list.w, cutoff.max=3, cutoff.min=1, target=2){
+loops_n.count <- function(list.w, edges1=edges1, edges2=edges2, target=2){
   df <- data.frame(Loop_number=c(rep(0, length(list.w))), No_loop=c(rep(0, length(list.w))), Loop=c(rep(0, length(list.w))))
   for(i in 1:length(list.w)){
     g <- graph.adjacency(t(list.w[[i]]), weighted = TRUE)
     E(g)$sign <- (list.w[[i]])[list.w[[i]] != 0] #signs ; does not work with signed=TRUE because of the negative values. 
-    if(is.null(feedforward.to(g, to=target, cutoff.max=cutoff.max, cutoff.min=cutoff.min))){
+    if(is.null(feedforward.to(g, to=target, edges1=edges1, edges2=edges2))){
       df[i,2] <- 1  } else{
         df[i,3] <- 1
-        ff <- feedforward.to(g, to=target, cutoff.max=cutoff.max, cutoff.min=cutoff.min)
+        ff <- feedforward.to(g, to=target, edges1=edges1, edges2=edges2)
         df[i,1] <- length(ff)
       }}
   return(df)
@@ -353,25 +251,25 @@ FBL_n.count <- function(list.w, cutoff=2, target=2){
 
 
 #FBL and FBL homogeneity count
-FBL.type <- function(list.w, cutoff=3, target=2, randomFF=FALSE){
-  df <- data.frame(Inhibiting=c(rep(0, length(list.w))), Activating=c(rep(0, length(list.w))), No_FBL=c(rep(0, length(list.w))), FBL=c(rep(0, length(list.w))))
+FBL.type <- function(list.w, edges=2, target=2, randomFF=FALSE){
+  df <- data.frame(FBL=c(rep(0, length(list.w))), No_FBL=c(rep(0, length(list.w))), Inhibiting=c(rep(0, length(list.w))), Activating=c(rep(0, length(list.w))) )
   for(i in 1:length(list.w)){
     g <- graph.adjacency(t(list.w[[i]]), weighted = TRUE)
     E(g)$sign <- (list.w[[i]])[list.w[[i]] != 0] #signs ; does not work with signed=TRUE because of the negative values. 
-    ff <- feedback.from(g, from=target, cutoff=cutoff)
+    ff <- feedback.from(g, from=target, edges=edges)
     if(length(ff)==0){
-      df[i,3] <- 1  } else{
-        df[i,4] <- 1
+      df[i,2] <- 1  } else{
+        df[i,1] <- 1
         if(randomFF==TRUE){
           nn <- ff[[sample(length(ff),1)]]
           reg1 <- E(g, path=nn)$sign #When regulations are heterogeneous, the product is -1
-          df[i,1] <- df[i,1] + ifelse(reg1[1]==-1, 1, 0)
-          df[i,2] <- df[i,2] + ifelse(reg1[1]==1, 1, 0)
+          df[i,3] <- df[i,3] + ifelse(reg1[1]==-1, 1, 0)
+          df[i,4] <- df[i,4] + ifelse(reg1[1]==1, 1, 0)
         }else{
           for(nn in 1:length(ff)) {
             reg1 <- E(g, path=ff[[nn]])$sign #When regulations are heterogeneous, the product is -1
-            df[i,1] <- df[i,1] + ifelse(reg1[1]==-1, 1/length(ff), 0)
-            df[i,2] <- df[i,2] + ifelse(reg1[1]==1, 1/length(ff), 0)
+            df[i,3] <- df[i,3] + ifelse(reg1[1]==-1, 1/length(ff), 0)
+            df[i,4] <- df[i,4] + ifelse(reg1[1]==1, 1/length(ff), 0)
           }}
       }}
   return(df)
@@ -380,9 +278,7 @@ FBL.type <- function(list.w, cutoff=3, target=2, randomFF=FALSE){
 
 
 e_coli_prep_analyses <- function(genes_list, g, g_mat, fun="FFL", edges1=2, edges2=1, cores=2, from=FALSE){
-  # edges1 is supposed to be the longer edge
-  stopifnot(fun=="FFL" || fun=="FFL.from" || fun=="FBL")
-  #here, create txt file, name=paste0(filename,"_",fun,".csv")
+  stopifnot((fun=="FFL" || fun=="FBL" || fun=="FFLcount") && edges1 >= edges2)
   loops <- mclapply(genes_list, function(gene) {
     #To avoid igraph::all_simple_paths to take days and weeks, we subset the regulatory networks. Only target genes and connected TFs are kept.
     gg <- induced.subgraph(g, vids = c(which(colnames(E_coli_mat)==gene), which(colnames(E_coli_mat)%in%TF_genes)) )
@@ -395,31 +291,11 @@ e_coli_prep_analyses <- function(genes_list, g, g_mat, fun="FFL", edges1=2, edge
     else if(from==TRUE) envirgenes <- which(colnames(E_coli_mat3)%in%genes_list) else envirgenes <- 1:ncol(E_coli_mat3)
     print(paste0(gene," ; network size ", ncol(E_coli_mat3)))
     if(fun=="FFL") cc <- FFL.type2(list(E_coli_mat3), edges1 = edges1, edges2 = edges2, target = which(colnames(E_coli_mat3)==gene), from=envirgenes)
-    if(fun=="FFL.from") cc <- FFL.from(list(E_coli_mat3), edges1 = edges1, edges2 = edges2, target = which(colnames(E_coli_mat3)==gene), from=envirgenes)
-    if(fun=="FBL") cc <- FBL.type(list(E_coli_mat3), cutoff = cutoff, target = which(colnames(E_coli_mat3)==gene))
+    if(fun=="FFLcount") cc <- loops_n.count(list(E_coli_mat3), edges1 = edges1, edges2 = edges2, target = which(colnames(E_coli_mat3)==gene))
+    if(fun=="FBL") cc <- FBL.type(list(E_coli_mat3), edges=edges1, target = which(colnames(E_coli_mat3)==gene))
     #Here, insert writing c(gene,cc) in a txt file
     return(c(gene,cc))
   }, mc.cores = cores)
   return(rbindlist(loops))
 }
 
-
-
-FFL_Z_reg <- function(graph, motif, a=0.5, Input=1){
-  #motif must be a subgraph
-  regX_Z <- half_loop_reg(E(graph, path=motif[[1]])$sign, Input=Input)
-  regX_Y_Z <- half_loop_reg(E(graph, path=motif[[2]])$sign, Input=Input)
-  return( a*(regX_Z+regX_Y_Z)  )
-}
-
-
-half_loop_reg <- function(sub_loop_sign, a=0.5, Input=1){
-    if(length(sub_loop_sign)==1){
-      regX_Z <- Input*sub_loop_sign[1]    }
-  else if(length(sub_loop_sign)==2){
-    regX_Z <- sub_loop_sign[2]*(a+(Input*sub_loop_sign[1]))  }
-  else if(length(sub_loop_sign)==3){
-    regX_Z <- (a+(sub_loop_sign[2]*(a+(Input*sub_loop_sign[1]))))*sub_loop_sign[3]  }
-  else if(length(sub_loop_sign)==4){
-    regX_Z <- (a+((a+(sub_loop_sign[2]*(a+(Input*sub_loop_sign[1]))))*sub_loop_sign[3]))*sub_loop_sign[4]  }
-}
