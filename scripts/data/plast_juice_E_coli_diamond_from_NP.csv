@@ -1,4 +1,4 @@
-"","V1","FFL","No_FFL","Pos_pos","Pos_mixt","Pos_neg","Neg_pos","Neg_mixt","Neg_neg","Mixt_pos","Mixt_mixt_hom","Mixt_mixt_het","Mixt_neg","NP_X"
+"","V1","FFL","No_FFL","PP","PM","PN","NP","NM","NN","MP","MM2","MM1","MN","NonPl_X"
 "1","metH",1,0,0,0,0,0,0,0,0,0,1,0,0
 "2","wcaF",0,1,0,0,0,0,0,0,0,0,0,0,0
 "3","waaH",0,1,0,0,0,0,0,0,0,0,0,0,0

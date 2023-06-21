@@ -40,13 +40,13 @@
 #
 ##PH
 #Tucker et al., 2002 ; DOI : 10.1128/JB.184.23.6551-6558.2002
-#Maur
+#Maurer et al., 2004 ; 
 
 phgenes1 <- read.table("e_coli/Plast_genes/Ph/plastic_genes.txt", sep ="\t", header=FALSE)
 phgenes1 <- phgenes1[(phgenes1[,1] %in% colnames(E_coli_mat)),] 
 phgenes2 <- read.table("e_coli/Plast_genes/pH_2/plastic_genes.txt", sep ="\t", header=FALSE)
 phgenes2 <- phgenes2[(phgenes2[,1] %in% colnames(E_coli_mat)),] 
-phgenes <- c(phgenes1, phgenes2)
+phgenes <- unique(c(phgenes1, phgenes2))
 
 phloops <- e_coli_prep_analyses(phgenes, g, E_coli_mat, fun=fun, edges1=edges1, edges2=edges2, cores=1, from = from)
 
@@ -149,6 +149,10 @@ print("Juice done!")
 #Human body temperature
 temptr_genes <- read.table("e_coli/Plast_genes/human_temp/Table_1_genes_updated_names.txt", sep ="\t", header=FALSE)
 temptr_genes <- temptr_genes[(temptr_genes[,1] %in% colnames(E_coli_mat)),] 
+temptr_genes2 <- read.table("e_coli/Plast_genes/Temperature/plastic_genes.txt", sep ="\t", header=FALSE)
+temptr_genes2 <- temptr_genes2[(temptr_genes2[,1] %in% colnames(E_coli_mat)),]
+
+temptr_genes <- unique(c(temptr_genes, temptr_genes2))
 temptr_genes1 <- temptr_genes[!(temptr_genes %in% all_plast_genes$V1)] 
 
 plast_temptr <- e_coli_prep_analyses(temptr_genes1, g, E_coli_mat, fun=fun, edges1=edges1, edges2=edges2, cores=1, from = from)
@@ -157,7 +161,7 @@ all_plast_genes <- rbind(all_plast_genes, as.data.frame(plast_temptr))
 
 print("Temperature done!")
 ########################################
-#10.1038/s41598-022-12463-3
+#10.1128/JB.01092-07
 #stringent response
 stringent_genes <- as.data.frame(unique(read.table("e_coli/Plast_genes/Stringent_response/All_genes.txt", sep ="\t", header=FALSE)[,1]))
 stringent_genes <- stringent_genes[(stringent_genes[,1] %in% colnames(E_coli_mat)),] 

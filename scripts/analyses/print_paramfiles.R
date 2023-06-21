@@ -3,7 +3,7 @@ source("scripts/functions/functions.R")
 source("scripts/functions/makeparam_funct.R")
 ################################################################################
 param.dir <- file.path("templates/10g")
-ifelse(!dir.exists(file.path("simul/10g")), dir.create("simul/10g"), FALSE)#burning_andreas folder
+ifelse(!dir.exists(file.path("simul/10g")), dir.create("simul/10g"), FALSE)
 cache.dir <- normalizePath(file.path("simul/10g"))
 
 overwrite <- FALSE
@@ -12,7 +12,6 @@ prog.path <- "/shared/projects/evoplanet/Software/simevolv/bin/Release/Simul_Pro
 # prog.path <- "../../simevolv/bin/Release/Simul_Prog"
 #####
 sd <- 0.25 #0.25
-random=TRUE #New environment randomly drawn or not
 min <- 0.15#min environment
 max <- 0.85 #max environment
 #
@@ -97,7 +96,6 @@ prog.path <- "/shared/projects/evoplanet/Software/simevolv/bin/Release/Simul_Pro
 # prog.path <- "../../simevolv/bin/Release/Simul_Prog"
 #####
 sd <- 0.25 #0.25
-random=TRUE #New environment randomly drawn or not
 min <- 0.15#min environment
 max <- 0.85 #max environment
 #

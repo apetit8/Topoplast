@@ -198,19 +198,19 @@ plast_juice <- read.csv("scripts/data/plast_juice_E_coli_FFL_from_allplast.csv",
 plast_stress <- read.csv("scripts/data/plast_stress_E_coli_FFL_from_allplast.csv", sep = ",")
 plast_ox <- read.csv("scripts/data/plast_ox_E_coli_FFL_from_allplast.csv", sep = ",")
 
-df <- as.data.frame(rbind(colSums(rbind(non_plast,all_plast)[,3:13]),
-                          colSums(non_plast[,3:13]),
-                          colSums(all_plast[,3:13]),
-                          colSums(np_medgrowthloops[,3:13]),
-                          colSums(plast_medgrowthloops[,3:13]),
-                          colSums(plast_ph[,3:13]),
-                          colSums(plast_aero[,3:13]),
-                          colSums(plast_mg_c[,3:13]),
-                          colSums(plast_stringent[,3:13]),
-                          colSums(plast_tempr[,3:13]),
-                          colSums(plast_juice[,3:13]),
-                          colSums(plast_stress[,3:13]),
-                          colSums(plast_ox[,3:13])
+df <- as.data.frame(rbind(colSums(rbind(non_plast,all_plast)[,3:13])*100/(sum(rbind(non_plast,all_plast)[,3])-sum(rbind(non_plast,all_plast)[,13])),
+                          colSums(non_plast[,3:13])*100/(sum(non_plast[,3])-sum(non_plast[,13])),
+                          colSums(all_plast[,3:13])*100/(sum(all_plast[,3])-sum(all_plast[,13])),
+                          colSums(np_medgrowthloops[,3:13])*100/(sum(np_medgrowthloops[,3])-sum(np_medgrowthloops[,13])),
+                          colSums(plast_medgrowthloops[,3:13])*100/(sum(plast_medgrowthloops[,3])-sum(plast_medgrowthloops[,13])),
+                          colSums(plast_ph[,3:13])*100/(sum(plast_ph[,3])-sum(plast_ph[,13])),
+                          colSums(plast_aero[,3:13])*100/(sum(plast_aero[,3])-sum(plast_aero[,13])),
+                          colSums(plast_mg_c[,3:13])*100/(sum(plast_mg_c[,3])-sum(plast_mg_c[,13])),
+                          colSums(plast_stringent[,3:13])*100/(sum(plast_stringent[,3])-sum(plast_stringent[,13])),
+                          colSums(plast_tempr[,3:13])*100/(sum(plast_tempr[,3])-sum(plast_tempr[,13])),
+                          colSums(plast_juice[,3:13])*100/(sum(plast_juice[,3])-sum(plast_juice[,13])),
+                          colSums(plast_stress[,3:13])*100/(sum(plast_stress[,3])-sum(plast_stress[,13])),
+                          colSums(plast_ox[,3:13])*100/(sum(plast_ox[,3])-sum(plast_ox[,13]))
 ))
 rownames(df) <- c("All","NP", "All_plast","NP_Medgth", "Medgth", "pH","Aero","Mg_C","Stringent","T°","Juice","Stress","Ox")
 df$coherent <- rowSums2(as.matrix(df[,c(3:6)])) #Count of 

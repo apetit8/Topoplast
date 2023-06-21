@@ -910,7 +910,7 @@ equiv.topos <- function(topo, groups=as.list(1:ncol(topo)), sorted=TRUE, unique=
 #Keep "essential" connections. Test every connection to see effect on target gene RN.
 #Inspired by Burda et al., 2011
 essential.topo <- function(df, min=0.15, max=0.85, target=2, treshold_coeff=0.05,
-                           treshold_og=0.05, genes=4, groups=list(1,2,3:4), basal=0.5, cores=2){
+                           treshold_og=0.05, genes=4, groups=list(1,2,3:4), basal=0.15, cores=2){
   #
   # target = Target gene in the network which RN will be tested
   # treshold_coeff = difference accepted in the Reaction Norm linear regression slope

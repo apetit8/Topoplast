@@ -1,7 +1,8 @@
 source("scripts/functions/functions.R")
 source("scripts/functions/detectloops.R")
 #####################
-sims.dirs1 <- list.dirs("simul/10g", recursive = TRUE)
+sims.dirs1 <- list.dirs("simul/10g", recursive = TRUE) #c(list.dirs("simul/10g", recursive = TRUE), list.dirs("simul/10g_a0.15", recursive = TRUE), list.dirs("simul/10g_rep", recursive = TRUE))
+# sims.dirs1 <- c(list.dirs("simul/30g", recursive = TRUE))
 genes <- 10
 min <- 0.15
 max <- 0.85
@@ -19,6 +20,8 @@ gen <- 10000 #max(df.10$Gen)
 df.10 <- df.simul(sims.dirs1, all.gen = TRUE)
 df.10$envir <- str_split(df.10$data.dir, "/", n=8, simplify = TRUE)[,3]
 df.10$anc_id <- str_split(str_split(df.10$data.dir, "/", n=8, simplify = TRUE)[,4], "-", simplify = TRUE)[,2]
+
+plot(df.10$Gen, df.10$Fitness)
 #############
 topo.anticor10 <- essential.topo(df=subset(df.10, Gen==gen & envir=="Anticorrelated"), target=target,
                                  treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3:10))
@@ -43,6 +46,8 @@ Anticor10 <- FFL.type2(topo.anticor10, edges1 = 2, edges2 = 1)
 Corr10 <- FFL.type2(topo.corr10, edges1 = 2, edges2 = 1)
 No_sel10 <- FFL.type2(topo.no_sel10, edges1 = 2, edges2 = 1) #
 Sel10 <- FFL.type2(topo.sel10, edges1 = 2, edges2 = 1)
+write.csv(rbind(Anticor10, Corr10), paste0("scripts/data/",filename,"_plast_FFL",".csv"))
+write.csv(Sel10, paste0("scripts/data/",filename,"_control_FFL",".csv"))
 
 df <- as.data.frame(rbind(colSums(rbind(Anticor10,Corr10))/2*100/nrow(Anticor10), colSums(Anticor10)*100/nrow(Anticor10), colSums(Corr10)*100/nrow(Anticor10), colSums(No_sel10)*100/nrow(No_sel10), colSums(Sel10)*100/nrow(Sel10)))
 rownames(df) <- c("Plastic\ngenes","Anticor","Cor","No_sel","Non-plastic\ngenes")
@@ -52,7 +57,7 @@ df$homogenous <- rowSums2(as.matrix(df[,c(3,4,7,8)]))
 df$heterogenous <- rowSums2(as.matrix(df[,c(5,6,9,10)]))
 write.csv(df, paste0("scripts/data/",filename,"_FFL",".csv"))
 
-pdf(paste0(filename,"prop_FFL",".pdf"), width=3.5, height=4)
+pdf(paste0("figures/",filename,"prop_FFL",".pdf"), width=3.5, height=4)
 layout(matrix(c(1:1), 1, 1, byrow = TRUE))
 #Each motif topology
 barplot(t(df[c(5,1),1:2]), col=c("gold", "grey"), main="Theoretical Prediction")
@@ -150,8 +155,10 @@ Anticor10 <- FFL.type2(topo.anticor10, edges1 = 2, edges2 = 2)
 Corr10 <- FFL.type2(topo.corr10, edges1 = 2, edges2 = 2)
 No_sel10 <- FFL.type2(topo.no_sel10, edges1 = 2, edges2 = 2) #
 Sel10 <- FFL.type2(topo.sel10, edges1 = 2, edges2 = 2)
+write.csv(rbind(Anticor10, Corr10), paste0("scripts/data/",filename,"_plast_diamond",".csv"))
+write.csv(Sel10, paste0("scripts/data/",filename,"_control_diamond",".csv"))
 
-df <- as.data.frame(rbind(colSums(rbind(Anticor10,Corr10))/2*100/nrow(Anticor10), colSums(Anticor10)*100/nrow(Anticor10), colSums(Corr10)*100/nrow(Anticor10), colSums(No_sel10)*100/nrow(Anticor10), colSums(Sel10)*100/nrow(Sel10)))
+df <- as.data.frame(rbind(colSums(rbind(Anticor10,Corr10))/2*100/nrow(Anticor10), colSums(Anticor10)*100/nrow(Anticor10), colSums(Corr10)*100/nrow(Anticor10), colSums(No_sel10)*100/nrow(No_sel10), colSums(Sel10)*100/nrow(Sel10)))
 rownames(df) <- c("All_plast","Anticor","Cor","No_sel","Sel")
 df$coherent <- rowSums2(as.matrix(df[,c(3,5,6,8,10,11)])) #Count of 
 df$incoherent <- rowSums2(as.matrix(df[,c(4,7,9,12)]))
@@ -204,7 +211,7 @@ Corr10 <- FBL.type(topo.corr10, edges = edges)
 No_sel10 <- FBL.type(topo.no_sel10, edges = edges) #
 Sel10 <- FBL.type(topo.sel10, edges = edges)
 
-df <- as.data.frame(rbind(colSums(rbind(Anticor10,Corr10))/2*100/nrow(Anticor10), colSums(Anticor10)*100/nrow(Anticor10), colSums(Corr10)*100/nrow(Anticor10), colSums(No_sel10)*100/nrow(Anticor10), colSums(Sel10)*100/nrow(Sel10)))
+df <- as.data.frame(rbind(colSums(rbind(Anticor10,Corr10))/2*100/nrow(Anticor10), colSums(Anticor10)*100/nrow(Anticor10), colSums(Corr10)*100/nrow(Corr10), colSums(No_sel10)*100/nrow(No_sel10), colSums(Sel10)*100/nrow(Sel10)))
 rownames(df) <- c("All_plast","Anticor","Cor","No_sel","Sel")
 write.csv(df, paste0("scripts/data/",filename,"_FBL",".csv"))
 
