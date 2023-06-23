@@ -234,15 +234,15 @@ loops_n.count <- function(list.w, edges1=edges1, edges2=edges2, target=2){
 
 
 #Count number of feedbackloop for each gene
-FBL_n.count <- function(list.w, cutoff=2, target=2){
+FBL_n.count <- function(list.w,  edges=2, target=2){
   df <- data.frame(FBL_number=c(rep(0, length(list.w))), No_FBL=c(rep(0, length(list.w))), FBL=c(rep(0, length(list.w))))
   for(i in 1:length(list.w)){
     g <- graph.adjacency(t(list.w[[i]]), weighted = TRUE)
     E(g)$sign <- (list.w[[i]])[list.w[[i]] != 0] #signs ; does not work with signed=TRUE because of the negative values. 
-    if(is.null(feedback.from(g, from=target, cutoff=cutoff))){
+    if(is.null(feedback.from(g, from=target, edges=edges))){
       df[i,2] <- 1  } else{
         df[i,3] <- 1
-        ff <- feedback.from(g, from=target, cutoff=cutoff)
+        ff <- feedback.from(g, from=target, edges=edges)
         df[i,1] <- length(ff)
       }}
   return(df)
@@ -251,8 +251,10 @@ FBL_n.count <- function(list.w, cutoff=2, target=2){
 
 
 #FBL and FBL homogeneity count
-FBL.type <- function(list.w, edges=2, target=2, randomFF=FALSE){
-  df <- data.frame(FBL=c(rep(0, length(list.w))), No_FBL=c(rep(0, length(list.w))), Inhibiting=c(rep(0, length(list.w))), Activating=c(rep(0, length(list.w))) )
+FBL.type <- function(list.w, edges=c(2:5), target=2, randomFF=FALSE){
+  df <- data.frame(FBL=c(rep(0, length(list.w))), No_FBL=c(rep(0, length(list.w))),
+                   Inhibiting=c(rep(0, length(list.w))), Activating=c(rep(0, length(list.w))),
+                   Size2=c(rep(0, length(list.w))),  Size3=c(rep(0, length(list.w))),  Size4=c(rep(0, length(list.w))),  Size5=c(rep(0, length(list.w))),  Size6=c(rep(0, length(list.w))) )
   for(i in 1:length(list.w)){
     g <- graph.adjacency(t(list.w[[i]]), weighted = TRUE)
     E(g)$sign <- (list.w[[i]])[list.w[[i]] != 0] #signs ; does not work with signed=TRUE because of the negative values. 
@@ -267,6 +269,8 @@ FBL.type <- function(list.w, edges=2, target=2, randomFF=FALSE){
           df[i,4] <- df[i,4] + ifelse(reg1[1]==1, 1, 0)
         }else{
           for(nn in 1:length(ff)) {
+            size <- length(E(g, path=ff[[nn]])$sign)
+            ifelse(size==2, df[i,5] <- df[i,5] + 1/length(ff), ifelse(size==3, df[i,6] <- df[i,6] + 1/length(ff), ifelse(size==4, df[i,7] <- df[i,7] + 1/length(ff), ifelse(size==5, df[i,8] <- df[i,8] + 1/length(ff), df[i,9] <- df[i,9] + 1/length(ff))) ))
             reg1 <- E(g, path=ff[[nn]])$sign #When regulations are heterogeneous, the product is -1
             df[i,3] <- df[i,3] + ifelse(reg1[1]==-1, 1/length(ff), 0)
             df[i,4] <- df[i,4] + ifelse(reg1[1]==1, 1/length(ff), 0)
@@ -278,7 +282,7 @@ FBL.type <- function(list.w, edges=2, target=2, randomFF=FALSE){
 
 
 e_coli_prep_analyses <- function(genes_list, g, g_mat, fun="FFL", edges1=2, edges2=1, cores=2, from=FALSE){
-  stopifnot((fun=="FFL" || fun=="FBL" || fun=="FFLcount") && edges1 >= edges2)
+  stopifnot(((fun=="FFL" || fun=="FBL" || fun=="FFLcount")&& edges1 >= edges2)|| fun=="FBLcount" )
   loops <- mclapply(genes_list, function(gene) {
     #To avoid igraph::all_simple_paths to take days and weeks, we subset the regulatory networks. Only target genes and connected TFs are kept.
     gg <- induced.subgraph(g, vids = c(which(colnames(E_coli_mat)==gene), which(colnames(E_coli_mat)%in%TF_genes)) )
@@ -293,6 +297,7 @@ e_coli_prep_analyses <- function(genes_list, g, g_mat, fun="FFL", edges1=2, edge
     if(fun=="FFL") cc <- FFL.type2(list(E_coli_mat3), edges1 = edges1, edges2 = edges2, target = which(colnames(E_coli_mat3)==gene), from=envirgenes)
     if(fun=="FFLcount") cc <- loops_n.count(list(E_coli_mat3), edges1 = edges1, edges2 = edges2, target = which(colnames(E_coli_mat3)==gene))
     if(fun=="FBL") cc <- FBL.type(list(E_coli_mat3), edges=edges1, target = which(colnames(E_coli_mat3)==gene))
+    if(fun=="FBLcount") cc <- FBL_n.count(list(E_coli_mat3), edges = edges1, target = which(colnames(E_coli_mat3)==gene))
     #Here, insert writing c(gene,cc) in a txt file
     return(c(gene,cc))
   }, mc.cores = cores)

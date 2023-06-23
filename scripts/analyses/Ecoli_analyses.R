@@ -124,15 +124,41 @@ csvname <- "E_coli_nffl"
 source("scripts/analyses/E_coli.R")
 
 #########################################
+#FROM = FALSE ; meaning that the output will be the the FFLS coming from and to plastic genes.
+#########################################
+#Analyses of plastic genes from different sources
+fun <- "FFLcount"
+edges1 <- 2
+edges2 <- 2
+from <- FALSE
+all_plast_genes <- data.frame()
+csvname <- "E_coli_nDMD"
+##
+source("scripts/analyses/E_coli.R")
+
+#########################################
 #FBL
 #########################################
 #Analyses of plastic genes from different sources
 fun <- "FBL"
-edges1 <- 3 #More FBL with edges1=3 than=2 ; why ?
+edges1 <- c(2:6) #More FBL with edges1=3 than=2 ; why ?
 edges2 <- 0
 from <- FALSE
 all_plast_genes <- data.frame()
-csvname <- "E_coli_FBL"
+csvname <- paste0("E_coli_FBL")
+##
+source("scripts/analyses/E_coli.R")
+
+#########################################
+#FBL count
+#########################################
+#Analyses of plastic genes from different sources
+fun <- "FBLcount"
+edges1 <- c(2:6) #More FBL with edges1=3 than=2 ; why ?
+edges2 <- 0
+from <- FALSE
+all_plast_genes <- data.frame()
+csvname <- paste0("E_coli_nFBL")
 ##
 source("scripts/analyses/E_coli.R")
 

@@ -194,17 +194,39 @@ Anticor10 <- loops_n.count(topo.anticor10, edges1 = 2, edges2 = 1)
 Corr10 <- loops_n.count(topo.corr10, edges1 = 2, edges2 = 1)
 No_sel10 <- loops_n.count(topo.no_sel10, edges1 = 2, edges2 = 1) #
 Sel10 <- loops_n.count(topo.sel10, edges1 = 2, edges2 = 1)
+write.csv(rbind(Anticor10, Corr10), paste0("scripts/data/",filename,"_Pl_nbrffl",".csv"))
+write.csv(Sel10, paste0("scripts/data/",filename,"_NP_nbrffl",".csv"))
 
-pdf(paste0("figures/",filename,"_N_loops",".pdf"), width=4, height=6)
+pdf(paste0("figures/",filename,"_N_FFL",".pdf"), width=4, height=6)
 par(mar = c(5,4, 1,1))
 layout(matrix(c(1:2), 2, 1, byrow = TRUE))
 hist(rbind(Anticor10,Corr10)$Loop_number, main = "Plastic genes", freq = FALSE, xlim = c(0,30), ylim=c(0,1), breaks = c(0:max(rbind(Anticor10,Corr10)$Loop_number)), xlab = "Number of FFL per gene")
 hist(Sel10$Loop_number, main = "Stable genes", freq = FALSE, ylim=c(0,1), xlim = c(0,30), breaks = c(0:max(rbind(Anticor10,Corr10)$Loop_number)), xlab = "Number of FFL per gene")
 dev.off()
+
+################################################################################
+################
+edges1 <- 2
+edges2 <- 2
+##### Loop count
+Anticor10 <- loops_n.count(topo.anticor10, edges1 = 2, edges2 = 2)
+Corr10 <- loops_n.count(topo.corr10, edges1 = 2, edges2 = 2)
+No_sel10 <- loops_n.count(topo.no_sel10, edges1 = 2, edges2 = 2) #
+Sel10 <- loops_n.count(topo.sel10, edges1 = 2, edges2 = 2)
+write.csv(rbind(Anticor10, Corr10), paste0("scripts/data/",filename,"_Pl_nbrDMD",".csv"))
+write.csv(Sel10, paste0("scripts/data/",filename,"_NP_nbrDMD",".csv"))
+
+pdf(paste0("figures/",filename,"_N_DMD",".pdf"), width=4, height=6)
+par(mar = c(5,4, 1,1))
+layout(matrix(c(1:2), 2, 1, byrow = TRUE))
+hist(rbind(Anticor10,Corr10)$Loop_number, main = "Plastic genes", freq = FALSE, xlim = c(0,30), ylim=c(0,1), breaks = c(0:max(rbind(Anticor10,Corr10)$Loop_number)), xlab = "Number of FFL per gene")
+hist(Sel10$Loop_number, main = "Stable genes", freq = FALSE, ylim=c(0,1), xlim = c(0,30), breaks = c(0:max(rbind(Anticor10,Corr10)$Loop_number)), xlab = "Number of FFL per gene")
+dev.off()
+
 ################################################################################
 #FBL
 ################
-edges <- 2
+edges <- c(2:6)
 #####
 Anticor10 <- FBL.type(topo.anticor10, edges = edges)
 Corr10 <- FBL.type(topo.corr10, edges = edges)
@@ -218,7 +240,24 @@ write.csv(df, paste0("scripts/data/",filename,"_FBL",".csv"))
 pdf(paste0("figures/", filename,"_FBL",".pdf"), width=6.5, height=6)
 layout(matrix(c(1:1), 1, 1, byrow = TRUE))
 #Each motif topology
-barplot(t(df[,2:4]), col=c("grey","olivedrab1","palegreen"))
-legend("bottomleft", box.lty=0,  bg="transparent", fill=c("grey","olivedrab1","palegreen"),
+barplot(t(df[,2:4]), col=c("grey","olivedrab1"))
+legend("bottomleft", box.lty=0,  bg="transparent", fill=c("grey","olivedrab1"),
        legend= colnames(df[,2:4]) )
+dev.off()
+################################################################################
+################
+edges <- c(2:6)
+##### FBL count
+Anticor10 <- FBL_n.count(topo.anticor10, edges=edges)
+Corr10 <- FBL_n.count(topo.corr10, edges=edges)
+No_sel10 <- FBL_n.count(topo.no_sel10, edges=edges) #
+Sel10 <- FBL_n.count(topo.sel10, edges=edges)
+write.csv(rbind(Anticor10, Corr10), paste0("scripts/data/",filename,"_Pl_nbrFBL",".csv"))
+write.csv(Sel10, paste0("scripts/data/",filename,"_NP_nbrFBL",".csv"))
+
+pdf(paste0("figures/",filename,"_N_FBL",".pdf"), width=4, height=6)
+par(mar = c(5,4, 1,1))
+layout(matrix(c(1:2), 2, 1, byrow = TRUE))
+hist(rbind(Anticor10,Corr10)$FBL_number, main = "Plastic genes", freq = FALSE, xlim = c(0,30), ylim=c(0,1), breaks = c(0:max(rbind(Anticor10,Corr10)$FBL_number)), xlab = "Number of FFL per gene")
+hist(Sel10$FBL_number, main = "Stable genes", freq = FALSE, ylim=c(0,1), xlim = c(0,30), breaks = c(0:max(rbind(Anticor10,Corr10)$FBL_number)), xlab = "Number of FFL per gene")
 dev.off()

@@ -187,4 +187,3 @@ write.csv(nonplast_FFL, paste0("scripts/data/nonplast_",csvname,".csv"))
 
 print("Non plastic genes done!")
 
-
