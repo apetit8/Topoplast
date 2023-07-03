@@ -5,13 +5,13 @@ pdfname <- "figures/fig_VS"
 pval <- 0.05
 ################################################################################
 ####FFL prop####################################################################
-non_plast <- read.csv("scripts/data/nonplast_E_coli_FFL.csv", sep = ",")
-all_plast <- read.csv("scripts/data/plast_genes_E_coli_FFL.csv", sep = ",")
+non_plast_ffl <- read.csv("scripts/data/nonplast_E_coli_FFL.csv", sep = ",")
+all_plast_ffl <- read.csv("scripts/data/plast_genes_E_coli_FFL.csv", sep = ",")
 theory <- read.csv("scripts/data/10g_FFL.csv", sep = ",")[c(1,5),1:11]
 
 
 df_ffl <- as.data.frame(rbind(theory[1,2:11], theory[2,2:11],
-                           colSums(all_plast[,3:12])*100/nrow(all_plast), colSums(non_plast[,3:12])*100/nrow(non_plast) ))
+                           colSums(all_plast_ffl[,3:12])*100/nrow(all_plast_ffl), colSums(non_plast_ffl[,3:12])*100/nrow(non_plast_ffl) ))
 rownames(df_ffl) <- c("Plastic\nPrediction", "Non-plastic\nPrediction","Plastic\nEmpiric","Non-Plastic\nEmpiric")
 
 pdf(paste0(pdfname,"_prop_FFL",".pdf"), width=5, height=4)
@@ -35,8 +35,8 @@ df <- subset(df, Loop_number != 0)
 
 pdf(paste0(pdfname,"_wisker",".pdf"), width=5, height=4)
 par(mgp=c(2.5, 1.2, 0), mar = c(2.9,3.5, 0.1,0.1))
-boxplot(df$Loop_number ~ df$Type,
-        at = c(1,1.9,3,3.9), ylab = "Number of FBL per gene", xlab = "",
+boxplot(log(df$Loop_number) ~ df$Type,
+        at = c(1,1.9,3,3.9), ylab = "Log of FBL number per gene", xlab = "",
         names = c("Plastic\nprediction", "Non plastic\nprediction", "Plastic\nempiric", "Non plastic\nempiric"),
         tck=-0.1,
         las = 1,
@@ -47,12 +47,12 @@ dev.off()
 
 ################################################################################
 ####DMD prop####################################################################
-non_plast <- read.csv("scripts/data/nonplast_E_coli_diamond.csv", sep = ",")
-all_plast <- read.csv("scripts/data/plast_genes_E_coli_diamond.csv", sep = ",")
+non_plast_dmd <- read.csv("scripts/data/nonplast_E_coli_diamond.csv", sep = ",")
+all_plast_dmd <- read.csv("scripts/data/plast_genes_E_coli_diamond.csv", sep = ",")
 theory <- read.csv("scripts/data/10g_diamond.csv", sep = ",")[c(1,5),1:13]
 
-df1 <- as.data.frame(rbind(theory[1,2:13], theory[2,2:13], colSums(all_plast[,3:14])*100/nrow(all_plast),
-                           colSums(non_plast[,3:14])*100/nrow(non_plast) ))
+df1 <- as.data.frame(rbind(theory[1,2:13], theory[2,2:13], colSums(all_plast_dmd[,3:14])*100/nrow(all_plast_dmd),
+                           colSums(non_plast_dmd[,3:14])*100/nrow(non_plast_dmd) ))
 rownames(df1) <- c("Plastic\nPrediction", "Non-plastic\nPrediction","Plastic\nEmpiric","Non-Plastic\nEmpiric")
 
 
@@ -78,8 +78,8 @@ df <- subset(df, Loop_number != 0)
 
 pdf(paste0(pdfname,"_wisker_DMD",".pdf"), width=5, height=4)
 par(mgp=c(2.5, 1.2, 0), mar = c(2.9,3.5, 0.1,0.1))
-boxplot(df$Loop_number ~ df$Type,
-        at = c(1,1.9,3,3.9), ylab = "Number of DMD per gene", xlab = "",
+boxplot(log(df$Loop_number) ~ df$Type,
+        at = c(1,1.9,3,3.9), ylab = "Log of DMD number per gene", xlab = "",
         names = c("Plastic\nprediction", "Non plastic\nprediction", "Plastic\nempiric", "Non plastic\nempiric"),
         tck=-0.1,
         las = 1,
@@ -122,8 +122,8 @@ df <- subset(df, FBL_number != 0)
 
 pdf(paste0(pdfname,"_wisker_FBL",".pdf"), width=5, height=4)
 par(mgp=c(2.5, 1.2, 0), mar = c(2.9,3.5, 0.1,0.1))
-boxplot(df$FBL_number ~ df$Type, ylim=c(0,1000),
-        at = c(1,1.9,3,3.9), ylab = "Number of FBL per gene", xlab = "",
+boxplot(log(df$FBL_number) ~ df$Type,
+        at = c(1,1.9,3,3.9), ylab = "Log of FBL per gene", xlab = "",
         names = c("Plastic\nprediction", "Non plastic\nprediction", "Plastic\nempiric", "Non plastic\nempiric"),
         tck=-0.1,
         las = 1,
@@ -140,5 +140,13 @@ dev.off()
 # anova(lm(Activating ~ Plasticity, subset(df, FBL==1) ))  #Almost significative ? Non significative enough ? for sign of FBL
 # 
 
+
+################################################################################
+#Number of gene with no loop####################################################
+100-length(unique(rbind(subset(all_plast_ffl, FFL==1)[,1:4],subset(all_plast_dmd, FFL==1)[,1:4])[,2]))*100/nrow(all_plast_ffl)
+# unique(rbind(subset(all_plast_ffl, FFL==0)[,1:4],subset(all_plast_dmd, FFL==0)[,1:4])[,2])
+#
+all_plast <- read.csv("scripts/data/plast_genes_E_coli_FFL_size10.csv", sep = ",")
+100-length(unique(subset(all_plast, FFL==1)[,2]))*100/nrow(all_plast)
 
 

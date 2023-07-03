@@ -162,11 +162,13 @@ FFL.type2 <- function(list.w, edges1=2, edges2=1, target=2, from=(1:ncol(list.w[
     C3=c(rep(0, length(list.w))), C1=c(rep(0, length(list.w))), C2=c(rep(0, length(list.w))), C4=c(rep(0, length(list.w))),
     I2=c(rep(0, length(list.w))), I4=c(rep(0, length(list.w))), I3=c(rep(0, length(list.w))), I1=c(rep(0, length(list.w))), NonPl_X=c(rep(0, length(list.w))))   }
  
-   if(edges1==2 && edges2==2){
+   else if(edges1==2 && edges2==2){
     df <- data.frame(FFL=c(rep(0, length(list.w))), No_FFL=c(rep(0, length(list.w))),
     PP=c(rep(0, length(list.w))), PM=c(rep(0, length(list.w))), PN=c(rep(0, length(list.w))), NP=c(rep(0, length(list.w))),
     NM=c(rep(0, length(list.w))), NN=c(rep(0, length(list.w))), MP=c(rep(0, length(list.w))), MM2=c(rep(0, length(list.w))),
     MM1=c(rep(0, length(list.w))), MN=c(rep(0, length(list.w))), NonPl_X=c(rep(0, length(list.w))))   }
+   else {
+    df <- data.frame(FFL=c(rep(0, length(list.w))), No_FFL=c(rep(0, length(list.w))), NonPl_X=c(rep(0, length(list.w))))  }
   for(i in 1:length(list.w)){
     g <- graph.adjacency(abs(t(list.w[[i]])), mode="directed") 
     E(g)$sign <- (list.w[[i]])[list.w[[i]] != 0] 
@@ -189,7 +191,7 @@ FFL.type2 <- function(list.w, edges1=2, edges2=1, target=2, from=(1:ncol(list.w[
             if(prod(c(E(g, path=m[[1]])$sign,E(g, path=m[[2]])$sign))==-1 && E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)]!=E(g, path=m[[2]])$sign[length(E(g, path=m[[2]])$sign)] && (E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)])==1) df[i,10] <- df[i,10] + 1/length(ff)
           }else{df[i,11] <- df[i,11] + 1/length(ff)}
           }}
-        if(edges1==2 && edges2==2){
+        else if(edges1==2 && edges2==2){
           for(m in ff) {
             if(m[[1]][1] %in% from){
               if(length(E(g, path=m[[1]])$sign)!=2 || length(E(g, path=m[[2]])$sign)!=2) stop("Wrong cut.offs")
@@ -212,7 +214,10 @@ FFL.type2 <- function(list.w, edges1=2, edges2=1, target=2, from=(1:ncol(list.w[
               if(reg_j1!=reg_i1 && reg_j2!=reg_i2 && reg_j1!=reg_j2) df[i,11] <- df[i,11] + 1/length(ff)
               if(reg_j1!=reg_i1 && reg_j2==-1 && reg_i2==-1) df[i,12] <- df[i,12] + 1/length(ff)
             }else{df[i,11] <- df[i,11] + 1/length(ff)}
-          }}}}
+          }} else         
+            for(m in ff) {
+            if(!(m[[1]][1] %in% from)){df[i,3] <- df[i,3] + 1/length(ff)} }
+        }}
   return(df)
 }
 
@@ -282,12 +287,13 @@ FBL.type <- function(list.w, edges=c(2:5), target=2, randomFF=FALSE){
 
 
 e_coli_prep_analyses <- function(genes_list, g, g_mat, fun="FFL", edges1=2, edges2=1, cores=2, from=FALSE){
-  stopifnot(((fun=="FFL" || fun=="FBL" || fun=="FFLcount")&& edges1 >= edges2)|| fun=="FBLcount" )
+  stopifnot(fun=="FFL" || fun=="FBL" || fun=="FFLcount"|| fun=="FBLcount" )
+  if(length(edges1)==1){stopifnot(edges1 >= edges2)}
   loops <- mclapply(genes_list, function(gene) {
     #To avoid igraph::all_simple_paths to take days and weeks, we subset the regulatory networks. Only target genes and connected TFs are kept.
     gg <- induced.subgraph(g, vids = c(which(colnames(E_coli_mat)==gene), which(colnames(E_coli_mat)%in%TF_genes)) )
     E_coli_mat2 <- t((get.adjacency(gg, sparse=FALSE, attr='V3')))
-    ggg <- induced.subgraph(gg, vids = as.vector(unlist(neighborhood(gg, edges1, nodes = which(colnames(E_coli_mat2)==gene), mode = 'all'))))
+    ggg <- induced.subgraph(gg, vids = as.vector(unlist(neighborhood(gg, max(edges1), nodes = which(colnames(E_coli_mat2)==gene), mode = 'all'))))
     E_coli_mat3 <- t((get.adjacency(ggg, sparse=FALSE, attr='V3')))
     E_coli_mat3 <- matrix(as.numeric(E_coli_mat3), ncol = ncol(E_coli_mat3), dimnames = dimnames(E_coli_mat3)) #convert to numeric matrix
     E_coli_mat3[is.na(E_coli_mat3)] <- 0

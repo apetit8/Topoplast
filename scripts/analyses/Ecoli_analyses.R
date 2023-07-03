@@ -162,6 +162,18 @@ csvname <- paste0("E_coli_nFBL")
 ##
 source("scripts/analyses/E_coli.R")
 
-
+#########################################
+#FROM = FALSE ; meaning that the output will be the the FFLS coming from and to plastic genes.
+#########################################
+#Analyses of plastic genes from different sources
+#DOES NOT WORK
+fun <- "FFL"
+edges1 <- c(3:8)
+edges2 <- c(1:8)
+from <- FALSE
+all_plast_genes <- data.frame()
+csvname <- "E_coli_FFL_size10"
+##
+source("scripts/analyses/E_coli.R")
 
 

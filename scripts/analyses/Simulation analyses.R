@@ -7,13 +7,13 @@ genes <- 10
 min <- 0.15
 max <- 0.85
 target <- 2 # Target gene in the network
-filename <- "10g"
+filename <- "10g_20k"
 ################################################################################
 #Parameters when keeping "essential" connections. Test every connection to see impact on target gene RN, and draw from that.
 #Inspired by Burda et al., 2011
 treshold_coeff <- 0.001 # difference accepted in the Reaction Norm linear regression slope
 treshold_og <- 0.001    # difference accepted in the RN linear regression intercept
-gen <- 10000 #max(df.10$Gen)
+gen <- 20000 #max(df.10$Gen)
 #####################
 #DATA
 ##################
