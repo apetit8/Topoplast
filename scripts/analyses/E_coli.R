@@ -173,8 +173,12 @@ all_plast_genes <- rbind(all_plast_genes, as.data.frame(plast_stringent))
 
 print("Stringent response done!")
 ########################################
-#Every plastic genes
-write.csv(all_plast_genes, paste0("scripts/data/plast_genes_",csvname,".csv"))
+#Plastic genes : only genes occuring in at least 2 studies are kept
+###
+Subplastic_genes <- as.character(subset( as.data.frame(table(c(stringent_genes, temptr_genes, temptr_genes2, juice_genes, aero_genes,
+                                                               ox_genes,mg_c_genes,medgrowth_genes$medium.genes,stress_genes,phgenes1,phgenes2))), Freq >=2)[,1])
+
+write.csv(subset(all_plast_genes, V1 %in% Subplastic_genes), paste0("scripts/data/plast_genes_",csvname,".csv"))
 
 print("All plastic genes done!")
 ########################################
@@ -186,4 +190,9 @@ nonplast_FFL <- e_coli_prep_analyses(nonplast_genes, g, E_coli_mat, fun=fun, edg
 write.csv(nonplast_FFL, paste0("scripts/data/nonplast_",csvname,".csv"))
 
 print("Non plastic genes done!")
+
+
+
+
+
 

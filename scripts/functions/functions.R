@@ -455,76 +455,35 @@ df.simul <- function(sims.dir, all.gen=TRUE, size=50000, M=FALSE){
   return(simul.df)
 }
 
-
-#For 10 genes
-df.sampling <- function(sims.dir, gen=1, size=50000){
+df.last.gens <- function(sims.dir, n.gen=50, size=50000){
   simul.df <- data.frame()
   filedata <- data.frame()
   #collect all the data
-  files     <- list.files(path = sims.dir, full.names=TRUE, pattern = "\\.txt$") #Check if this works
+  files     <- list.files(path = sims.dir, full.names=TRUE, pattern = "\\.txt$")
+  files     <- files[grep('out-rep\\d+\\.txt', files)]
   files <- files[sapply(files, file.size) > size]
-  for (i in files) { 
-    print(i)
-    mytopos <- lapply(i, function(ff) {
-      tt <- fread(ff, data.table=FALSE) 
-      #Data
-      b.gen <- str_split(ff, "/", n=8, simplify = TRUE)[,4]
-      Wmat <- extract.W.matrix(tt, gen=gen) #W data
-      W <- as.matrix(Wmat, ncol=10)
-      slope <- getSlope.ALR(W=W, n.env=21, target.gene=2)
-      prevpop <- str_split(ff, "/sampling/", n=2, simplify = TRUE)[,1]
-      data.gen <- c(ff, prevpop, b.gen, slope )
-      filedata <- rbind(filedata, data.gen)
-      return(as.list(filedata))
-    })
-    newt <- as.data.frame(rbindlist(mytopos, use.names=FALSE))
-    setnames(newt, 1:4, c("data.dir","Before_Pop","Before_Gen", "Slope"))
-    simul.df <- rbind(simul.df, newt) #paste the data of i in a data.frame with the others
-  }
-  simul.df$Before_Gen <- as.numeric( str_split(simul.df$Before_Gen, "g", simplify = TRUE)[,2] )
-  simul.df[,3:4] <- lapply( simul.df[,3:4], as.numeric)
-  return(simul.df)
-}
-
-
-#To use every gen sampling info
-#Problem !! : There is no first column that can be used as an index (as "Gen" for regular output files).
-#Solution : replicate "extract W" but for row index instead of Gen.
-df.sampling2 <- function(sims.dir, size=50000){
-  simul.df <- data.frame()
-  filedata <- data.frame()
-  #collect all the data
-  files     <- list.files(path = sims.dir, full.names=TRUE, pattern = "\\_G") #Check if this works
-  files <- files[sapply(files, file.size) > size]
-  file.results <- mclapply(files, function(ff) { 
+  mytopos <- lapply(files, function(ff) {
     print(ff)
     tt <- fread(ff, data.table=FALSE)
-    #Data
-    gen <- str_split(str_split(str_split(ff, "/", n=8, simplify = TRUE)[,6], "_G", simplify = TRUE)[,2], ".txt", simplify = TRUE)
-    
-    Ws <- extract.W.matrix.all.pop(tt, index=1:nrow(tt)) #Is it in the right order ?
-    slopes2 <- sapply(Ws, function(W) getSlope.ALR(W=t(W), n.env=10, target.gene=2))#WHY t() ??Why two times, one in the extract matrix function and one now ? It's not the case anywhere else
-    slopes3 <- sapply(Ws, function(W) getSlope.ALR(W=t(W), n.env=10, target.gene=3))#WHY t() ??Why two times, one in the extract matrix function and one now ? It's not the case anywhere else
-    
-    var.slope2 <- var(slopes2)
-    mean.slope2 <- mean(slopes2)
-    var.slope3 <- var(slopes3)
-    mean.slope3 <- mean(slopes3)
-    prevpop <- str_split(ff, "/", simplify = TRUE)[,4]
-    data.gen <- data.frame(
-      data.dir   = ff, 
-      Before_Pop = prevpop, 
-      Before_Gen = gen[,1], 
-      Var_Slope2  = sqrt(var.slope2), 
-      Mean_Slope2 = mean.slope2,
-      Var_Slope3  = sqrt(var.slope3), 
-      Mean_Slope3 = mean.slope3)
-  }, mc.cores=4)
-  
-  simul.df <- do.call(rbind, file.results)
+    mygens <- (tt[nrow(tt),"Gen"]-n.gen):tt[nrow(tt),"Gen"]
+    for (gen in mygens) {
+      #M data
+      gen <-gen
+      phen.mean <- extract.P.mean(tt, gen=gen)
+      data.gen <- c(ff, gen, phen.mean)
+      filedata <- rbind(filedata, data.gen)
+    }
+    return(filedata)
+  })
+  simul.df <- as.data.frame(rbindlist(mytopos, use.names=FALSE))
+  nbrc <- ncol(simul.df)-2
+  data <- list(let = c("Pmean"), id = c(seq(1,nbrc ,1)), sep = c("_"))
+  Wcol <- data %>% cross() %>% map(lift(paste)) 
+  setnames(simul.df, 1:(2+nbrc), c("data.dir","Gen", unlist(Wcol)))
+  simul.df[,2:ncol(simul.df)] <- lapply( simul.df[,2:ncol(simul.df)], as.numeric)
   return(simul.df)
 }
-      
+
 
 #Function that gives the mutational robustness of the reaction norm of a pop.
 df.sampling3 <- function(sims.dir, size=50000, rep=6){
@@ -726,7 +685,7 @@ phenotype_plastic_loop_R <- function(W, S0, a, steps, measure, sensors=NULL) {
   sto <- matrix(NA, nrow=length(S0), ncol=steps+1)
   sto[,1] <- S0
   for (i in 1:steps) {
-    S0 <- sigma.M2c((W %*% S0), lambda=lambda, mu=mu) 
+    S0 <- sigma.M2p((W %*% S0), lambda=lambda, mu=mu) 
     if(is.null(sensors)==FALSE){S0[1:length(sensors)] <- sensors}
     sto[,i+1] <- S0
   }
@@ -740,7 +699,7 @@ pheno.from.W <- function(W, a=0.5, S0=rep(a, nrow(W)), steps=20, measure=4, full
   return(ans)
 }
 
-pheno.from.W <- cmpfun(pheno.from.W)
+# pheno.from.W <- cmpfun(pheno.from.W)
 
 #Function that gives the number of plastic genes fom W matrix from a dataframe
 plasticity <- function(dfplast, genes=51, treshold=0.01, envir1=c(0.15), envir2=c(0.85)){
@@ -766,8 +725,9 @@ getSlope.ALR <- function(W, n.env=21, target.gene=2, min=0.15, max=0.85, givebac
   #giveback 2 = reg coeff ; 1 = reg origin
   envs  <- seq(min, max, length.out=n.env)
   phens <- sapply(envs, function(env) pheno.from.W(W, sensors = env, a=a)$mean[target.gene])
-  reg   <- lm(phens ~ envs)
-  return(coef(reg)[giveback])  # the first coefficient is the regression intercept, the second is the slope
+  # reg   <- lm(phens ~ envs)
+  reg <- .lm.fit(cbind(rep(1, length(phens)), phens), envs)$coefficients  #much faster than lm()
+  return(reg[giveback])  # the first coefficient is the regression intercept, the second is the slope
 }
 
 slope.stablefrom <- function(df, thresh=0.001, window=5, ...) {
@@ -910,7 +870,7 @@ equiv.topos <- function(topo, groups=as.list(1:ncol(topo)), sorted=TRUE, unique=
 #Keep "essential" connections. Test every connection to see effect on target gene RN.
 #Inspired by Burda et al., 2011
 essential.topo <- function(df, min=0.15, max=0.85, target=2, treshold_coeff=0.05,
-                           treshold_og=0.05, genes=4, groups=list(1,2,3:4), basal=0.15, cores=2){
+                           treshold_og=0.05, genes=4, basal=0.15, cores=2){
   #
   # target = Target gene in the network which RN will be tested
   # treshold_coeff = difference accepted in the Reaction Norm linear regression slope
@@ -920,30 +880,18 @@ essential.topo <- function(df, min=0.15, max=0.85, target=2, treshold_coeff=0.05
   essential_Ws <- mclapply(1:nrow(df), function(i){ #df : 
     W <-  t(matrix(as.numeric(df[i,7:(genes*genes+6)]), ncol = genes))
     W2 <- W
-    #basal <- if(grepl("Down", df[i,(ncol(df)-1)])) 0.8 else if(grepl("Up", df[i,(ncol(df)-1)])) 0.2 else 0.5
-    #The line above : retrieve basal value from file direction. Only works for MY CURRENT design.
-    RN_W_coeff <- getSlope.ALR(W=W, n.env=30, target.gene=target, min=min, max=max, a=basal)
-    RN_W_og <- getSlope.ALR(W=W, n.env=30, target.gene=target, min=min, max=max, giveback=1, a=basal)
+    RN_W_coeff <- getSlope.ALR(W=W, n.env=15, target.gene=target, min=min, max=max, a=basal)
+    RN_W_og <- getSlope.ALR(W=W, n.env=15, target.gene=target, min=min, max=max, giveback=1, a=basal)
     for(Wij in 1:length(W)){  #(but diagonal)
       W_test <- W
       if(W_test[Wij]!=0){
         W_test[Wij] <- 0
-        RN_Wij_coeff <- getSlope.ALR(W=W_test, n.env=30, target.gene=target, min=min, max=max, a=basal)
-        RN_Wij_og <- getSlope.ALR(W=W_test, n.env=30, target.gene=target, min=min, max=max, giveback=1, a=basal)
-        # W2[Wij] <- ifelse(RN_Wij_coeff >= (RN_W_coeff-treshold_coeff) &
-        #                     RN_Wij_coeff <= (RN_W_coeff+treshold_coeff) &
-        #                     RN_Wij_og >= (RN_W_og-treshold_og)&
-        #                     RN_Wij_og <= (RN_W_og+treshold_og), 0, 1) * sign(W2[Wij])
+        RN_Wij_coeff <- getSlope.ALR(W=W_test, n.env=15, target.gene=target, min=min, max=max, a=basal)
+        RN_Wij_og <- getSlope.ALR(W=W_test, n.env=15, target.gene=target, min=min, max=max, giveback=1, a=basal)
         W2[Wij] <- ifelse(treshold_coeff > (abs(RN_W_coeff-RN_Wij_coeff)) ||
                             treshold_og > (abs(RN_W_og-RN_Wij_og)), 0, 1) * sign(W2[Wij])
         }}
     return(W2)}, mc.cores=cores)
-  #  simul.topo <- lapply(1:length(essential_Ws), function(i){
-  #    untopo <- unique.topo(essential_Ws[[i]], groups=groups)
-  #    # untopo <- equiv.topos(essential_Ws[[i]], groups)[[1]]
-  #    return(untopo)
-  # })
-  # return(simul.topo)
   return(essential_Ws)
 }
 

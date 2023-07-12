@@ -23,7 +23,7 @@ E_coli_mat[is.na(E_coli_mat)] <- 0 #fill NA to 0, mandatory for later analyses
 ##########
 igraph_options(return.vs.es=F)
 #########################################
-#FROM = FALSE ; meaning that the output will be the the FFLS coming from and to plastic genes.
+#FROM = FALSE
 #########################################
 #Analyses of plastic genes from different sources
 fun <- "FFL"
@@ -124,7 +124,7 @@ csvname <- "E_coli_nffl"
 source("scripts/analyses/E_coli.R")
 
 #########################################
-#FROM = FALSE ; meaning that the output will be the the FFLS coming from and to plastic genes.
+#FROM = FALSE 
 #########################################
 #Analyses of plastic genes from different sources
 fun <- "FFLcount"
@@ -163,17 +163,16 @@ csvname <- paste0("E_coli_nFBL")
 source("scripts/analyses/E_coli.R")
 
 #########################################
-#FROM = FALSE ; meaning that the output will be the the FFLS coming from and to plastic genes.
+#FROM = FALSE
 #########################################
 #Analyses of plastic genes from different sources
 #DOES NOT WORK
 fun <- "FFL"
-edges1 <- c(3:8)
-edges2 <- c(1:8)
+edges1 <- c(3:5)
+edges2 <- c(1:5)
 from <- FALSE
 all_plast_genes <- data.frame()
 csvname <- "E_coli_FFL_size10"
 ##
 source("scripts/analyses/E_coli.R")
-
 

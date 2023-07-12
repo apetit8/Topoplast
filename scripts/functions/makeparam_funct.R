@@ -124,11 +124,11 @@ write.param <- function(param.file, param) {
 
 
 #make.randopt but to make random or custom optimum RN
-make.randopt <- function(oldopt, pattern, begin.bottleneck=FALSE, random=TRUE, oldenv=0.5, sd=0.05, min=0.2, max=0.8, RNslope=1, RNintercept=0) {
+make.randopt <- function(oldopt, pattern, begin.bottleneck=FALSE, random=TRUE, oldenv=0.5, sd=0.05, min=0.2, max=0.8, RN=list(c(0,0))) {
   # Returns a vector of random optima according to the provided pattern
   # (constant vs fluctuating optima)
   stopifnot(length(oldopt) == length(pattern),
-            all(pattern %in% 0:10))
+            all(pattern %in% 0:5))
   newopt <- oldopt
   if(random==TRUE) env <- runif(1, min, max)
   # env <- rnorm(1, mean=oldenv, sd=0.05, max=0.2, min=0.8)
@@ -138,10 +138,10 @@ make.randopt <- function(oldopt, pattern, begin.bottleneck=FALSE, random=TRUE, o
   newopt[pattern == 2] <- env
   if (begin.bottleneck) newopt[pattern == 3] <- runif(sum(pattern == 3))
   newopt[pattern == 4] <- (1-env)
-  #added pattern
-  newopt[pattern == 5] <- env*RNslope+RNintercept #Corr Up and Down
-  # newopt[1] <- env
-  
+  #add "for" loop here
+  for (i in 1:length(newopt[pattern == 5])) {
+    newopt[pattern == 5][i] <- env*RN[[i]][1]+RN[[i]][2]
+  }
   newopt
 }
 
@@ -160,7 +160,7 @@ make.selstr <- function(pattern) {
 #Remove every manipulation of the fitness strength as we only use the pre-burn part of this function.
 create.paramseries <- function(param.template.file, extparam.file, simul.dir, overwrite=FALSE,
                                verbose=FALSE, allow.extrapar=c("GENET_MUTRATES"), tar.param=TRUE, mc.cores=detectCores()-2,
-                               sd=0.05, min=0.2, max=0.8, random=FALSE, bottleneck=TRUE, manual=NULL, RNslope=1, RNintercept=0) 
+                               sd=0.05, min=0.2, max=0.8, random=FALSE, bottleneck=TRUE, manual=NULL) 
   # This is the main algorithm that create the simulation structure. 
   # The function retruns the necessary information to make a launchfile
   # (it does not write the launchfile, because all information is not available here)
@@ -210,9 +210,6 @@ create.paramseries <- function(param.template.file, extparam.file, simul.dir, ov
   bo.d <- extparam$BOTTLENECK_DURATION
   bo.a <- extparam$BOTTLENECK_AFTER
   totgen <- bo.b + bo.d + bo.a
-  # HERE
-  # sel.strength <- max(myparam$FITNESS_STRENGTH)
-  # sel.strength2 <- if ("FITNESS_STRENGTH" %in% names(extparam)) max(extparam$FITNESS_STRENGTH) else sel.strength
   # Checks for the consistency of both parameter files
   if (!"SIMUL_MAXGEN" %in% names(myparam)) 
     myparam$SIMUL_MAXGEN <- totgen
@@ -231,7 +228,7 @@ create.paramseries <- function(param.template.file, extparam.file, simul.dir, ov
   if (verbose)
     pb <- txtProgressBar(min = 1, max = extparam$REPLICATES, style = 3)
   # browser()
-  mclapply(1:extparam$REPLICATES, function(rep) {
+  mclapply(1:extparam$REPLICATES, function(rep) { #mclapply
     repdir <- file.path(simul.dir, .repDir(rep))
     compressed.file.name <- file.path(repdir, .repTarFile(rep))
     if (exists(compressed.file.name))
@@ -240,8 +237,15 @@ create.paramseries <- function(param.template.file, extparam.file, simul.dir, ov
     if (overwrite) { # This is quite powerful, use with caution (simulation results are deleted prior to launching a new sim)
       unlink(list.files(path=repdir, full.names=TRUE))
     }
+    #Draw random RNs for "manual" plasticity ; changes for each rep
+    RN <- lapply(1:length(which(extparam$SCENARIO_PART1==5)), function(i){
+      RNslope <- sample(c(runif(1,0.5718,1.4282), runif(1,-1.4282,-0.5718)), 1)
+      if(RNslope > 1) RNintercept <- runif(1, 1-RNslope, 0) else if(RNslope >0) RNintercept <- runif(1, 0, 1-RNslope )
+      else if(RNslope < -1) RNintercept <- runif(1, 1, -RNslope) else RNintercept <- runif(1, -RNslope, 1)
+      return(c(RNslope, RNintercept))
+    })
     # First generation: use the full template file
-    optim <- make.randopt(runif(myparam$GENET_NBLOC, min, max), extparam$SCENARIO_PART1, sd=sd, min=min, max=max, random=random, RNslope=RNslope, RNintercept=RNintercept)
+    optim <- make.randopt(runif(myparam$GENET_NBLOC, min, max), extparam$SCENARIO_PART1, sd=sd, min=min, max=max, random=random, RN=RN)
     #Replace with chosen optimum if wanted
     if(is.null(manual)==FALSE){optim[(length(optim)-length(manual)+1):length(optim)] <- manual}
     myparam$FITNESS_OPTIMUM <- optim
@@ -254,19 +258,21 @@ create.paramseries <- function(param.template.file, extparam.file, simul.dir, ov
       for (gen in 1:(bo.b-1)) {
         par.file.name <- c(par.file.name, file.path(repdir, .repFile(rep, gen)))
         if (!file.exists(par.file.name[gen+1]) || overwrite) {
-          optim <- make.randopt(optim, extparam$SCENARIO_PART1, oldenv=optim[1], sd=sd, min=min, max=max, random=random, RNslope=RNslope, RNintercept=RNintercept) ## Here : give back the prev env.
-          write.param(par.file.name[gen+1],
-                      list(FITNESS_OPTIMUM = optim, 
-                           FILE_NEXTPAR    = suppressWarnings(normalizePath(file.path(repdir, .repFile(rep, gen+1))))))
-        }
-      }
+          optim <- make.randopt(optim, extparam$SCENARIO_PART1, oldenv=optim[1], sd=sd, min=min, max=max, random=random, RN=RN) ## Here : give back the prev env.
+          if(gen == bo.b-50){ #More outputs before the end of the simulation (to infer reaction norms during results analyses)
+            write.param(par.file.name[gen+1], list(FITNESS_OPTIMUM = optim, 
+                             FILE_NEXTPAR    = suppressWarnings(normalizePath(file.path(repdir, .repFile(rep, gen+1)))),
+                             SIMUL_OUTPUT = 1))    }
+          else write.param(par.file.name[gen+1], list(FITNESS_OPTIMUM = optim, 
+                                FILE_NEXTPAR    = suppressWarnings(normalizePath(file.path(repdir, .repFile(rep, gen+1))))))
+        }}
     extparlast <- extparam$SCENARIO_PART1
     gen <- gen+1
     
     #If no bottleneck required : skip all that
     if (bottleneck==TRUE){
       # first bottleneck generation
-      optim <- make.randopt(optim, extparam$SCENARIO_PART2, begin.bottleneck=TRUE, sd=sd, min=min, max=max, RNslope=RNslope, RNintercept=RNintercept)
+      optim <- make.randopt(optim, extparam$SCENARIO_PART2, begin.bottleneck=TRUE, sd=sd, min=min, max=max, RN=RN)
       par.file.name <- c(par.file.name, file.path(repdir, .repFile(rep, bo.b)))
       if (!file.exists(par.file.name[bo.b+1]) || overwrite)
         write.param(par.file.name[bo.b+1],
@@ -280,7 +286,7 @@ create.paramseries <- function(param.template.file, extparam.file, simul.dir, ov
         for (gen in ((bo.b+1):(bo.b+bo.d))) {
           par.file.name <- c(par.file.name, file.path(repdir, .repFile(rep, gen)))
           if (!file.exists(par.file.name[gen+1]) || overwrite) {
-            optim <- make.randopt(optim, extparam$SCENARIO_PART2, oldenv=optim[1], sd=sd, min=min, max=max, random=random, RNslope=RNslope, RNintercept=RNintercept)
+            optim <- make.randopt(optim, extparam$SCENARIO_PART2, oldenv=optim[1], sd=sd, min=min, max=max, random=random, RN=RN)
             write.param(par.file.name[gen+1],
                         list(FITNESS_OPTIMUM = optim, 
                              FILE_NEXTPAR    = suppressWarnings(normalizePath(file.path(repdir, .repFile(rep, gen+1))))))
@@ -291,7 +297,7 @@ create.paramseries <- function(param.template.file, extparam.file, simul.dir, ov
         gen <- bo.b+bo.d + 1
         par.file.name <- c(par.file.name, file.path(repdir, .repFile(rep, gen)))
         if (!file.exists(par.file.name[gen + 1]) || overwrite) {
-          optim <- make.randopt(optim, extparam$SCENARIO_PART2, sd=sd, min=min, max=max, RNslope=RNslope, RNintercept=RNintercept) 
+          optim <- make.randopt(optim, extparam$SCENARIO_PART2, sd=sd, min=min, max=max, RN=RN) 
           new.psize <- myparam$INIT_PSIZE
           if ("PSIZE_AFTER" %in% names(extparam))
             new.psize <- extparam$PSIZE_AFTER
@@ -306,7 +312,7 @@ create.paramseries <- function(param.template.file, extparam.file, simul.dir, ov
         for (gen in ((bo.b+bo.d+2):(bo.b+bo.d+bo.a-1))) {
           par.file.name <- c(par.file.name, file.path(repdir, .repFile(rep, gen)))
           if (!file.exists(par.file.name[gen+1]) || overwrite) {
-            optim <- make.randopt(optim, extparam$SCENARIO_PART2, oldenv=optim[1], sd=sd, min=min, max=max, random=random, RNslope=RNslope, RNintercept=RNintercept)
+            optim <- make.randopt(optim, extparam$SCENARIO_PART2, oldenv=optim[1], sd=sd, min=min, max=max, random=random, RN=RN)
             write.param(par.file.name[gen+1],
                         list(FITNESS_OPTIMUM = optim, 
                              FILE_NEXTPAR    = suppressWarnings(normalizePath(file.path(repdir, .repFile(rep, gen+1))))))
@@ -321,7 +327,7 @@ create.paramseries <- function(param.template.file, extparam.file, simul.dir, ov
     
     par.file.name <- c(par.file.name, file.path(repdir, .repFile(rep, gen)))
     if (!file.exists(par.file.name[gen+1]) || overwrite) {
-      optim <- make.randopt(optim, extparlast, oldenv=optim[1], sd=sd, min=min, max=max, random=random, RNslope=RNslope, RNintercept=RNintercept)
+      optim <- make.randopt(optim, extparlast, oldenv=optim[1], sd=sd, min=min, max=max, random=random, RN=RN)
       write.param(par.file.name[gen+1],
                   list(FITNESS_OPTIMUM = optim))
     }
