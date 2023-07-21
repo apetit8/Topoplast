@@ -2,9 +2,9 @@
 source("scripts/functions/functions.R")
 source("scripts/functions/makeparam_funct.R")
 ################################################################################
-param.dir <- file.path("templates/Full_netw")
-ifelse(!dir.exists(file.path("simul/Full_netw2")), dir.create("simul/Full_netw2"), FALSE)
-cache.dir <- normalizePath(file.path("simul/Full_netw2"))
+param.dir <- file.path("templates/10g/Anticorrelated")
+ifelse(!dir.exists(file.path("simul/10g")), dir.create("simul/10g"), FALSE)
+cache.dir <- normalizePath(file.path("simul/10g"))
 
 overwrite <- FALSE
 # options(warn=1)
@@ -15,7 +15,7 @@ sd <- 0.25 #0.25
 min <- 0.15#min environment
 max <- 0.85 #max environment
 #
-launchfilename <- "launchers/Full_netw2-launch.sh"
+launchfilename <- "launchers/10g-launch.sh"
 ##########################
 # Generate all simulations
 # A simulation is characterized by a name, a parameter file, and an extended parameter file with bottleneck etc. information

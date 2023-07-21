@@ -21,9 +21,9 @@ barplot(t(df_ffl[,1:2]), main = "FFL motif enrichment", col=c("gold", "grey"), s
 dev.off()
 
 #Whisker plot###############################
-nbrloop_thpl <- read.csv("scripts/data/full_Pl_nbrffl.csv", sep = ",")
+nbrloop_thpl <- read.csv("scripts/data/full_Pl_nbrFFL.csv", sep = ",")
 nbrloop_thpl$Type <- "1thpl"
-nbrloop_thnp <- read.csv("scripts/data/full_NP_nbrffl.csv", sep = ",")
+nbrloop_thnp <- read.csv("scripts/data/full_NP_nbrFFL.csv", sep = ",")
 nbrloop_thnp$Type <- "2thnp"
 nbrloop_empl <- read.csv("scripts/data/plast_genes_E_coli_nffl.csv", sep = ",")[,c(1,3,4,5)]
 nbrloop_empl$Type <- "3empl"
@@ -33,7 +33,7 @@ nbrloop_emnp$Type <- "4emnp"
 df <- rbind(nbrloop_thpl, nbrloop_thnp, nbrloop_empl, nbrloop_emnp)
 df <- subset(df, Loop_number != 0)
 
-pdf(paste0(pdfname,"_wisker",".pdf"), width=5, height=4)
+pdf(paste0(pdfname,"_wisker_FFL",".pdf"), width=5, height=4)
 par(mgp=c(2.5, 1.2, 0), mar = c(2.9,3.5, 0.1,0.1))
 boxplot(log(df$Loop_number) ~ df$Type,
         at = c(1,1.9,3,3.9), ylab = "Log of FFL number per gene", xlab = "",
@@ -64,9 +64,9 @@ dev.off()
 
 
 #Whisker plot#############################
-nbrloop_thpl <- read.csv("scripts/data/10g_Pl_nbrDMD.csv", sep = ",")
+nbrloop_thpl <- read.csv("scripts/data/full_Pl_nbrDMD.csv", sep = ",")
 nbrloop_thpl$Type <- "1thpl"
-nbrloop_thnp <- read.csv("scripts/data/10g_NP_nbrDMD.csv", sep = ",")
+nbrloop_thnp <- read.csv("scripts/data/full_NP_nbrDMD.csv", sep = ",")
 nbrloop_thnp$Type <- "2thnp"
 nbrloop_empl <- read.csv("scripts/data/plast_genes_E_coli_nDMD.csv", sep = ",")[,c(1,3,4,5)]
 nbrloop_empl$Type <- "3empl"
@@ -92,7 +92,7 @@ dev.off()
 ####FBL prop####################################################################
 non_plast <- read.csv("scripts/data/nonplast_E_coli_FBL.csv", sep = ",")
 all_plast <- read.csv("scripts/data/plast_genes_E_coli_FBL.csv", sep = ",")
-theory <- read.csv("scripts/data/10g_FBL.csv", sep = ",")[c(1,5),]
+theory <- read.csv("scripts/data/full_FBL.csv", sep = ",")[,]
 
 df <- as.data.frame(rbind(theory[1,2:5], theory[2,2:5],
                            colSums(all_plast[,3:6])*100/nrow(all_plast), colSums(non_plast[,3:6])*100/nrow(non_plast) ))
@@ -108,9 +108,9 @@ barplot(t(df[,1:2]), main="FBL motif enrichment", col=c("olivedrab1", "grey"),
 dev.off()
 
 #Whisker plot###########################
-nbrloop_thpl <- read.csv("scripts/data/10g_Pl_nbrFBL.csv", sep = ",")
+nbrloop_thpl <- read.csv("scripts/data/full_Pl_nbrFBL.csv", sep = ",")
 nbrloop_thpl$Type <- "1thpl"
-nbrloop_thnp <- read.csv("scripts/data/10g_NP_nbrFBL.csv", sep = ",")
+nbrloop_thnp <- read.csv("scripts/data/full_NP_nbrFBL.csv", sep = ",")
 nbrloop_thnp$Type <- "2thnp"
 nbrloop_empl <- read.csv("scripts/data/plast_genes_E_coli_nFBL.csv", sep = ",")[,c(1,3,4,5)]
 nbrloop_empl$Type <- "3empl"

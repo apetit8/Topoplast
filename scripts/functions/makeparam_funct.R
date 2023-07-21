@@ -138,9 +138,9 @@ make.randopt <- function(oldopt, pattern, begin.bottleneck=FALSE, random=TRUE, o
   newopt[pattern == 2] <- env
   if (begin.bottleneck) newopt[pattern == 3] <- runif(sum(pattern == 3))
   newopt[pattern == 4] <- (1-env)
-  #add "for" loop here
+  #Loop for random plastic RN
   for (i in 1:length(newopt[pattern == 5])) {
-    newopt[pattern == 5][i] <- env*RN[[i]][1]+RN[[i]][2]
+    newopt[pattern == 5][i] <- (env*RN[[i]][1])+RN[[i]][2]
   }
   newopt
 }
@@ -160,7 +160,7 @@ make.selstr <- function(pattern) {
 #Remove every manipulation of the fitness strength as we only use the pre-burn part of this function.
 create.paramseries <- function(param.template.file, extparam.file, simul.dir, overwrite=FALSE,
                                verbose=FALSE, allow.extrapar=c("GENET_MUTRATES"), tar.param=TRUE, mc.cores=detectCores()-2,
-                               sd=0.05, min=0.2, max=0.8, random=FALSE, bottleneck=TRUE, manual=NULL) 
+                               sd=0.05, min=0.15, max=0.85, random=FALSE, bottleneck=TRUE, manual=NULL) 
   # This is the main algorithm that create the simulation structure. 
   # The function retruns the necessary information to make a launchfile
   # (it does not write the launchfile, because all information is not available here)
@@ -237,11 +237,10 @@ create.paramseries <- function(param.template.file, extparam.file, simul.dir, ov
     if (overwrite) { # This is quite powerful, use with caution (simulation results are deleted prior to launching a new sim)
       unlink(list.files(path=repdir, full.names=TRUE))
     }
-    #Draw random RNs for "manual" plasticity ; changes for each rep
+    #Draw random RNs for "manual" plasticity
     RN <- lapply(1:length(which(extparam$SCENARIO_PART1==5)), function(i){
-      RNslope <- sample(c(runif(1,0.5718,1.4282), runif(1,-1.4282,-0.5718)), 1)
-      if(RNslope > 1) RNintercept <- runif(1, 1-RNslope, 0) else if(RNslope >0) RNintercept <- runif(1, 0, 1-RNslope )
-      else if(RNslope < -1) RNintercept <- runif(1, 1, -RNslope) else RNintercept <- runif(1, -RNslope, 1)
+      RNslope <- sample(c(runif(1,0.5718,1.15), runif(1,-1.15,-0.5718)), 1)
+      if(RNslope > 1) RNintercept <- runif(1, 1-RNslope, 0) else if(RNslope > 0) RNintercept <- runif(1, 0, 1-RNslope ) else if(RNslope < -1) RNintercept <- runif(1, 1, -RNslope) else RNintercept <- runif(1, -RNslope, 1)
       return(c(RNslope, RNintercept))
     })
     # First generation: use the full template file
