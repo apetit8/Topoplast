@@ -540,68 +540,68 @@ df.sampling3 <- function(sims.dir, size=50000, rep=6){
   return(simul.df)
 }
 
-#DF to compare mean centrality (every genes of every pop) for the 5 gene categories
-centrality.df <- function(df, Ss=1, Pg=1, Sg=1, Tf=7, start=7){
-  # Ss = number of sensor genes ; Pg = plastic genes ; Sg = stables genes ; Tf = transcription factors
-  # start = column in df from which the network begun
-  df.centrality <- data.frame() 
-  j<-1
-  for (i in 1:nrow(df)) {
-    W <- t(matrix(as.numeric(df[i,start:((Ss+Tf+Pg+Sg)*(Ss+Tf+Pg+Sg)+start-1)]), ncol = (Ss+Tf+Pg+Sg)))
-    #W matrix as a graph : 
-    G <- as.directed(graph.adjacency(t(W), weighted = T))
-    G <- delete.edges(G, E(G)[ abs(weight) < 0.1 ])
-    ec <- eigen_centrality(G, directed=T, weights=NA, options=list(maxiter=1000000))$vector
-    deg <- degree(G, mode = "all")
-    degin <- degree(G, mode = "in")
-    degout <- degree(G, mode = "out")
-    #By gene category 
-    df.centrality[j:(j+Ss-1), 1] <-"Sensor"
-    df.centrality[(j+Ss):(j+Pg+Ss-1), 1] <- "Plastic"
-    df.centrality[(j+Pg+Ss):(j+Pg+Ss+Sg-1), 1] <- "Stable"
-    df.centrality[(j+Pg+Ss+Sg):(j+Tf+Pg+Ss+Sg-1), 1] <- "Transcriptor"
-    #
-    df.centrality[j:(j+Ss-1), 2] <- ec[1:Ss]
-    df.centrality[(j+Ss):(j+Pg+Ss-1), 2] <- ec[(Ss+1):(Ss+Pg)]
-    df.centrality[(j+Pg+Ss):(j+Pg+Ss+Sg-1), 2] <- ec[(Ss+Pg+1):(Ss+Pg+Sg)]
-    df.centrality[(j+Pg+Ss+Sg):(j+Tf+Pg+Ss+Sg-1), 2] <- ec[(Ss+Pg+Sg+1):(Ss+Pg+Sg+Tf)]
-    #
-    df.centrality[j:(j+Ss-1), 3] <- deg[1:Ss]
-    df.centrality[(j+Ss):(j+Pg+Ss-1), 3] <- deg[(Ss+1):(Ss+Pg)]
-    df.centrality[(j+Pg+Ss):(j+Pg+Ss+Sg-1), 3] <- deg[(Ss+Pg+1):(Ss+Pg+Sg)]
-    df.centrality[(j+Pg+Ss+Sg):(j+Tf+Pg+Ss+Sg-1), 3] <- deg[(Ss+Pg+Sg+1):(Ss+Pg+Sg+Tf)]
-    #
-    df.centrality[j:(j+Ss-1), 4] <- degin[1:Ss]
-    df.centrality[(j+Ss):(j+Pg+Ss-1), 4] <- degin[(Ss+1):(Ss+Pg)]
-    df.centrality[(j+Pg+Ss):(j+Pg+Ss+Sg-1), 4] <- degin[(Ss+Pg+1):(Ss+Pg+Sg)]
-    df.centrality[(j+Pg+Ss+Sg):(j+Tf+Pg+Ss+Sg-1), 4] <- degin[(Ss+Pg+Sg+1):(Ss+Pg+Sg+Tf)]
-    #
-    df.centrality[j:(j+Ss-1), 5] <- degout[1:Ss]
-    df.centrality[(j+Ss):(j+Pg+Ss-1), 5] <- degout[(Ss+1):(Ss+Pg)]
-    df.centrality[(j+Pg+Ss):(j+Pg+Ss+Sg-1), 5] <- degout[(Ss+Pg+1):(Ss+Pg+Sg)]
-    df.centrality[(j+Pg+Ss+Sg):(j+Tf+Pg+Ss+Sg-1), 5] <- degout[(Ss+Pg+Sg+1):(Ss+Pg+Sg+Tf)]
-    #
-    df.centrality[j:(j+Ss-1), 6] <- sum(abs(W[1:Ss,]))/(1:Ss)
-    df.centrality[(j+Ss):(j+Pg+Ss-1), 6] <- sum(abs(W[(Ss+1):(Ss+Pg),]))/((Ss+1):(Ss+Pg)) 
-    df.centrality[(j+Pg+Ss):(j+Pg+Ss+Sg-1), 6] <- sum(abs(W[(Ss+Pg+1):(Ss+Pg+Sg),]))/((Ss+Pg+1):(Ss+Pg+Sg))
-    df.centrality[(j+Pg+Ss+Sg):(j+Tf+Pg+Ss+Sg-1), 6] <- sum(abs(W[(Ss+Pg+Sg+1):(Ss+Pg+Sg+Tf),]))/((Ss+Pg+Sg+1):(Ss+Pg+Sg+Tf))
-    #    
-    df.centrality[j:(j+Ss-1), 7] <- sum(abs(W[,1:Ss]))/(1:Ss)
-    df.centrality[(j+Ss):(j+Pg+Ss-1), 7] <- sum(abs(W[,(Ss+1):(Ss+Pg)]))/((Ss+1):(Ss+Pg)) 
-    df.centrality[(j+Pg+Ss):(j+Pg+Ss+Sg-1), 7] <- sum(abs(W[,(Ss+Pg+1):(Ss+Pg+Sg)]))/((Ss+Pg+1):(Ss+Pg+Sg))
-    df.centrality[(j+Pg+Ss+Sg):(j+Tf+Pg+Ss+Sg-1), 7] <- sum(abs(W[,(Ss+Pg+Sg+1):(Ss+Pg+Sg+Tf)]))/((Ss+Pg+Sg+1):(Ss+Pg+Sg+Tf))
-    
-    #I can add as many indexes as i want
-    df.centrality[j:(j+Tf+Pg+Ss+Sg-1), 8] <- df[i,2] #Gen
-    df.centrality[j:(j+Tf+Pg+Ss+Sg-1), 9] <- df[i,(107)] #Environment
-    
-    j<- j+(Ss+Tf+Pg+Sg)
-  }
-  df.centrality$V10 <- paste0(df.centrality$V1,"_", df.centrality$V9)
-  setnames(df.centrality, 1:10, c("Gene_cat","Centrality","Connect","ConnectIn","ConnectOut","Sum_in","Sum_out","Gen","Envir","Cat_envir" ) )
-  
-  return(df.centrality)
-}
+# #DF to compare mean centrality (every genes of every pop) for the 5 gene categories
+# centrality.df <- function(df, Ss=1, Pg=1, Sg=1, Tf=7, start=7){
+#   # Ss = number of sensor genes ; Pg = plastic genes ; Sg = stables genes ; Tf = transcription factors
+#   # start = column in df from which the network begun
+#   df.centrality <- data.frame() 
+#   j<-1
+#   for (i in 1:nrow(df)) {
+#     W <- t(matrix(as.numeric(df[i,start:((Ss+Tf+Pg+Sg)*(Ss+Tf+Pg+Sg)+start-1)]), ncol = (Ss+Tf+Pg+Sg)))
+#     #W matrix as a graph : 
+#     G <- as.directed(graph.adjacency(t(W), weighted = T))
+#     G <- delete.edges(G, E(G)[ abs(weight) < 0.1 ])
+#     ec <- eigen_centrality(G, directed=T, weights=NA, options=list(maxiter=1000000))$vector
+#     deg <- degree(G, mode = "all")
+#     degin <- degree(G, mode = "in")
+#     degout <- degree(G, mode = "out")
+#     #By gene category 
+#     df.centrality[j:(j+Ss-1), 1] <-"Sensor"
+#     df.centrality[(j+Ss):(j+Pg+Ss-1), 1] <- "Plastic"
+#     df.centrality[(j+Pg+Ss):(j+Pg+Ss+Sg-1), 1] <- "Stable"
+#     df.centrality[(j+Pg+Ss+Sg):(j+Tf+Pg+Ss+Sg-1), 1] <- "Transcriptor"
+#     #
+#     df.centrality[j:(j+Ss-1), 2] <- ec[1:Ss]
+#     df.centrality[(j+Ss):(j+Pg+Ss-1), 2] <- ec[(Ss+1):(Ss+Pg)]
+#     df.centrality[(j+Pg+Ss):(j+Pg+Ss+Sg-1), 2] <- ec[(Ss+Pg+1):(Ss+Pg+Sg)]
+#     df.centrality[(j+Pg+Ss+Sg):(j+Tf+Pg+Ss+Sg-1), 2] <- ec[(Ss+Pg+Sg+1):(Ss+Pg+Sg+Tf)]
+#     #
+#     df.centrality[j:(j+Ss-1), 3] <- deg[1:Ss]
+#     df.centrality[(j+Ss):(j+Pg+Ss-1), 3] <- deg[(Ss+1):(Ss+Pg)]
+#     df.centrality[(j+Pg+Ss):(j+Pg+Ss+Sg-1), 3] <- deg[(Ss+Pg+1):(Ss+Pg+Sg)]
+#     df.centrality[(j+Pg+Ss+Sg):(j+Tf+Pg+Ss+Sg-1), 3] <- deg[(Ss+Pg+Sg+1):(Ss+Pg+Sg+Tf)]
+#     #
+#     df.centrality[j:(j+Ss-1), 4] <- degin[1:Ss]
+#     df.centrality[(j+Ss):(j+Pg+Ss-1), 4] <- degin[(Ss+1):(Ss+Pg)]
+#     df.centrality[(j+Pg+Ss):(j+Pg+Ss+Sg-1), 4] <- degin[(Ss+Pg+1):(Ss+Pg+Sg)]
+#     df.centrality[(j+Pg+Ss+Sg):(j+Tf+Pg+Ss+Sg-1), 4] <- degin[(Ss+Pg+Sg+1):(Ss+Pg+Sg+Tf)]
+#     #
+#     df.centrality[j:(j+Ss-1), 5] <- degout[1:Ss]
+#     df.centrality[(j+Ss):(j+Pg+Ss-1), 5] <- degout[(Ss+1):(Ss+Pg)]
+#     df.centrality[(j+Pg+Ss):(j+Pg+Ss+Sg-1), 5] <- degout[(Ss+Pg+1):(Ss+Pg+Sg)]
+#     df.centrality[(j+Pg+Ss+Sg):(j+Tf+Pg+Ss+Sg-1), 5] <- degout[(Ss+Pg+Sg+1):(Ss+Pg+Sg+Tf)]
+#     #
+#     df.centrality[j:(j+Ss-1), 6] <- sum(abs(W[1:Ss,]))/(1:Ss)
+#     df.centrality[(j+Ss):(j+Pg+Ss-1), 6] <- sum(abs(W[(Ss+1):(Ss+Pg),]))/((Ss+1):(Ss+Pg)) 
+#     df.centrality[(j+Pg+Ss):(j+Pg+Ss+Sg-1), 6] <- sum(abs(W[(Ss+Pg+1):(Ss+Pg+Sg),]))/((Ss+Pg+1):(Ss+Pg+Sg))
+#     df.centrality[(j+Pg+Ss+Sg):(j+Tf+Pg+Ss+Sg-1), 6] <- sum(abs(W[(Ss+Pg+Sg+1):(Ss+Pg+Sg+Tf),]))/((Ss+Pg+Sg+1):(Ss+Pg+Sg+Tf))
+#     #    
+#     df.centrality[j:(j+Ss-1), 7] <- sum(abs(W[,1:Ss]))/(1:Ss)
+#     df.centrality[(j+Ss):(j+Pg+Ss-1), 7] <- sum(abs(W[,(Ss+1):(Ss+Pg)]))/((Ss+1):(Ss+Pg)) 
+#     df.centrality[(j+Pg+Ss):(j+Pg+Ss+Sg-1), 7] <- sum(abs(W[,(Ss+Pg+1):(Ss+Pg+Sg)]))/((Ss+Pg+1):(Ss+Pg+Sg))
+#     df.centrality[(j+Pg+Ss+Sg):(j+Tf+Pg+Ss+Sg-1), 7] <- sum(abs(W[,(Ss+Pg+Sg+1):(Ss+Pg+Sg+Tf)]))/((Ss+Pg+Sg+1):(Ss+Pg+Sg+Tf))
+#     
+#     #I can add as many indexes as i want
+#     df.centrality[j:(j+Tf+Pg+Ss+Sg-1), 8] <- df[i,2] #Gen
+#     df.centrality[j:(j+Tf+Pg+Ss+Sg-1), 9] <- df[i,(107)] #Environment
+#     
+#     j<- j+(Ss+Tf+Pg+Sg)
+#   }
+#   df.centrality$V10 <- paste0(df.centrality$V1,"_", df.centrality$V9)
+#   setnames(df.centrality, 1:10, c("Gene_cat","Centrality","Connect","ConnectIn","ConnectOut","Sum_in","Sum_out","Gen","Envir","Cat_envir" ) )
+#   
+#   return(df.centrality)
+# }
 
 #PHENOTYPES################################################################
 # netW.R

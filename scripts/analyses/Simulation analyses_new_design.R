@@ -1,7 +1,7 @@
 source("scripts/functions/functions.R")
 source("scripts/functions/detectloops.R")
 #####################
-sims.dirs1 <- list.dirs("simul/Full_netw2", recursive = TRUE)
+sims.dirs1 <- list.dirs("simul/Full_netw", recursive = TRUE)
 genes <- 36
 min <- 0.15
 max <- 0.85
@@ -9,15 +9,17 @@ filename <- "full"
 ################################################################################
 #Parameters when keeping "essential" connections. Test every connection to see impact on target gene RN, and draw from that.
 #Inspired by Burda et al., 2011
-treshold_coeff <- 0.001 # difference accepted in the Reaction Norm linear regression slope
-treshold_og    <- 0.001 # difference accepted in the RN linear regression intercept
+treshold_coeff <- 0.01 # difference accepted in the Reaction Norm linear regression slope
+treshold_og    <- 0.01 # difference accepted in the RN linear regression intercept
 #####################
 #DATA
 #####################
-df.full <- df.simul(sims.dirs1, all.gen = FALSE)
-df.full$envir <- str_split(df.full$data.dir, "/", n=8, simplify = TRUE)[,3]
+df.full <- df.simul(sims.dirs1, all.gen = TRUE)
+pdf(paste0("figures/",filename,"_fitness",".pdf"), width=5, height=4)
 plot(df.full$Gen, df.full$Fitness)
 plot(subset(df.full, Gen >=9000)$Optimum, subset(df.full, Gen >=9000)$Fitness)
+dev.off()
+df.full <- df.simul(sims.dirs1, all.gen = FALSE)
 #############
 #############
 #Loop to identify plastic genes
@@ -44,10 +46,10 @@ topo_all <- mclapply(unique(df.last50[,1]), function(netw){
 
 #Saving outputs for plastic and non plastic genes separatly
 topo_plastic <-  unlist(unlist(topo_all, recursive = FALSE)[sapply(unlist(topo_all, recursive = FALSE), FUN=attr, "is.plastic") == "plastic"], recursive = FALSE)
-saveRDS(topo_plastic, "scripts/data/list_plastic_topo.Rds")
+saveRDS(topo_plastic, paste0("scripts/data/list_plastic_topo",filename,".Rds"))
 #
 topo_nnplast <-  unlist(unlist(topo_all, recursive = FALSE)[sapply(unlist(topo_all, recursive = FALSE), FUN=attr, "is.plastic") == "non_plastic"], recursive = FALSE)
-saveRDS(topo_nnplast, "scripts/data/list_nnplast_topo.Rds") 
+saveRDS(topo_nnplast, paste0("scripts/data/list_nnplast_topo.Rds",filename,".Rds"))
 
 ################################################################################
 ############FFL

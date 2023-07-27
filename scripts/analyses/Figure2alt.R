@@ -18,7 +18,7 @@ df$group <- c(1,2)
 pdf(paste0(pdfname,"_FFL_lm",".pdf"), width=5, height=4.5)
 par(mar = c(4,4, 1,1))
 plot( NULL, NULL, type = "p", pch = 19,
-     col = "darkseagreen", xlab = "Plastic/Non-plastic Prediction", ylab = "Plastic/Non-plastic Empiric", lty = 1, lwd = 1,
+     xlab = "Plastic/Non-plastic Prediction", ylab = "Plastic/Non-plastic Empiric", lty = 1, lwd = 1,
      ylim = c(min(log2(as.data.frame(t(df))[,2])), max(log2(as.data.frame(t(df))[,2]))),
      xlim = c(min(log2(as.data.frame(t(df))[,1])), max(log2(as.data.frame(t(df))[,1]))) )
 polygon(x=c(min(log2(as.data.frame(t(df))[,1]))-0.15, min(log2(as.data.frame(t(df))[,1]))-0.15, 0, 0),
@@ -27,19 +27,19 @@ polygon(x=c(min(log2(as.data.frame(t(df))[,1]))-0.15, min(log2(as.data.frame(t(d
 polygon(x=c(0,0,max(log2(as.data.frame(t(df))[,1]))+0.15, max(log2(as.data.frame(t(df))[,1])+0.15)),
         y=c(0, max(log2(as.data.frame(t(df))[,2]))+0.075, max(log2(as.data.frame(t(df))[,2]))+0.075, 0),
         col="honeydew2", border=NA)
-lines(log2(as.data.frame(t(df))[1,1]), log2(as.data.frame(t(df))[1,2]), pch = 22, cex=2, bg = "darkseagreen", type = "p", lty = 1, lwd = 1)
+# c("forestgreen","yellowgreen","dodgerblue","deepskyblue","indianred1","lightpink","orange","lightgoldenrod1")
+lines(log2(as.data.frame(t(df))[1,1]), log2(as.data.frame(t(df))[1,2]), pch = 22, cex=2, bg = "forestgreen", type = "p", lty = 1, lwd = 1)
 lines(log2(as.data.frame(t(df))[2,1]), log2(as.data.frame(t(df))[2,2]), pch = 22, cex=2, bg = "yellowgreen", type = "p", lty = 1, lwd = 1)
-lines(log2(as.data.frame(t(df))[3,1]), log2(as.data.frame(t(df))[3,2]), pch = 22, cex=2, bg = "dodgerblue", type = "p", lty = 1, lwd = 1)
-lines(log2(as.data.frame(t(df))[4,1]), log2(as.data.frame(t(df))[4,2]), pch = 22, cex=2, bg = "deepskyblue3", type = "p", lty = 1, lwd = 1)
-lines(log2(as.data.frame(t(df))[5,1]), log2(as.data.frame(t(df))[5,2]), pch = 22, cex=2, bg = "indianred1", type = "p", lty = 1, lwd = 1)
+lines(log2(as.data.frame(t(df))[3,1]), log2(as.data.frame(t(df))[3,2]), pch = 22, cex=2, bg = "dodgerblue3", type = "p", lty = 1, lwd = 1)
+lines(log2(as.data.frame(t(df))[4,1]), log2(as.data.frame(t(df))[4,2]), pch = 22, cex=2, bg = "lightskyblue", type = "p", lty = 1, lwd = 1)
+lines(log2(as.data.frame(t(df))[5,1]), log2(as.data.frame(t(df))[5,2]), pch = 22, cex=2, bg = "hotpink2", type = "p", lty = 1, lwd = 1)
 lines(log2(as.data.frame(t(df))[6,1]), log2(as.data.frame(t(df))[6,2]), pch = 22, cex=2, bg = "lightpink", type = "p", lty = 1, lwd = 1)
 lines(log2(as.data.frame(t(df))[7,1]), log2(as.data.frame(t(df))[7,2]), pch = 22, cex=2, bg = "orange", type = "p", lty = 1, lwd = 1)
 lines(log2(as.data.frame(t(df))[8,1]), log2(as.data.frame(t(df))[8,2]), pch = 22, cex=2, bg = "lightgoldenrod1", type = "p", lty = 1, lwd = 1)
 
-abline(lm(Plastic_Empiric-1 ~ Plastic_Prediction-1, data = as.data.frame(t(df))), col = "black")
+abline(lm(log2(Plastic_Empiric) ~ log2(Plastic_Prediction), data = as.data.frame(t(df[,c(1:8)]))), col = "black")
 abline(0,1, lty=2)
-# legend("topright", box.lty=0,  bg="transparent", fill = c("darkseagreen","yellowgreen","dodgerblue","deepskyblue3","indianred1","lightpink","orange","lightgoldenrod1"),
-#        legend = colnames(df)[1:8])
+
 dev.off()
 
 # pdf(paste0(pdfname,"_FFL_motifs",".pdf"), width=5, height=5)
@@ -96,7 +96,7 @@ df$group <- c(1,2)
 pdf(paste0(pdfname,"_DMD_lm",".pdf"), width=5, height=4.5)
 par(mar = c(4,4, 1,1))
 plot(NULL, NULL, type = "p",
-     col = "olivedrab1", xlab = "Plastic/Non-plastic Prediction", ylab = "Plastic/Non-plastic Empiric", lty = 1, lwd = 1,
+     xlab = "Plastic/Non-plastic Prediction", ylab = "Plastic/Non-plastic Empiric", lty = 1, lwd = 1,
      ylim = c(min(log2(as.data.frame(t(df))[,2])), max(log2(as.data.frame(t(df))[,2]))),
      xlim = c(min(log2(as.data.frame(t(df))[,1])), max(log2(as.data.frame(t(df))[,1]))))
 polygon(x=c(min(log2(as.data.frame(t(df))[,1]))-0.2,min(log2(as.data.frame(t(df))[,1]))-0.2,0,0),
@@ -117,7 +117,7 @@ lines(log2(as.data.frame(t(df))[8,1]), log2(as.data.frame(t(df))[8,2]), pch = 22
 lines(log2(as.data.frame(t(df))[9,1]), log2(as.data.frame(t(df))[9,2]), pch = 22, cex=2, bg = "darkgoldenrod1", type = "p", lty = 1, lwd = 1)
 lines(log2(as.data.frame(t(df))[10,1]), log2(as.data.frame(t(df))[10,2]), pch = 22, cex=2, bg = "peachpuff", type = "p", lty = 1, lwd = 1)
 
-abline(lm(Plastic_Empiric-1 ~ Plastic_Prediction-1, data = as.data.frame(t(df))), col = "black")
+abline(lm(log2(Plastic_Empiric) ~ log2(Plastic_Prediction), data = as.data.frame(t(df[,c(1:10)]))), col = "black")
 abline(0,1, lty=2)
 # legend("topright", box.lty=0,  bg="transparent", fill = c("olivedrab1","palegreen","mediumseagreen","plum","darkorchid1",
 #                                                           "plum1","lightsalmon1","indianred1","lightpink","chocolate1"), legend = c("PP","PM","PN","NP","NM","NN","MP","MM2","MM1","MN"))

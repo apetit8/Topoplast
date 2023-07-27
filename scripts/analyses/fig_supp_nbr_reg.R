@@ -4,7 +4,6 @@ source("scripts/functions/functions.R")
 library(purrr)
 #########################################
 pdfname <- "figures/fig_supp_reg_nbr"
-gen <- 10000 
 #########################################
 #Genetic data
 ec_cyc <- read.csv("e_coli/ECOLI-regulatory-network_cyc_editd.csv") #List of regulations from Ecocyc
@@ -26,7 +25,7 @@ E_coli_mat <- t((get.adjacency(g,sparse=FALSE, attr='V3'))) #t() to have regulat
 E_coli_mat <- matrix(as.numeric(E_coli_mat), ncol = ncol(E_coli_mat), dimnames = dimnames(E_coli_mat)) #convert to numeric matrix
 E_coli_mat[is.na(E_coli_mat)] <- 0 #fill NA to 0, mandatory for later analyses
 ################################################################################
-#Empiric
+#E. coli
 plastgenes <- read.csv("scripts/data/plast_genes_E_coli_FFL.csv", sep = ",")[,2]
 npgenes <- read.csv("scripts/data/nonplast_E_coli_FFL.csv", sep = ",")[,2]
 E_coli_mat_plast <- E_coli_mat[plastgenes, ]
@@ -34,30 +33,58 @@ reg_number_plast <- rowSums2(abs(E_coli_mat_plast))
 E_coli_mat_np <- E_coli_mat[npgenes, ]
 reg_number_np <- rowSums2(abs(E_coli_mat_np))
 
-#Prediction
-sims.dirs1 <- list.dirs("simul/10g_selfreg", recursive = TRUE) #c(list.dirs("simul/10g", recursive = TRUE), list.dirs("simul/10g_a0.15", recursive = TRUE), list.dirs("simul/10g_rep", recursive = TRUE))
-df.10 <- df.simul(sims.dirs1, all.gen = TRUE)
-df.10$envir <- str_split(df.10$data.dir, "/", n=8, simplify = TRUE)[,3]
+#Simulations
+topo_plastic <- readRDS("scripts/data/list_plastic_topo.Rds")
+topo_nnplast <- readRDS("scripts/data/list_nnplast_topo.Rds")
+  
+THreg_sum_plast <- unlist(lapply(topo_plastic, function(i){rowSums2(abs(i))} ))
+THreg_sum_np <- unlist(lapply(topo_nnplast, function(i){rowSums2(abs(i))} ))
 
-topo.anticor10 <- essential.topo(df=subset(df.10, Gen==gen & envir=="Anticorrelated"), target=target,
-                                 treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3:10))
-topo.corr10 <- essential.topo(df=subset(df.10, Gen==gen & envir=="Correlated"), target=target,
-                              treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3:10))
-topo.sel10 <- essential.topo(df=subset(df.10, Gen==gen & envir=="Control_sel"), target=target,
-                             treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes, groups = list(1,2,3:10))
+#
+pdf(paste0(pdfname,".pdf"), width=5, height=4)
+par(mgp=c(2.5, 1.2, 0), mar = c(2.9,3.5, 0.1,0.1))
+boxplot(cbind(reg_number_np, reg_number_plast, THreg_sum_np, THreg_sum_plast), at = c(1,1.9,3,3.9), ylab = "Number of regulation per gene",
+        names = c("Non-Plastic\nE. coli", "Plastic\nE. coli", "Non-plastic\nTheory","Plastic\nTheory"))
+text(1.35, 25, paste0( ifelse(t.test(reg_number_plast, reg_number_np, var.equal=F)$p.value <=0.01, "***", ""  )), cex=2)
+dev.off()
 
-list_mat <- c(lapply(topo.anticor10, function(i){abs(i)} ),lapply(topo.corr10, function(i){abs(i)}))
-list_mat <- list_mat %>% map(~.x[2, ])
-THreg_sum_plast <- sapply(list_mat, sum)
+################################################################################
+#Positive and neg regulations
+#E. coli
+plastmat <- E_coli_mat_plast
+plastmat[(plastmat == -1)] <- 0
+reg_number_pos_plast <- rowSums2(plastmat)
+plastmat <- E_coli_mat_plast
+plastmat[(plastmat == 1)] <- 0
+reg_number_neg_plast <- rowSums2(abs(plastmat))
+#
+plastmat <- E_coli_mat_np
+plastmat[(plastmat == -1)] <- 0
+reg_number_pos_np <- rowSums2(plastmat)
+plastmat <- E_coli_mat_np
+plastmat[(plastmat == 1)] <- 0
+reg_number_neg_np <- rowSums2(abs(plastmat))
 
-list_mat <- lapply(topo.sel10, function(i){abs(i)} )
-list_mat <- list_mat %>% map(~.x[2, ])
-THreg_sum_np <- sapply(list_mat, sum)
 
-#####
-pdf(paste0(pdfname,"_reg_nbr",".pdf"), width=5, height=4)
+#Simulations
+THreg_sum_pos_plast <- unlist(lapply(topo_plastic, function(i){ i[(i == -1)] <- 0
+return(rowSums2(abs(i)))} ))
+THreg_sum_neg_plast <- unlist(lapply(topo_plastic, function(i){ i[(i == 1)] <- 0
+return(rowSums2(abs(i)))} ))
+#
+THreg_sum_pos_np <- unlist(lapply(topo_nnplast, function(i){ i[(i == -1)] <- 0
+return(rowSums2(abs(i)))} ))
+THreg_sum_neg_np <- unlist(lapply(topo_nnplast, function(i){ i[(i == 1)] <- 0
+return(rowSums2(abs(i)))} ))
+
+df <- data.frame(Pos=c(sum(reg_number_pos_np)*100/sum(reg_number_np),  sum(reg_number_pos_plast)*100/sum(reg_number_plast),  sum(THreg_sum_pos_np)*100/sum(THreg_sum_np), sum(THreg_sum_pos_plast)*100/sum(THreg_sum_plast) ),
+                 Neg=c(sum(reg_number_neg_np)*100/sum(reg_number_np), sum(reg_number_neg_plast)*100/sum(reg_number_plast), sum(THreg_sum_neg_np)*100/sum(THreg_sum_np), sum(THreg_sum_neg_plast)*100/sum(THreg_sum_plast) ))
+
+pdf(paste0(pdfname,"_sign",".pdf"), width=5, height=4)
 par(mar = c(5,2, 2,1))
-boxplot(cbind(THreg_sum_plast, THreg_sum_np, reg_number_plast, reg_number_np), main = "Total number of regulation", at = c(1,1.9,3,3.9), names = c("Plastic\nprediction", "Non plastic\nprediction", "Plastic\nempiric", "Non plastic\nempiric"))
+barplot(t(df), main = "Regulation type", names = c("Non-Plastic\nE. coli", "Plastic\nE. coli", "Non-plastic\nTheory","Plastic\nTheory"),
+        space=c(0.0,0.1,0.35,0.1), legend.text = c( "Activating","Inhibiting"), args.legend = list(ncol=2, x = "topright", inset = c(0.2, 1.2)), ylim = c(0,105))
+text(1.05, 103, paste0( ifelse(t.test(reg_number_neg_plast, reg_number_neg_np, var.equal=F)$p.value <=0.01, "***", ""  )), cex=2)
 dev.off()
 
 

@@ -191,8 +191,8 @@ write.csv(nonplast_FFL, paste0("scripts/data/nonplast_",csvname,".csv"))
 
 print("Non plastic genes done!")
 
-
-
+########################################
+print(paste0("Plast genes: ", nrow(all_plast_genes), "; Plast genes in annot: ", nrow(subset(all_plast_genes, V1 %in% Subplastic_genes))))
 
 
 

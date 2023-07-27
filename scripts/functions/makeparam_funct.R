@@ -160,7 +160,7 @@ make.selstr <- function(pattern) {
 #Remove every manipulation of the fitness strength as we only use the pre-burn part of this function.
 create.paramseries <- function(param.template.file, extparam.file, simul.dir, overwrite=FALSE,
                                verbose=FALSE, allow.extrapar=c("GENET_MUTRATES"), tar.param=TRUE, mc.cores=detectCores()-2,
-                               sd=0.05, min=0.15, max=0.85, random=FALSE, bottleneck=TRUE, manual=NULL) 
+                               sd=0.05, min=0.15, max=0.85, random=FALSE, manual=NULL) 
   # This is the main algorithm that create the simulation structure. 
   # The function retruns the necessary information to make a launchfile
   # (it does not write the launchfile, because all information is not available here)
@@ -206,16 +206,11 @@ create.paramseries <- function(param.template.file, extparam.file, simul.dir, ov
   myparam <- param.template
   extrapar <- extparam[names(extparam) %in% allow.extrapar]
   # A few shortcuts to make the code more readable
-  bo.b <- extparam$BOTTLENECK_BEGIN 
-  bo.d <- extparam$BOTTLENECK_DURATION
-  bo.a <- extparam$BOTTLENECK_AFTER
-  totgen <- bo.b + bo.d + bo.a
+  totgen <- extparam$GENERATION_MAX
   # Checks for the consistency of both parameter files
   if (!"SIMUL_MAXGEN" %in% names(myparam)) 
     myparam$SIMUL_MAXGEN <- totgen
-  if (myparam$SIMUL_MAXGEN < totgen) 
-    warning("Inconsistency between the MAXGEN parameters in ", param.template.file, 
-            " and bottleneck duration in ", extparam.file, ".")
+
   stopifnot(
     length(extparam$SCENARIO_PART1) == myparam$GENET_NBLOC , 
     length(extparam$SCENARIO_PART1) == length(extparam$SCENARIO_PART2))
@@ -253,12 +248,11 @@ create.paramseries <- function(param.template.file, extparam.file, simul.dir, ov
     if (!file.exists(par.file.name[1]) || overwrite)
       write.param(par.file.name[1], myparam)
     # From here, just update what is necessary
-    if (bo.b > 2)
-      for (gen in 1:(bo.b-1)) {
+      for (gen in 1:(totgen-1)) {
         par.file.name <- c(par.file.name, file.path(repdir, .repFile(rep, gen)))
         if (!file.exists(par.file.name[gen+1]) || overwrite) {
           optim <- make.randopt(optim, extparam$SCENARIO_PART1, oldenv=optim[1], sd=sd, min=min, max=max, random=random, RN=RN) ## Here : give back the prev env.
-          if(gen == bo.b-50){ #More outputs before the end of the simulation (to infer reaction norms during results analyses)
+          if(gen == totgen-50){ #More outputs before the end of the simulation (to infer reaction norms during results analyses)
             write.param(par.file.name[gen+1], list(FITNESS_OPTIMUM = optim, 
                              FILE_NEXTPAR    = suppressWarnings(normalizePath(file.path(repdir, .repFile(rep, gen+1)))),
                              SIMUL_OUTPUT = 1))    }
@@ -268,69 +262,14 @@ create.paramseries <- function(param.template.file, extparam.file, simul.dir, ov
     extparlast <- extparam$SCENARIO_PART1
     gen <- gen+1
     
-    #If no bottleneck required : skip all that
-    if (bottleneck==TRUE){
-      # first bottleneck generation
-      optim <- make.randopt(optim, extparam$SCENARIO_PART2, begin.bottleneck=TRUE, sd=sd, min=min, max=max, RN=RN)
-      par.file.name <- c(par.file.name, file.path(repdir, .repFile(rep, bo.b)))
-      if (!file.exists(par.file.name[bo.b+1]) || overwrite)
-        write.param(par.file.name[bo.b+1],
-                    c(list(INIT_PSIZE = round(bo.d*extparam$BOTTLENECK_STRENGTH/2), # Maize is diploid, so the strenght k = 2N/t
-                           FITNESS_OPTIMUM = optim, 
-                           # FITNESS_STRENGTH     = sel.strength2*make.selstr(extparam$SCENARIO_PART2), #HERE
-                           FILE_NEXTPAR    = suppressWarnings(normalizePath(file.path(repdir, .repFile(rep, bo.b+1))))),
-                      extrapar))
-      # The rest of the bottleneck
-      if (bo.d > 1)
-        for (gen in ((bo.b+1):(bo.b+bo.d))) {
-          par.file.name <- c(par.file.name, file.path(repdir, .repFile(rep, gen)))
-          if (!file.exists(par.file.name[gen+1]) || overwrite) {
-            optim <- make.randopt(optim, extparam$SCENARIO_PART2, oldenv=optim[1], sd=sd, min=min, max=max, random=random, RN=RN)
-            write.param(par.file.name[gen+1],
-                        list(FITNESS_OPTIMUM = optim, 
-                             FILE_NEXTPAR    = suppressWarnings(normalizePath(file.path(repdir, .repFile(rep, gen+1))))))
-          }
-        }
-      # First generation after the bottleneck
-      if (bo.a > 1){
-        gen <- bo.b+bo.d + 1
-        par.file.name <- c(par.file.name, file.path(repdir, .repFile(rep, gen)))
-        if (!file.exists(par.file.name[gen + 1]) || overwrite) {
-          optim <- make.randopt(optim, extparam$SCENARIO_PART2, sd=sd, min=min, max=max, RN=RN) 
-          new.psize <- myparam$INIT_PSIZE
-          if ("PSIZE_AFTER" %in% names(extparam))
-            new.psize <- extparam$PSIZE_AFTER
-          write.param(par.file.name[gen + 1],
-                      list(FITNESS_OPTIMUM = optim, 
-                           INIT_PSIZE      = new.psize,
-                           FILE_NEXTPAR    = suppressWarnings(normalizePath(file.path(repdir, .repFile(rep, gen + 1))))))
-        }
-      }
-      # Domestication after bottleneck
-      if (bo.a > 2)
-        for (gen in ((bo.b+bo.d+2):(bo.b+bo.d+bo.a-1))) {
-          par.file.name <- c(par.file.name, file.path(repdir, .repFile(rep, gen)))
-          if (!file.exists(par.file.name[gen+1]) || overwrite) {
-            optim <- make.randopt(optim, extparam$SCENARIO_PART2, oldenv=optim[1], sd=sd, min=min, max=max, random=random, RN=RN)
-            write.param(par.file.name[gen+1],
-                        list(FITNESS_OPTIMUM = optim, 
-                             FILE_NEXTPAR    = suppressWarnings(normalizePath(file.path(repdir, .repFile(rep, gen+1))))))
-          }
-        }
-      extparlast <- extparam$SCENARIO_PART2
-      gen <- bo.b+bo.d+bo.a
-    }
-    
     # Very last generation (no NEXTPAR)
-    # gen <- bo.b+bo.d+bo.a
-    
     par.file.name <- c(par.file.name, file.path(repdir, .repFile(rep, gen)))
     if (!file.exists(par.file.name[gen+1]) || overwrite) {
       optim <- make.randopt(optim, extparlast, oldenv=optim[1], sd=sd, min=min, max=max, random=random, RN=RN)
       write.param(par.file.name[gen+1],
                   list(FITNESS_OPTIMUM = optim))
     }
-    
+    gc(verbose = FALSE)
     stopifnot(all(!duplicated(par.file.name))) # just to check if everything is all right... 
     if (tar.param)
       tar.param(par.file.name, compressed.file.name)
