@@ -26,35 +26,6 @@ library(igraph)
 
 ##TOOLS#######################################################################################
 
-#Variances with sliding window
-slidingvar <- function(x, window=3) { # x= array of values
-  ans <- rep(0, 1+length(x)-window)
-  for (i in 1:length(ans))
-    ans[i] <- var(x[i:(i+window-1)])
-  ans
-}
-
-replicate.mean <- function(tt) {
-  stopifnot(length(unique(sapply(tt, nrow))) == 1, length(unique(sapply(tt, ncol))) == 1)
-  arr <- do.call(abind, c(tt, list(along=3)))
-  rowMeans(arr, dims=2)
-}
-
-replicate.var <- function(tt) {
-  # This rowVars function comes from https://stat.ethz.ch/pipermail/r-help/2006-April/103001.html
-  # Author: David Brahm
-  .rowVars <- function(x, na.rm=FALSE, dims=1, unbiased=TRUE, SumSquares=FALSE, twopass=FALSE) {
-    if (SumSquares) return(rowSums(x^2, na.rm, dims))
-    N <- rowSums(!is.na(x), FALSE, dims)
-    Nm1 <- if (unbiased) N-1 else N
-    if (twopass) {x <- if (dims==0) x - mean(x, na.rm=na.rm) else sweep(x, 1:dims, rowMeans(x,na.rm,dims))}
-    (rowSums(x^2, na.rm, dims) - rowSums(x, na.rm, dims)^2/N) / Nm1
-  }
-  stopifnot(length(unique(sapply(tt, nrow))) == 1, length(unique(sapply(tt, ncol))) == 1)
-  arr <- do.call(abind, c(tt, list(along=3)))
-  .rowVars(arr, dims=2)
-}
-
 #Matrix extraction from output files
 extract.P.mean <- function(tt, what="MPhen",  gen=tt[nrow(tt), "Gen"]) {
   ex <- unlist(tt[tt[,"Gen"]==gen, grep(colnames(tt), pattern=what)])
@@ -93,23 +64,6 @@ extract.W.matrix <- function(tt, gen=tt[nrow(tt), "Gen"]) {
   t(extract.matrix(tt, "MeanAll", gen=gen))
 }
 
-extract.matrix.all.pop <- function(tt, what="CovPhen", index=1) {
-  # index can be a vector -> returns a list of matrices
-  mycols <- grep(colnames(tt), pattern=what)
-  if (length(mycols) == 0) stop("No match for ", what, " at generation ", index,".")
-  if (sqrt(length(mycols)) %% 1 != 0) stop("No way to make a square matrix out of ", length(mycols), " elements.")
-  
-  if (length(index)== 1) {
-    return(matrix(unlist(tt[index, mycols]), ncol=sqrt(length(mycols))))
-  } else {
-    return(lapply(index, function(i) matrix(unlist(tt[i, mycols]), ncol=sqrt(length(mycols)))))
-  }
-}
-
-extract.W.matrix.all.pop <- function(tt, index=1) {
-  t(extract.matrix.all.pop(tt, "MeanAll", index=index))
-}
-
 ##
 #function to read a parameter file
 read.param <- function(parfile) {
@@ -120,214 +74,6 @@ read.param <- function(parfile) {
   if (any(duplicated(param.names))) warning("Duplicated param names in ", parfile)
   names(ans) <- param.names
   ans
-}
-
-##
-#function to write in a parameter file
-write.param <- function(parlist, parfile) {
-  unlink(parfile)
-  for (nn in names(parlist)) 
-    cat(nn, "\t", parlist[[nn]], "\n", file=parfile, append=TRUE)
-}
-
-#function to write multiple parameter files for multiple changing parameters
-generate.param.list <- function(template, param.list, reps=1, launchfile=NA, sep=c("-", "-", "-R"), vec.indx=rep(1, length(param.list)), variable = 1, name="simu",
-                                simevolv="$SIMEVOLV", param.dir=dirname(template), simu.dir=dirname(template), param.ext=".par", simu.ext=".txt", nextpar=FALSE) {
-  
-  launch <- NULL
-  templ <- read.param(template)
-  param.grid <- do.call(expand.grid, param.list)
-  if (nextpar==1) param.grid[,1] <- as.character(param.grid[,1] ) #the number = number of the argument : nextpar
-  if (nextpar==2) param.grid[,2] <- as.character(param.grid[,2] ) #the number = number of the argument : nextpar
-  names.grid <- do.call(expand.grid,  list(lapply(param.list, function(pp) if (is.null(names(pp))) as.character(pp) else  as.character(pp))))
-  colnames(names.grid) <- paste0(colnames(names.grid), ifelse(vec.indx == 1, "", vec.indx))
-  rownames(param.grid) <- do.call(paste, c(lapply(colnames(names.grid), function(nn) paste(nn, names.grid[,nn], sep=sep[1])), list(sep=sep[2])))
-  for (i in seq_len(nrow(param.grid))) {
-    mypar <- templ
-    for (j in seq_along(names(param.list))) {
-      if (!names(param.list)[j] %in% names(mypar))
-        stop("Error: parameter ", names(param.list)[j], " is not in file ", template, ".")
-      # if (length(mypar[[names(param.list)[j]]]) < vec.indx[j])
-      #   stop("Error: parameter ", names(param.list)[j], " does not have ", vec.indx[j], "elements.")
-      mypar[[names(param.list)[j]]][vec.indx[j]] <- param.grid[i,j]
-    }
-    # parfile <- paste0(param.dir, "/", rownames(param.grid)[i], param.ext)
-    parfile <- paste0(param.dir, "/", name, variable, param.ext)
-    # browser()
-    write.param(parfile=parfile, parlist=mypar)
-    for (rr in seq_len(reps)) {
-      launch <- c(launch, paste(simevolv, "-p", paste0(rownames(param.grid)[i], param.ext), "-o", paste0(rownames(param.grid)[i], sep[3], formatC(rr, width = 1+floor(log10(reps)), format = "d", flag = "0"), simu.ext), sep=" "))
-    }
-  }
-  # browser()
-  if (!is.na(launchfile)) {
-    dir <- as.character(dirname(template))
-    cat(launch, file=print(sprintf("%s/%s", dir , launchfile)), sep="\n")
-  }
-  launch
-}
-
-print.launcher <- function(param.list, dir="../simul/", reps=30, simevolv="$SIMEVOLV", simu.ext=".txt", launchfile="launcher.sh"){
-  launch <- NULL
-  for (i in param.list) {
-        for (rr in seq_len(reps)) {
-          launch <- c(launch, paste(simevolv, "-p", i, "-o", paste0(i,rr,simu.ext), sep=" "))
-        }
-        if (!is.na(launchfile)) {
-          cat(launch, file=print(sprintf("%s/%s", dir , launchfile)), sep="\n")
-        }
-  }
-}
-
-# print.launcher.P <- function(param.list, dir="../simul/", reps=30, simevolv="$SIMEVOLV", simu.ext=".txt", launchfile="launcher.sh", prev_pop="pop.pop"){
-#   launch <- NULL
-#   jj <- 1
-#   for (prev in prev_pop) {
-#     for (i in param.list) {
-#     
-#       for (rr in seq_len(reps)) {
-#         launch <- c(launch, paste(simevolv, "-p", i, "-o", paste0(i,"_anc",jj,"/",rr,simu.ext), sep=" "," -P ", prev))
-#         # dir.create(paste0(i,"_anc",jj,"/",rr,simu.ext))
-#         ifelse(!dir.exists(file.path(paste0(i,"_anc",jj))), dir.create(paste0(i,"_anc",jj,"/")), FALSE)
-#         }
-#       if (!is.na(launchfile)) {
-#         cat(launch, file=print(sprintf("%s", launchfile)), sep="\n")
-#       }
-#     }
-#     jj <- jj + 1
-#   }
-# }
-
-
-print.launcher.P <- function(param.list, dir="../simul/", reps=30, simevolv="$SIMEVOLV",
-                    simu.ext=".txt", launchfile="launcher.sh", prev_pop="pop.pop", directory="_amp/"){
-  launch <- NULL
-  jj <- 1
-  for (prev in prev_pop) {
-    for (i in param.list) {
-      for (rr in seq_len(reps)) {
-        parfiledir <- str_split(i, "param", n=2, simplify = TRUE)[1]
-        parfile_id <- str_split(i, "param", n=2, simplify = TRUE)[2]
-        launch <- c(launch, paste(simevolv, "-p", i, "-o", paste0(parfiledir, directory,parfile_id,"_anc",jj,"/",rr,simu.ext), sep=" "," -P ", prev))
-        # dir.create(paste0(i,"_anc",jj,"/",rr,simu.ext))
-        ifelse(!dir.exists(file.path(paste0(parfiledir, directory,parfile_id,"_anc",jj))), dir.create(paste0(parfiledir, directory,parfile_id,"_anc",jj)), FALSE)
-      }
-      if (!is.na(launchfile)) {
-        cat(launch, file=print(sprintf("%s", launchfile)), sep="\n")
-      }
-    }
-    jj <- jj + 1
-  }
-}
-
-print.launcher.J <- function(param.list, reps=30, simevolv="$SIMEVOLV", simu.ext=".txt", launchfile="launcher.sh", prev_pop="pop.pop"){
-  launch <- NULL
-  for (prev in prev_pop) {
-    for (i in param.list) {
-      for (rr in seq_len(reps)) {
-        parfiledir <- str_split(i, "optimum", n=2, simplify = TRUE)[1]
-        parfile_id <- str_split(i, "optimum", n=2, simplify = TRUE)[2]
-
-        ancpop <- str_split(prev, "../simul/Population_", n=2, simplify = TRUE)
-        ancpop <- str_split(ancpop[1,2], "/rep", n=2, simplify = TRUE)
-        prevpop_id <- str_split(ancpop[1,2], "/out", n=2, simplify = TRUE)[1]
-        launch <- c(launch, paste(simevolv, "-p", i, "-o", paste0(parfiledir, ancpop[,1],"/",prevpop_id,"/",parfile_id,"_",rr,simu.ext), sep=" "," -P ", prev))
-        # browser()
-        }
-    }
-  }
-  if (!is.na(launchfile)) {
-    cat(launch, file=print(sprintf("%s", launchfile)), sep="\n", append = FALSE)
-  }
-}
-
-#Function to print parameter files of the wanted S matrix
-param.from.sel.features <- function(param.template, param.out="param.par", cor=NA, angle=NA, size=NA, eccentricity=NA, reps=40) {
-  pp <- read.param(param.template)
-  S.mat <- matrix2.from.features(cor=cor, angle=angle, size=size, eccentricity=eccentricity)
-  n.genes <- if ("GENET_NBPHEN" %in% names(pp)) pp$GENET_NBPHEN else pp$GENET_NBLOC
-  pS <- param.S.matrix(S.mat, n.genes=n.genes)
-  pp[names(pS)] <- pS
-  browser()
-  write.param(pp, parfile=param.out)
-}
-
-extract.nbphen <- function(parfile) {
-  rp <- read.param(parfile)
-  if (rp$TYPE_ARCHI %in% c("additive", "multilinear")) {
-    np <- if("GENET_NBPHEN" %in% names(rp)) rp$GENET_NBPHEN else 1
-  } else if (rp$TYPE_ARCHI %in% c("wagner", "siegal", "m2")) {
-    np <- rp$GENET_NBLOC
-  }
-  np
-}
-
-extract.theta <- function(parfile) {
-  rp <- read.param(parfile)
-  np <- extract.nbphen(parfile)
-  th <- rp$FITNESS_OPTIMUM
-  if (length(th) == 1) return(rep(th, np))
-  if (length(th) == np) return(th)
-  stop("Param file: ", parfile, ", The number of optima (", length(th), ") does not match the number of traits (", np, ").")
-}
-
-
-extract.S.matrix <- function(parfile) {
-  .cor2cov <- function(cc, sd) t(cc*sd)*sd
-  rp <- read.param(parfile)
-  np <- extract.nbphen(parfile)
-  fs <- rp$FITNESS_STRENGTH
-  if (length(fs)==1)
-    fs <- rep(fs, np)
-  if (length(fs) != np)
-    stop("Param file: ", parfile, ", The number of fitness strengths (", length(fs), ") does not match the number of traits (", np, ").")
-  if (rp$FITNESS_TYPE == "gaussian") {
-    ans <- diag(1/(2*fs))
-  } else if (rp$FITNESS_TYPE == "multivar_gaussian") {
-    vv  <- 1/(2*fs)
-    rr <- rp$FITNESS_CORRELATION
-    if (length(rr) != np*(np-1)/2)
-      stop("Param file: ", parfile, ", The number of fitness correlations (", length(rr), ") does not match the number of traits (", np, ").")
-    ansr <- diag(np)
-    ansr[upper.tri(ansr)] <- rr
-    ansr <- as.matrix(Matrix::forceSymmetric(ansr))
-    ans <- .cor2cov(ansr, sqrt(vv))
-  } else {
-    stop("Asking the S matrix for non-gaussian selection is meaningless.")
-  }
-  ans
-}
-
-extract.S.matrix.fig3 <- function(parfile) {
-  .cor2cov <- function(cc, sd) t(cc*sd)*sd
-  rp <- read.param(parfile)
-  fs <- rp$FITNESS_STRENGTH
-  np <- 4
-  vv  <- 1/(2*fs)
-  rr <- rp$FITNESS_CORRELATION
-  ansr <- diag(np)
-  ansr[upper.tri(ansr)] <- rr
-  ansr <- as.matrix(Matrix::forceSymmetric(ansr))
-  ans <- .cor2cov(ansr, sqrt(vv))
-  ans
-}
-
-##
-#Take properties of S and convert it in S parameters for Simevolv 
-param.S.matrix <- function(S.mat, n.genes=ncol(S.mat)) {
-  stopifnot(is.matrix(S.mat), ncol(S.mat) == nrow(S.mat))
-  stopifnot(n.genes > 0)
-  if (n.genes < ncol(S.mat))
-    S.mat <- S.mat[1:n.genes, 1:n.genes]
-  if (n.genes > ncol(S.mat)) {
-    rec <- matrix(0, ncol=n.genes-ncol(S.mat), nrow=nrow(S.mat))
-    dg <- matrix(0, ncol=n.genes-ncol(S.mat), nrow=n.genes-nrow(S.mat))
-    diag(dg) <- Inf
-    S.mat <- rbind(cbind(S.mat, rec), cbind(t(rec), dg))
-  }
-  list(
-    FITNESS_STRENGTH = 1/(2*diag(S.mat)),
-    FITNESS_CORRELATION = cov2cor(S.mat)[upper.tri(S.mat)])
 }
 
 #MATRIX FEATURES############################################################################
@@ -349,42 +95,6 @@ matrix.features <- function(M, n.genes=ncol(M)) {
   ans
 }
 
-#Functions to find a matrix that gives an ellipse of given parameters (Numeric methods)
-matrix2.targetdist <- function(pp, target) {
-  if (pp["v1"] <= 0 || pp["v2"] <= 0) return(Inf)
-  mf <- matrix.features(matrix(c(pp["v1"], pp["c"], pp["c"], pp["v2"]), ncol=2))
-  ans <- sum(sapply(names(target), function(nn) mf[[nn]][1]-target[nn])^2)
-  ans
-}
-
-matrix2.optim <- function(target) {
-  stopifnot(all(names(target) %in% c("cor","angle","size","eccentricity")))
-  stopifnot(length(target) == 3)
-  
-  st <- c(target["size"]/2, target["size"]/2, sign(target["angle"])*target["size"]/10)
-  names(st) <- c("v1","v2","c")
-  ans <- optimx::optimx(par=st, matrix2.targetdist, method="Nelder-Mead", target=target, itnmax=2000)
-  if (ans$convcode != 0) 
-    warning("Convergence failed for ", paste0(names(target), "=", target, collapse="  "))
-  matrix(c(ans$v1, ans$c, ans$c, ans$v2), ncol=2)
-}
-
-# Common wrapper function
-matrix2.from.features <- function(cor=NA, angle=NA, size=NA, eccentricity=NA, method=c("numeric", "analytic")[1]) {
-  if (method == "numeric") {
-    tt <- c(cor=cor, angle=modulopi(angle), size=size, eccentricity=eccentricity)
-    tt <- tt[!is.na(tt)]
-    return(matrix2.optim(tt))
-  } else if (method == "analytic") {
-    if (is.na(cor) || is.na(size) || is.na(eccentricity) ||!is.na(angle))
-      stop("Analytic method not available for this combination.")
-    return(matrix2.noangle(r=cor, S=size, e=eccentricity))
-  } else {
-    stop("Method ", method, " not available.")
-  }
-}
-
-
 #TRIGONOMETRY##########################################################################
 
 # returns the angle of an ellipse (between -pi/2 and pi/2)
@@ -392,30 +102,6 @@ modulopi <- function(angle) {
   ans <- angle %% pi
   ifelse(ans > pi/2, ans-pi, ans)
 }
-
-#Diff between angle, allows to pick the modulo
-modulo.all <- function(angle, modulo=pi) {
-  angle <- angle %% modulo
-  ifelse(angle > modulo/2, angle - modulo, angle)
-}
-
-#Calculate an angular mean between pi and -pi
-mean.angle.2pi <- function(data) {
-  atan2(mean(sin(data)), mean(cos(data)))
-}
-
-#Calculate an angular mean between pi/2 and -pi/2
-mean.angle.pi <- function(data) {
-  modulo.all(mean.angle.2pi(2*(data %% pi))/2, pi)
-}
-
-#Put mean M direction close to the S defined between -pi/2 and pi/2
-mean.angle.pi.byS <- function(data, ang_S) {
-  df <- modulo.all(mean.angle.2pi(2*(data %% pi))/2, pi)
-  if ((df - mean(ang_S, 7)/2) < -pi/2){ df = df + pi}
-  if ((df - mean(ang_S, 7)/2) > pi/2){ df = df - pi}
-  return(df)
-} 
 
 #DATA EXTRACTION################################################################
 
@@ -731,29 +417,6 @@ getSlope.ALR <- function(W, n.env=21, target.gene=2, min=0.15, max=0.85, givebac
   return(reg[giveback])  # the first coefficient is the regression intercept, the second is the slope
 }
 
-slope.stablefrom <- function(df, thresh=0.001, window=5, ...) {
-  df.stab <- data.frame()
-  for (file in unique(df$data.dir)) {
-    slopes <- c()
-    df2 <- subset(df, data.dir==file) #Get all gen for one output file
-    #Get slope for all gen
-    for (i in 1:nrow(df2)) {
-      W <- t(matrix(as.numeric(df2[i,7:106]), ncol = 10))
-      slope <- getSlope.ALR(W, n.env = 5)
-      slopes <- c(slopes, slope)
-    }
-    varslopes <- slidingvar(slopes, window=window)
-    #Find at which gen the slope is stabilized
-    Genstab <- which(varslopes < thresh)
-    Genstab <- max(Genstab)
-    stabslope <- c(unique(df2$Before_Gen), df2[Genstab,2]) #Column 2 is the generation.
-    
-    df.stab[nrow(df.stab)+1,1:2] <- stabslope
-  }
-  return(df.stab)  #return : df with Before_Gen and Gen to reach stable slope
-}
-
-
 
 #TOPOLOGIES#####################################################################
 
@@ -797,74 +460,8 @@ my.permn <- function(x, fun=NULL, ...) {
   permn(x, fun, ...)
 }
 
-netw.group <- function(df, Ss=1, Pg=1, Sg=1, Tf=7, start=7, target=2){
-  # Ss = number of sensor genes ; Pg = plastic genes ; Sg = stables genes ; Tf = transcription factors
-  # start = column in df from which the network begun
-  #Target : 2="Changing gene" ; 3="Constant" gene ; 1="Signal" gene
-  file.results <- lapply(1:nrow(df), function(i) { #mclapply(files, function(ff) {
-    W <- t(matrix(as.numeric(df[i,start:((Ss+Tf+Pg+Sg)*(Ss+Tf+Pg+Sg)+start-1)]), ncol = (Ss+Tf+Pg+Sg)))
-    #W matrix as a graph : 
-    G <- as.directed(graph.adjacency(t(W), weighted = T))
-    G <- delete.edges(G, E(G)[ abs(weight) < mean(abs(weight)) ]) #delete.edges(G, E(G)[ abs(weight) < 0.1 ]) ; mean(abs(weight))
-    
-    V(G)$color <- c("darkred","orange", "green","yellow",  "yellow", "yellow", "yellow", "yellow", "yellow", "yellow")
-    
-    GG <- induced_subgraph(G, c(1,target, neighbors(G,target, mode="all")))
-    GG <- t(as.matrix(as_adj(GG, attr="weight")))
-    
-    return(GG)
-  })
-  return(file.results)
-}
-
-
 #Topo analyses 
 library("combinat")
-
-unique.topo <- function(topo, groups=as.list(1:ncol(topo))) {
-  # topo is a n x n square matrix (forced to be a signed matrix)
-  # groups is a list of groups of genes, numbered from 1 to the n
-  # Just in case the user is sloppy, smart guesses:
-  topo <- sign(topo)
-  if (!all(1:ncol(topo) %in% unlist(groups)))
-    groups <- c(groups, as.list((1:ncol(topo))[! 1:ncol(topo) %in% unlist(groups)]))
-  stopifnot(
-    is.matrix(topo), ncol(topo) > 0, ncol(topo) == nrow(topo),
-    all(topo %in% c(-1,0,1)),
-    length(unlist(groups)) == ncol(topo), all(unlist(groups) %in% 1:ncol(topo))
-  )
-  equiv.topos(topo, groups)[[1]]
-}
-
-
-equiv.topos <- function(topo, groups=as.list(1:ncol(topo)), sorted=TRUE, unique=TRUE) {
-  # topo is a n x n square matrix (forced to be a signed matrix)
-  # groups is a list of groups of genes, numbered from 1 to the n
-  # Just in case the user is sloppy, smart guesses:
-  topo <- sign(topo)
-  if (!all(1:ncol(topo) %in% unlist(groups)))
-    groups <- c(groups, as.list((1:ncol(topo))[! 1:ncol(topo) %in% unlist(groups)]))
-  #
-  stopifnot(
-    is.matrix(topo), ncol(topo) > 0, ncol(topo) == nrow(topo),
-    all(topo %in% c(-1,0,1)),
-    length(unlist(groups)) == ncol(topo), all(unlist(groups) %in% 1:ncol(topo))
-  )
-  #
-  group.perms <- lapply(groups, function(gr) my.permn(gr))
-  glob.perms   <- do.call(expand.grid, lapply(sapply(group.perms, length), seq_len))
-  all.perms  <- apply(glob.perms, 1, function(x) unlist(lapply(seq_along(x), function(i) group.perms[[i]][x[i]])))
-  topo.list <- lapply(as.data.frame(all.perms), function(p) topo[p,p])
-  tokeep <- 1:length(topo.list)
-  if (unique || sorted) {
-    topo.df <- as.data.frame(do.call(rbind, lapply(topo.list, c)))
-    if (sorted)
-      tokeep <- do.call(order, c(as.list(topo.df[tokeep,]), list(decreasing=TRUE)))
-    if (unique)
-      tokeep <- tokeep[!duplicated(topo.df[tokeep,])]			
-  }
-  topo.list[tokeep] 
-}
 
 
 #Function that gives the essential topology
@@ -903,61 +500,6 @@ mean_W <- function(list_topo){
   return(W)
 }
 
-
-core_topo <- function(list_topo, treshold=0.90, asgraph=TRUE, sorting_4g=FALSE){
-  #list_topo = result from essential.topo()
-  if(sorting_4g==TRUE) list_topo <- sorting_topo_4g(list_topo)
-  mean_topo <- mean_W(list_topo)
-  for (cell in 1:length(mean_topo)) {
-    mean_topo[cell] <- ifelse(abs(mean_topo[cell])>=treshold,1,0) * sign(mean_topo[cell])
-  }
-  if (asgraph==TRUE) return(as.directed(graph.adjacency(t(mean_topo), weighted = T))) else return(mean_topo)
-}
-
-
-core_topo.alt <- function(list_topo, treshold=0.9, asgraph=TRUE, sorting_4g=FALSE){
-  #list_topo = result from essential.topo()
-  if(sorting_4g==TRUE) list_topo <- sorting_topo_4g(list_topo)
-  mean_topo <- mean_W(list_topo)
-  freq_topo <- mean_W(lapply(list_topo, abs)) #Freq matrix
-  print(mean_topo)
-  print(freq_topo)
-  # browser()
-  #Keep only cells with freq > treshold
-  for (cell in 1:length(freq_topo)) {
-    freq_topo[cell] <- ifelse(freq_topo[cell]>=treshold,1,0)
-  } 
-  #Only keep the regulations that are always there ; if value != from 1 or -1 it means that the reg can be positive or negative
-  for (cell in 1:length(mean_topo)) {
-    mean_topo[cell] <- ifelse(freq_topo[cell]==1,1,0) * mean_topo[cell]
-  }
-  if (asgraph==TRUE) return(as.directed(graph.adjacency(t(mean_topo), weighted = T))) else return(mean_topo)
-}
-
-
-sorting_topo_4g <- function(list_topo, target=2, genes=c(3,4)){
-  sort_topo <- lapply(list_topo, function(W){
-    W2 <- W
-    if(W[target,genes[1]]==1){
-      #transfo matrix, put column 1 into position 2
-      W1 <- W
-      W1[,genes[1]] <- W[,genes[2]]
-      W1[,genes[2]] <- W[,genes[1]]
-      W2 <- W1
-      W2[genes[1],] <- W1[genes[2],]
-      W2[genes[2],] <- W1[genes[1],]
-    }
-    if(W[target,genes[2]]==-1){
-      #transfo matrix
-      W1 <- W
-      W1[,genes[1]] <- W[,genes[2]]
-      W1[,genes[2]] <- W[,genes[1]]
-      W2 <- W1
-      W2[genes[1],] <- W1[genes[2],]
-      W2[genes[2],] <- W1[genes[1],]
-    }
-    return(W2)  })
-}
 
 
 

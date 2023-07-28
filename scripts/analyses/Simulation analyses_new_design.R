@@ -1,11 +1,11 @@
 source("scripts/functions/functions.R")
 source("scripts/functions/detectloops.R")
 #####################
-sims.dirs1 <- list.dirs("simul/Full_netw", recursive = TRUE)
+sims.dirs1 <- list.dirs("simul/Full_netw_long3", recursive = TRUE)
 genes <- 36
 min <- 0.15
 max <- 0.85
-filename <- "full"
+filename <- "full_long3"
 ################################################################################
 #Parameters when keeping "essential" connections. Test every connection to see impact on target gene RN, and draw from that.
 #Inspired by Burda et al., 2011

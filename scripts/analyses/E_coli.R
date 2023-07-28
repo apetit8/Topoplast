@@ -11,7 +11,6 @@
 # #Adding non-regulated genes in regulation data
 # nonreg_genes <- as.data.frame(ec_genes[!(ec_genes[,2] %in% ec_cyc[,1]),]) #Regulators
 # nonreg_genes <- nonreg_genes[!(nonreg_genes[,2] %in% ec_cyc[,2]),] #Regulatees
-# #1639 genes that are non-regulated
 # nr <- as.data.frame(cbind(nonreg_genes[,2],nonreg_genes[,2], rep(0, nrow(nonreg_genes)))) #Same file format as ec_cyc
 # setnames(nr, 1:3, colnames(ec_cyc))
 # ec_reg_full <- rbind(ec_cyc, nr) #Reg file with every genes
@@ -192,7 +191,6 @@ write.csv(nonplast_FFL, paste0("scripts/data/nonplast_",csvname,".csv"))
 print("Non plastic genes done!")
 
 ########################################
-print(paste0("Plast genes: ", nrow(all_plast_genes), "; Plast genes in annot: ", nrow(subset(all_plast_genes, V1 %in% Subplastic_genes))))
+print(paste0("Plast genes: ", nrow(all_plast_genes), "; Plast genes occuring more than twice: ", nrow(subset(all_plast_genes, V1 %in% Subplastic_genes))))
 
-
-
+length(unique(all_plast_genes[,1]))

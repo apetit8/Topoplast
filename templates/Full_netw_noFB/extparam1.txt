@@ -1,4 +1,4 @@
-REPLICATES   2
+REPLICATES   300
 # Coding rules :
 # 1 = Stable gene, same optimum before/after domestication
 # 2 = Plastic gene, x=environmental value
@@ -9,4 +9,8 @@ REPLICATES   2
 # NB : as many digits as genes
 SCENARIO_PART1 2   0 0 0 0 0 0   5 5 5 5 5 5 5 5 5 5 5 5  1 1 1 1 1 1 1 1 1 1 1 1  0 0 0 0 0       
 SCENARIO_PART2 2   0 0 0 0 0 0   5 5 5 5 5 5 5 5 5 5 5 5  1 1 1 1 1 1 1 1 1 1 1 1  0 0 0 0 0      
-GENERATION_MAX  500
+BOTTLENECK_BEGIN    30000
+BOTTLENECK_DURATION 0
+BOTTLENECK_AFTER    0
+BOTTLENECK_STRENGTH 0.999
+
