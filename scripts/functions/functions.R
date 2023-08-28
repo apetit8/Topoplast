@@ -5,23 +5,14 @@ suppressPackageStartupMessages(library(abind))
 library(parallel)
 library(plyr)
 library(stringr)
-# library(FactoMineR)
-# library(factoextra)
-# library(gridExtra)
 library(matrixStats)
-# library(ggplot2)
-# library(ggExtra)
 library(grid)
-# library(ggstance)
-# library(gtable)
 library(scales)
 library(Rcpp)
 library(tidyr)
 library(rlist)
-# library(tidyverse)
 library(purrr)
 library(data.table)
-library(truncnorm)
 library(igraph)
 
 ##TOOLS#######################################################################################
@@ -171,123 +162,6 @@ df.last.gens <- function(sims.dir, n.gen=50, size=50000){
   return(simul.df)
 }
 
-
-#Function that gives the mutational robustness of the reaction norm of a pop.
-df.sampling3 <- function(sims.dir, size=50000, rep=6){
-  #rep has to be => 2 to calculate a variance
-  simul.df <- data.frame()
-  filedata <- data.frame()
-  #collect all the data
-  files     <- list.files(path = sims.dir, full.names=TRUE, pattern = "\\_G") #Check if this works
-  files <- files[grep('G00000', files, invert = TRUE)]
-  files <- files[sapply(files, file.size) > size]
-  file.results <- lapply(files, function(ff) { #mclapply(files, function(ff) { 
-    print(ff)
-    tt <- fread(ff, data.table=FALSE)
-    #Data
-    gen <- str_split(str_split(str_split(ff, "/", n=8, simplify = TRUE)[,6], "_G", simplify = TRUE)[,2], ".txt", simplify = TRUE)
-    #
-    slopes2 <- c()
-    slopes3 <- c()
-    varslp2 <- c()
-    varslp3 <- c()
-    W <- extract.W.matrix.all.pop(tt, index=1:nrow(tt)) #Is it in the right order ?
-    for (j in 1:length(W)) {
-      Ws <- as.matrix(W[[j]], nc)
-      Wprob <- ifelse(Ws==0,0,1)
-      #loop for each mut
-      for (i in 1:rep) {
-        W_mut <- Ws
-        #Get W cell that is different from 0
-        Wij <- which(W_mut == sample(W_mut, size=1, replace=TRUE, prob = Wprob))  
-        #Change a random value in a W matrix 
-        W_mut[Wij] <- rtruncnorm(n=1, mean=W_mut[Wij], sd=sd)
-        slopes2 <- c(slopes2, getSlope.ALR(W=t(W_mut), n.env=5, target.gene=2))
-        slopes3 <- c(slopes3, getSlope.ALR(W=t(W_mut), n.env=5, target.gene=3))
-      }
-      varslp2 <- c(var(as.numeric(slopes2)))
-      varslp3 <- c(var(as.numeric(slopes3)))
-    }
-    sd_rep2 <- mean(varslp2)
-    sd_rep3 <- mean(varslp3)
-    prevpop <- str_split(ff, "/", simplify = TRUE)[,4]
-    #
-    data.gen <- data.frame(
-      data.dir   = ff, 
-      Before_Pop = prevpop, 
-      Before_Gen = gen[,1], 
-      Sd_ind_2 = sqrt(sd_rep2),
-      Sd_ind_3 = sqrt(sd_rep3))
-    
-    return(data.gen)
-  })#, mc.cores=4)
-  
-  simul.df <- do.call(rbind, file.results)
-  return(simul.df)
-}
-
-# #DF to compare mean centrality (every genes of every pop) for the 5 gene categories
-# centrality.df <- function(df, Ss=1, Pg=1, Sg=1, Tf=7, start=7){
-#   # Ss = number of sensor genes ; Pg = plastic genes ; Sg = stables genes ; Tf = transcription factors
-#   # start = column in df from which the network begun
-#   df.centrality <- data.frame() 
-#   j<-1
-#   for (i in 1:nrow(df)) {
-#     W <- t(matrix(as.numeric(df[i,start:((Ss+Tf+Pg+Sg)*(Ss+Tf+Pg+Sg)+start-1)]), ncol = (Ss+Tf+Pg+Sg)))
-#     #W matrix as a graph : 
-#     G <- as.directed(graph.adjacency(t(W), weighted = T))
-#     G <- delete.edges(G, E(G)[ abs(weight) < 0.1 ])
-#     ec <- eigen_centrality(G, directed=T, weights=NA, options=list(maxiter=1000000))$vector
-#     deg <- degree(G, mode = "all")
-#     degin <- degree(G, mode = "in")
-#     degout <- degree(G, mode = "out")
-#     #By gene category 
-#     df.centrality[j:(j+Ss-1), 1] <-"Sensor"
-#     df.centrality[(j+Ss):(j+Pg+Ss-1), 1] <- "Plastic"
-#     df.centrality[(j+Pg+Ss):(j+Pg+Ss+Sg-1), 1] <- "Stable"
-#     df.centrality[(j+Pg+Ss+Sg):(j+Tf+Pg+Ss+Sg-1), 1] <- "Transcriptor"
-#     #
-#     df.centrality[j:(j+Ss-1), 2] <- ec[1:Ss]
-#     df.centrality[(j+Ss):(j+Pg+Ss-1), 2] <- ec[(Ss+1):(Ss+Pg)]
-#     df.centrality[(j+Pg+Ss):(j+Pg+Ss+Sg-1), 2] <- ec[(Ss+Pg+1):(Ss+Pg+Sg)]
-#     df.centrality[(j+Pg+Ss+Sg):(j+Tf+Pg+Ss+Sg-1), 2] <- ec[(Ss+Pg+Sg+1):(Ss+Pg+Sg+Tf)]
-#     #
-#     df.centrality[j:(j+Ss-1), 3] <- deg[1:Ss]
-#     df.centrality[(j+Ss):(j+Pg+Ss-1), 3] <- deg[(Ss+1):(Ss+Pg)]
-#     df.centrality[(j+Pg+Ss):(j+Pg+Ss+Sg-1), 3] <- deg[(Ss+Pg+1):(Ss+Pg+Sg)]
-#     df.centrality[(j+Pg+Ss+Sg):(j+Tf+Pg+Ss+Sg-1), 3] <- deg[(Ss+Pg+Sg+1):(Ss+Pg+Sg+Tf)]
-#     #
-#     df.centrality[j:(j+Ss-1), 4] <- degin[1:Ss]
-#     df.centrality[(j+Ss):(j+Pg+Ss-1), 4] <- degin[(Ss+1):(Ss+Pg)]
-#     df.centrality[(j+Pg+Ss):(j+Pg+Ss+Sg-1), 4] <- degin[(Ss+Pg+1):(Ss+Pg+Sg)]
-#     df.centrality[(j+Pg+Ss+Sg):(j+Tf+Pg+Ss+Sg-1), 4] <- degin[(Ss+Pg+Sg+1):(Ss+Pg+Sg+Tf)]
-#     #
-#     df.centrality[j:(j+Ss-1), 5] <- degout[1:Ss]
-#     df.centrality[(j+Ss):(j+Pg+Ss-1), 5] <- degout[(Ss+1):(Ss+Pg)]
-#     df.centrality[(j+Pg+Ss):(j+Pg+Ss+Sg-1), 5] <- degout[(Ss+Pg+1):(Ss+Pg+Sg)]
-#     df.centrality[(j+Pg+Ss+Sg):(j+Tf+Pg+Ss+Sg-1), 5] <- degout[(Ss+Pg+Sg+1):(Ss+Pg+Sg+Tf)]
-#     #
-#     df.centrality[j:(j+Ss-1), 6] <- sum(abs(W[1:Ss,]))/(1:Ss)
-#     df.centrality[(j+Ss):(j+Pg+Ss-1), 6] <- sum(abs(W[(Ss+1):(Ss+Pg),]))/((Ss+1):(Ss+Pg)) 
-#     df.centrality[(j+Pg+Ss):(j+Pg+Ss+Sg-1), 6] <- sum(abs(W[(Ss+Pg+1):(Ss+Pg+Sg),]))/((Ss+Pg+1):(Ss+Pg+Sg))
-#     df.centrality[(j+Pg+Ss+Sg):(j+Tf+Pg+Ss+Sg-1), 6] <- sum(abs(W[(Ss+Pg+Sg+1):(Ss+Pg+Sg+Tf),]))/((Ss+Pg+Sg+1):(Ss+Pg+Sg+Tf))
-#     #    
-#     df.centrality[j:(j+Ss-1), 7] <- sum(abs(W[,1:Ss]))/(1:Ss)
-#     df.centrality[(j+Ss):(j+Pg+Ss-1), 7] <- sum(abs(W[,(Ss+1):(Ss+Pg)]))/((Ss+1):(Ss+Pg)) 
-#     df.centrality[(j+Pg+Ss):(j+Pg+Ss+Sg-1), 7] <- sum(abs(W[,(Ss+Pg+1):(Ss+Pg+Sg)]))/((Ss+Pg+1):(Ss+Pg+Sg))
-#     df.centrality[(j+Pg+Ss+Sg):(j+Tf+Pg+Ss+Sg-1), 7] <- sum(abs(W[,(Ss+Pg+Sg+1):(Ss+Pg+Sg+Tf)]))/((Ss+Pg+Sg+1):(Ss+Pg+Sg+Tf))
-#     
-#     #I can add as many indexes as i want
-#     df.centrality[j:(j+Tf+Pg+Ss+Sg-1), 8] <- df[i,2] #Gen
-#     df.centrality[j:(j+Tf+Pg+Ss+Sg-1), 9] <- df[i,(107)] #Environment
-#     
-#     j<- j+(Ss+Tf+Pg+Sg)
-#   }
-#   df.centrality$V10 <- paste0(df.centrality$V1,"_", df.centrality$V9)
-#   setnames(df.centrality, 1:10, c("Gene_cat","Centrality","Connect","ConnectIn","ConnectOut","Sum_in","Sum_out","Gen","Envir","Cat_envir" ) )
-#   
-#   return(df.centrality)
-# }
 
 #PHENOTYPES################################################################
 # netW.R

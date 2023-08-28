@@ -5,7 +5,7 @@ pdfname <- "figures/fig_alt"
 ##FFL motifs####################################################################
 non_plast <- read.csv("scripts/data/nonplast_E_coli_FFL.csv", sep = ",")
 all_plast <- read.csv("scripts/data/plast_genes_E_coli_FFL.csv", sep = ",")
-theory <- read.csv("scripts/data/full_FFL.csv", sep = ",")[,1:11]
+theory <- read.csv("scripts/data/full_20k_0-01_FFL.csv", sep = ",")[,1:11]
 
 df_ffl <- as.data.frame(rbind(theory[1,4:11]*100/theory[1,2],theory[2,4:11]*100/theory[2,2], colSums(all_plast[,5:12])*100/sum(all_plast[,3]),
                               colSums(non_plast[,5:12])*100/sum(non_plast[,3]) ))
@@ -83,7 +83,7 @@ legend("topright", box.lty=0,  bg="transparent", fill = c("grey","black"), legen
 ################################################################################
 non_plast <- read.csv("scripts/data/nonplast_E_coli_diamond.csv", sep = ",")
 all_plast <- read.csv("scripts/data/plast_genes_E_coli_diamond.csv", sep = ",")
-theory <- read.csv("scripts/data/full_DMD.csv", sep = ",")[,1:13]
+theory <- read.csv("scripts/data/full_20k_0-01_DMD.csv", sep = ",")[,1:13]
 
 df1 <- as.data.frame(rbind(theory[1,4:13]*100/theory[1,2], theory[2,4:13]*100/theory[2,2], 
                            colSums(all_plast[,5:14])*100/sum(all_plast[,3]), colSums(non_plast[,5:14])*100/sum(non_plast[,3]) ))

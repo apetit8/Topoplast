@@ -1,5 +1,5 @@
 source("scripts/functions/functions.R")
-pdfname <- "figures/fig_full_VS"
+pdfname <- "figures/fig_full_20k_nnTF"
 #Plot combining both empirical data and theoretical data
 ################################################################################
 pval <- 0.05
@@ -7,7 +7,7 @@ pval <- 0.05
 ##FFL motifs####################################################################
 non_plast <- read.csv("scripts/data/nonplast_E_coli_FFL.csv", sep = ",")
 all_plast <- read.csv("scripts/data/plast_genes_E_coli_FFL.csv", sep = ",")
-theory <- read.csv("scripts/data/full_FFL.csv", sep = ",")[,1:11]
+theory <- read.csv("scripts/data/full_20k_nnTF_FFL.csv", sep = ",")[,1:11]
 
 df_ffl <- as.data.frame(rbind(colSums(non_plast[,5:12])*100/sum(non_plast[,3]), colSums(all_plast[,5:12])*100/sum(all_plast[,3]),
   theory[2,4:11]*100/theory[2,2],theory[1,4:11]*100/theory[1,2]))
@@ -58,14 +58,8 @@ dev.off()
 ##DMD motifs####################################################################
 non_plast <- read.csv("scripts/data/nonplast_E_coli_diamond.csv", sep = ",")
 all_plast <- read.csv("scripts/data/plast_genes_E_coli_diamond.csv", sep = ",")
-theory <- read.csv("scripts/data/full_DMD.csv", sep = ",")[,1:13]
+theory <- read.csv("scripts/data/full_20k_nnTF_DMD.csv", sep = ",")[,1:13]
 
-df1 <- as.data.frame(rbind(colSums(non_plast[,3:14])*100/nrow(non_plast), colSums(all_plast[,3:14])*100/nrow(all_plast),
-                            theory[2,2:13], theory[1,2:13] ))
-rownames(df1) <- c("Non-Plastic\nE. coli", "Plastic\nE. coli", "Non-plastic\nTheory","Plastic\nTheory")
-
-
-####Motifs
 df1 <- as.data.frame(rbind(colSums(non_plast[,5:14])*100/sum(non_plast[,3]), colSums(all_plast[,5:14])*100/sum(all_plast[,3]),
                            theory[2,4:13]*100/theory[2,2], theory[1,4:13]*100/theory[1,2] ))
 rownames(df1) <- c("Non-Plastic\nE. coli", "Plastic\nE. coli", "Non-plastic\nTheory","Plastic\nTheory")
@@ -73,11 +67,6 @@ rownames(df1) <- c("Non-Plastic\nE. coli", "Plastic\nE. coli", "Non-plastic\nThe
 #Stat test to know if plastic and non plastic are different from each other
 df_anova <- rbind(subset(non_plast, FFL==1)[,5:14], subset(all_plast, FFL==1)[,5:14])
 df_anova$Plasticity <- c(rep("No", nrow(subset(non_plast, FFL==1))),rep("Yes", nrow(subset(all_plast, FFL==1))))
-#theory
-theoryP <- read.csv("scripts/data/full_plast_DMD.csv", sep = ",")[,1:13]
-theoryNP <- read.csv("scripts/data/full_control_DMD.csv", sep = ",")[,1:13]
-df_anova2 <- rbind(subset(theoryNP, FFL==1)[,2:13], subset(theoryP, FFL==1)[,2:13])
-df_anova2$Plasticity <- c(rep("No", nrow(subset(theoryNP, FFL==1))),rep("Yes", nrow(subset(theoryP, FFL==1))))
 
 # colnames(df1)
 legendtext <- c(paste0("PP", ifelse(anova(lm(PP ~ Plasticity, df_anova))[1,5] <= pval, "(*)", "")),
@@ -102,7 +91,7 @@ dev.off()
 ##FBL motifs####################################################################
 non_plast <- read.csv("scripts/data/nonplast_E_coli_FBL.csv", sep = ",")
 all_plast <- read.csv("scripts/data/plast_genes_E_coli_FBL.csv", sep = ",")
-theory <- read.csv("scripts/data/full_FBL.csv", sep = ",")[,]
+theory <- read.csv("scripts/data/full_20k_nnTF_FBL.csv", sep = ",")[,]
 
 df <- as.data.frame(rbind(colSums(non_plast[,7:11])*100/sum(non_plast[,3]), colSums(all_plast[,7:11])*100/sum(all_plast[,3]), 
                           theory[2,6:10]*100/theory[2,2], theory[1,6:10]*100/theory[1,2]))

@@ -155,7 +155,7 @@ feedforward.to <- function(
 		recursive=FALSE)
 }
 
-FFL.type2 <- function(list.w, edges1=2, edges2=1, target=2, from=(1:ncol(list.w[[1]]))){
+FFL.type2 <- function(list.w, edges1=2, edges2=1, target, from=(1:ncol(list.w[[1]]))){
   
   if(edges1==2 && edges2==1){
     df <- data.frame(FFL=c(rep(0, length(list.w))), No_FFL=c(rep(0, length(list.w))),

@@ -25,11 +25,11 @@ igraph_options(return.vs.es=F)
 #########################################
 ##PH ; Tucker et al., 2002 ; DOI : 10.1128/JB.184.23.6551-6558.2002
 phgenes1 <- read.table("e_coli/Plast_genes/Ph/plastic_genes.txt", sep ="\t", header=FALSE)
-phgenes1 <- phgenes1[(phgenes1[,1] %in% colnames(E_coli_mat)),] 
+phgenes1 <-  unique(phgenes1[(phgenes1[,1] %in% colnames(E_coli_mat)),] )
 ########################################
 #PH ; Maurer et al., 2004 ; 
 phgenes2 <- read.table("e_coli/Plast_genes/pH_2/plastic_genes.txt", sep ="\t", header=FALSE)
-phgenes2 <- phgenes2[(phgenes2[,1] %in% colnames(E_coli_mat)),] 
+phgenes2 <- unique(phgenes2[(phgenes2[,1] %in% colnames(E_coli_mat)),] )
 ########################################
 #10.1128/JB.01092-07 Bhatia et al., 2022
 #Compendium of stressor
@@ -38,46 +38,46 @@ stress_genes <- as.data.frame(unique(c(subset(read.csv("e_coli/Plast_genes/Mult_
                                        subset(read.csv("e_coli/Plast_genes/Mult_stress/Table_S7.csv", sep ="\t", header=TRUE), Differential.expression != "ns")[,5],
                                        subset(read.csv("e_coli/Plast_genes/Mult_stress/Table_S8.csv", sep ="\t", header=TRUE), Differential.expression != "ns")[,5],
                                        subset(read.csv("e_coli/Plast_genes/Mult_stress/Table_S9.csv", sep ="\t", header=TRUE), Differential.expression != "ns")[,5])))
-stress_genes <- stress_genes[(stress_genes[,1] %in% colnames(E_coli_mat)),] 
+stress_genes <-  unique(stress_genes[(stress_genes[,1] %in% colnames(E_coli_mat)),] )
 ########################################
 ##Medium of growth
 #Feugeas et al., 2016 ; DOI : 10.1093/molbev/msw105
 medgrowth_genes <- read.csv("e_coli/Plast_genes/Growth_envir/Supp_tables_S1.csv", sep ="\t", header=TRUE)
-medgrowth_genes <- medgrowth_genes[(medgrowth_genes[,1] %in% colnames(E_coli_mat)),1] 
+medgrowth_genes <-  unique(medgrowth_genes[(medgrowth_genes[,1] %in% colnames(E_coli_mat)),1] )
 ########################################
 #10.1038/srep45303 Caglar et al., 2017
 #List of plastic genes for 3 different conditions: carbone source, Mg stress, Na+ stress
 mg_c_genes <- as.data.frame(unique(subset(read.csv("e_coli/Plast_genes/C_Mg_Na/41598_2017_BFsrep45303_MOESM60_ESM.csv"), dataType=="mrna")[,2]))
-mg_c_genes <- mg_c_genes[(mg_c_genes[,1] %in% colnames(E_coli_mat)),1]
+mg_c_genes <- unique( mg_c_genes[(mg_c_genes[,1] %in% colnames(E_coli_mat)),1])
 ########################################
 #10.1128/AEM.00914-09 Wang et al., 2009
 #List of plastic genes oxydative stress
 ox_genes <- read.csv("e_coli/Plast_genes/Oxydative_stress/table_5_genes_updated_names.txt", sep ="\t", header=FALSE)
-ox_genes <- ox_genes[(ox_genes[,1] %in% colnames(E_coli_mat)),] 
+ox_genes <-  unique(ox_genes[(ox_genes[,1] %in% colnames(E_coli_mat)),] )
 ########################################
 #10.1007/s00253-018-9083-5 Ng et al., 2018
 #List of DEGS between aerozolisation and liquid suspension
 aero_genes <- read.table("e_coli/Plast_genes/Aero_liquid/Table_2_3_4.txt", sep ="\t", header=FALSE)
-aero_genes <- aero_genes[(aero_genes[,1] %in% colnames(E_coli_mat)),] 
+aero_genes <-  unique(aero_genes[(aero_genes[,1] %in% colnames(E_coli_mat)),] )
 ########################################
 #10.1128/AEM.02841-08 Bergholz et al., 2009
 #Apple Juice
 juice_genes <- read.table("e_coli/Plast_genes/apple_juice/Table_1_genes_updated_names.txt", sep ="\t", header=FALSE)
-juice_genes <- juice_genes[(juice_genes[,1] %in% colnames(E_coli_mat)),] 
+juice_genes <-  unique(juice_genes[(juice_genes[,1] %in% colnames(E_coli_mat)),] )
 ########################################
 #10.1128/JB.01929-06 White-Ziegler et al., 2007
 #Human body temperature
 temptr_genes <- read.table("e_coli/Plast_genes/human_temp/Table_1_genes_updated_names.txt", sep ="\t", header=FALSE)
-temptr_genes <- temptr_genes[(temptr_genes[,1] %in% colnames(E_coli_mat)),] 
+temptr_genes <-  unique(temptr_genes[(temptr_genes[,1] %in% colnames(E_coli_mat)),] )
 ########################################
 #https://doi.org/10.1038/s41598-020-74606-8 Kim et al., 2020 ; Temperature
 temptr_genes2 <- read.table("e_coli/Plast_genes/Temperature/plastic_genes.txt", sep ="\t", header=FALSE)
-temptr_genes2 <- temptr_genes2[(temptr_genes2[,1] %in% colnames(E_coli_mat)),]
+temptr_genes2 <-  unique(temptr_genes2[(temptr_genes2[,1] %in% colnames(E_coli_mat)),])
 ########################################
 #10.1128/JB.01092-07 Durfee et al., 2008
 #stringent response
 stringent_genes <- as.data.frame(unique(read.table("e_coli/Plast_genes/Stringent_response/All_genes.txt", sep ="\t", header=FALSE)[,1]))
-stringent_genes <- stringent_genes[(stringent_genes[,1] %in% colnames(E_coli_mat)),] 
+stringent_genes <-  unique(stringent_genes[(stringent_genes[,1] %in% colnames(E_coli_mat)),] )
 ########################################
 
 #PROBLEM: %in% also count it if the string of character in inside a larger string. Not what I want at all ; 
@@ -87,86 +87,86 @@ colnames(study_mat) <- c("Tucker2002","Maurer2004","Bhatia2022","Feugas2016","Ca
 rownames(study_mat) <- colnames(study_mat)
 # c(phgenes1,phgenes2,stress_genes,medgrowth_genes,mg_c_genes,ox_genes,aero_genes,juice_genes,temptr_genes,temptr_genes2,stringent_genes)
 
-study_mat[,1] <- c( length(which(phgenes1 %in% phgenes1)), length(which(phgenes1 %in% phgenes2)),
-                    length(which(phgenes1 %in% stress_genes)), length(which(phgenes1 %in% medgrowth_genes)),
-                    length(which(phgenes1 %in% mg_c_genes)), length(which(phgenes1 %in% ox_genes)),
-                    length(which(phgenes1 %in% aero_genes)), length(which(phgenes1 %in% juice_genes)),
-                    length(which(phgenes1 %in% temptr_genes)), length(which(phgenes1 %in% temptr_genes2)),
-                    length(which(phgenes1 %in% stringent_genes)))
+study_mat[,1] <- c( sum(phgenes1 %in% phgenes1), sum(phgenes1 %in% phgenes2),
+                    sum(phgenes1 %in% stress_genes), sum(phgenes1 %in% medgrowth_genes),
+                    sum(phgenes1 %in% mg_c_genes), sum(phgenes1 %in% ox_genes),
+                    sum(phgenes1 %in% aero_genes), sum(phgenes1 %in% juice_genes),
+                    sum(phgenes1 %in% temptr_genes), sum(phgenes1 %in% temptr_genes2),
+                    sum(phgenes1 %in% stringent_genes))
 
-study_mat[,2] <- c( length(which(phgenes2 %in% phgenes1)), length(which(phgenes2 %in% phgenes2)),
-                    length(which(phgenes2 %in% stress_genes)), length(which(phgenes2 %in% medgrowth_genes)),
-                    length(which(phgenes2 %in% mg_c_genes)), length(which(phgenes2 %in% ox_genes)),
-                    length(which(phgenes2 %in% aero_genes)), length(which(phgenes2 %in% juice_genes)),
-                    length(which(phgenes2 %in% temptr_genes)), length(which(phgenes2 %in% temptr_genes2)),
-                    length(which(phgenes2 %in% stringent_genes)))
+study_mat[,2] <- c( sum(phgenes2 %in% phgenes1), sum(phgenes2 %in% phgenes2),
+                    sum(phgenes2 %in% stress_genes), sum(phgenes2 %in% medgrowth_genes),
+                    sum(phgenes2 %in% mg_c_genes), sum(phgenes2 %in% ox_genes),
+                    sum(phgenes2 %in% aero_genes), sum(phgenes2 %in% juice_genes),
+                    sum(phgenes2 %in% temptr_genes), sum(phgenes2 %in% temptr_genes2),
+                    sum(phgenes2 %in% stringent_genes))
 
-study_mat[,3] <- c( length(which(stress_genes %in% phgenes1)), length(which(stress_genes %in% phgenes2)),
-                    length(which(stress_genes %in% stress_genes)), length(which(stress_genes %in% medgrowth_genes)),
-                    length(which(stress_genes %in% mg_c_genes)), length(which(stress_genes %in% ox_genes)),
-                    length(which(stress_genes %in% aero_genes)), length(which(stress_genes %in% juice_genes)),
-                    length(which(stress_genes %in% temptr_genes)), length(which(stress_genes %in% temptr_genes2)),
-                    length(which(stress_genes %in% stringent_genes)))
+study_mat[,3] <- c( sum(stress_genes %in% phgenes1), sum(stress_genes %in% phgenes2),
+                    sum(stress_genes %in% stress_genes), sum(stress_genes %in% medgrowth_genes),
+                    sum(stress_genes %in% mg_c_genes), sum(stress_genes %in% ox_genes),
+                    sum(stress_genes %in% aero_genes), sum(stress_genes %in% juice_genes),
+                    sum(stress_genes %in% temptr_genes), sum(stress_genes %in% temptr_genes2),
+                    sum(stress_genes %in% stringent_genes))
 
-study_mat[,4] <- c( length(which(medgrowth_genes %in% phgenes1)), length(which(medgrowth_genes %in% phgenes2)),
-                    length(which(medgrowth_genes %in% stress_genes)), length(which(medgrowth_genes %in% medgrowth_genes)),
-                    length(which(medgrowth_genes %in% mg_c_genes)), length(which(medgrowth_genes %in% ox_genes)),
-                    length(which(medgrowth_genes %in% aero_genes)), length(which(medgrowth_genes %in% juice_genes)),
-                    length(which(medgrowth_genes %in% temptr_genes)), length(which(medgrowth_genes %in% temptr_genes2)),
-                    length(which(medgrowth_genes %in% stringent_genes)))
+study_mat[,4] <- c( sum(medgrowth_genes %in% phgenes1), sum(medgrowth_genes %in% phgenes2),
+                    sum(medgrowth_genes %in% stress_genes), sum(medgrowth_genes %in% medgrowth_genes),
+                    sum(medgrowth_genes %in% mg_c_genes), sum(medgrowth_genes %in% ox_genes),
+                    sum(medgrowth_genes %in% aero_genes), sum(medgrowth_genes %in% juice_genes),
+                    sum(medgrowth_genes %in% temptr_genes), sum(medgrowth_genes %in% temptr_genes2),
+                    sum(medgrowth_genes %in% stringent_genes))
 
-study_mat[,5] <- c( length(which(mg_c_genes %in% phgenes1)), length(which(mg_c_genes %in% phgenes2)),
-                    length(which(mg_c_genes %in% stress_genes)), length(which(mg_c_genes %in% medgrowth_genes)),
-                    length(which(mg_c_genes %in% mg_c_genes)), length(which(mg_c_genes %in% ox_genes)),
-                    length(which(mg_c_genes %in% aero_genes)), length(which(mg_c_genes %in% juice_genes)),
-                    length(which(mg_c_genes %in% temptr_genes)), length(which(mg_c_genes %in% temptr_genes2)),
-                    length(which(mg_c_genes %in% stringent_genes)))
-
-
-study_mat[,6] <- c( length(which(ox_genes %in% phgenes1)), length(which(ox_genes %in% phgenes2)),
-                    length(which(ox_genes %in% stress_genes)), length(which(ox_genes %in% medgrowth_genes)),
-                    length(which(ox_genes %in% mg_c_genes)), length(which(ox_genes %in% ox_genes)),
-                    length(which(ox_genes %in% aero_genes)), length(which(ox_genes %in% juice_genes)),
-                    length(which(ox_genes %in% temptr_genes)), length(which(ox_genes %in% temptr_genes2)),
-                    length(which(ox_genes %in% stringent_genes)))
-
-study_mat[,7] <- c( length(which(aero_genes %in% phgenes1)), length(which(aero_genes %in% phgenes2)),
-                    length(which(aero_genes %in% stress_genes)), length(which(aero_genes %in% medgrowth_genes)),
-                    length(which(aero_genes %in% mg_c_genes)), length(which(aero_genes %in% ox_genes)),
-                    length(which(aero_genes %in% aero_genes)), length(which(aero_genes %in% juice_genes)),
-                    length(which(aero_genes %in% temptr_genes)), length(which(aero_genes %in% temptr_genes2)),
-                    length(which(aero_genes %in% stringent_genes)))
-
-study_mat[,8] <- c( length(which(juice_genes %in% phgenes1)), length(which(juice_genes %in% phgenes2)),
-                    length(which(juice_genes %in% stress_genes)), length(which(juice_genes %in% medgrowth_genes)),
-                    length(which(juice_genes %in% mg_c_genes)), length(which(juice_genes %in% ox_genes)),
-                    length(which(juice_genes %in% aero_genes)), length(which(juice_genes %in% juice_genes)),
-                    length(which(juice_genes %in% temptr_genes)), length(which(juice_genes %in% temptr_genes2)),
-                    length(which(juice_genes %in% stringent_genes)))
-
-study_mat[,9] <- c( length(which(temptr_genes %in% phgenes1)), length(which(temptr_genes %in% phgenes2)),
-                    length(which(temptr_genes %in% stress_genes)), length(which(temptr_genes %in% medgrowth_genes)),
-                    length(which(temptr_genes %in% mg_c_genes)), length(which(temptr_genes %in% ox_genes)),
-                    length(which(temptr_genes %in% aero_genes)), length(which(temptr_genes %in% juice_genes)),
-                    length(which(temptr_genes %in% temptr_genes)), length(which(temptr_genes %in% temptr_genes2)),
-                    length(which(temptr_genes %in% stringent_genes)))
-
-study_mat[,10] <- c( length(which(temptr_genes2 %in% phgenes1)), length(which(temptr_genes2 %in% phgenes2)),
-                    length(which(temptr_genes2 %in% stress_genes)), length(which(temptr_genes2 %in% medgrowth_genes)),
-                    length(which(temptr_genes2 %in% mg_c_genes)), length(which(temptr_genes2 %in% ox_genes)),
-                    length(which(temptr_genes2 %in% aero_genes)), length(which(temptr_genes2 %in% juice_genes)),
-                    length(which(temptr_genes2 %in% temptr_genes)), length(which(temptr_genes2 %in% temptr_genes2)),
-                    length(which(temptr_genes2 %in% stringent_genes)))
-
-study_mat[,11] <- c( length(which(stringent_genes %in% phgenes1)), length(which(stringent_genes %in% phgenes2)),
-                    length(which(stringent_genes %in% stress_genes)), length(which(stringent_genes %in% medgrowth_genes)),
-                    length(which(stringent_genes %in% mg_c_genes)), length(which(stringent_genes %in% ox_genes)),
-                    length(which(stringent_genes %in% aero_genes)), length(which(stringent_genes %in% juice_genes)),
-                    length(which(stringent_genes %in% temptr_genes)), length(which(stringent_genes %in% temptr_genes2)),
-                    length(which(stringent_genes %in% stringent_genes)))
+study_mat[,5] <- c( sum(mg_c_genes %in% phgenes1), sum(mg_c_genes %in% phgenes2),
+                    sum(mg_c_genes %in% stress_genes), sum(mg_c_genes %in% medgrowth_genes),
+                    sum(mg_c_genes %in% mg_c_genes), sum(mg_c_genes %in% ox_genes),
+                    sum(mg_c_genes %in% aero_genes), sum(mg_c_genes %in% juice_genes),
+                    sum(mg_c_genes %in% temptr_genes), sum(mg_c_genes %in% temptr_genes2),
+                    sum(mg_c_genes %in% stringent_genes))
 
 
+study_mat[,6] <- c( sum(ox_genes %in% phgenes1), sum(ox_genes %in% phgenes2),
+                    sum(ox_genes %in% stress_genes), sum(ox_genes %in% medgrowth_genes),
+                    sum(ox_genes %in% mg_c_genes), sum(ox_genes %in% ox_genes),
+                    sum(ox_genes %in% aero_genes), sum(ox_genes %in% juice_genes),
+                    sum(ox_genes %in% temptr_genes), sum(ox_genes %in% temptr_genes2),
+                    sum(ox_genes %in% stringent_genes))
 
+study_mat[,7] <- c( sum(aero_genes %in% phgenes1), sum(aero_genes %in% phgenes2),
+                    sum(aero_genes %in% stress_genes), sum(aero_genes %in% medgrowth_genes),
+                    sum(aero_genes %in% mg_c_genes), sum(aero_genes %in% ox_genes),
+                    sum(aero_genes %in% aero_genes), sum(aero_genes %in% juice_genes),
+                    sum(aero_genes %in% temptr_genes), sum(aero_genes %in% temptr_genes2),
+                    sum(aero_genes %in% stringent_genes))
+
+study_mat[,8] <- c( sum(juice_genes %in% phgenes1), sum(juice_genes %in% phgenes2),
+                    sum(juice_genes %in% stress_genes), sum(juice_genes %in% medgrowth_genes),
+                    sum(juice_genes %in% mg_c_genes), sum(juice_genes %in% ox_genes),
+                    sum(juice_genes %in% aero_genes), sum(juice_genes %in% juice_genes),
+                    sum(juice_genes %in% temptr_genes), sum(juice_genes %in% temptr_genes2),
+                    sum(juice_genes %in% stringent_genes))
+
+study_mat[,9] <- c( sum(temptr_genes %in% phgenes1), sum(temptr_genes %in% phgenes2),
+                    sum(temptr_genes %in% stress_genes), sum(temptr_genes %in% medgrowth_genes),
+                    sum(temptr_genes %in% mg_c_genes), sum(temptr_genes %in% ox_genes),
+                    sum(temptr_genes %in% aero_genes), sum(temptr_genes %in% juice_genes),
+                    sum(temptr_genes %in% temptr_genes), sum(temptr_genes %in% temptr_genes2),
+                    sum(temptr_genes %in% stringent_genes))
+
+study_mat[,10] <- c( sum(temptr_genes2 %in% phgenes1), sum(temptr_genes2 %in% phgenes2),
+                    sum(temptr_genes2 %in% stress_genes), sum(temptr_genes2 %in% medgrowth_genes),
+                    sum(temptr_genes2 %in% mg_c_genes), sum(temptr_genes2 %in% ox_genes),
+                    sum(temptr_genes2 %in% aero_genes), sum(temptr_genes2 %in% juice_genes),
+                    sum(temptr_genes2 %in% temptr_genes), sum(temptr_genes2 %in% temptr_genes2),
+                    sum(temptr_genes2 %in% stringent_genes))
+
+study_mat[,11] <- c( sum(stringent_genes %in% phgenes1), sum(stringent_genes %in% phgenes2),
+                    sum(stringent_genes %in% stress_genes), sum(stringent_genes %in% medgrowth_genes),
+                    sum(stringent_genes %in% mg_c_genes), sum(stringent_genes %in% ox_genes),
+                    sum(stringent_genes %in% aero_genes), sum(stringent_genes %in% juice_genes),
+                    sum(stringent_genes %in% temptr_genes), sum(stringent_genes %in% temptr_genes2),
+                    sum(stringent_genes %in% stringent_genes))
+
+study_mat
+write.csv(study_mat, "figures/Supplemental_tab1.csv")
 
 
 

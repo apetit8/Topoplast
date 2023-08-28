@@ -4,10 +4,20 @@ pdfname <- "figures/fig_full_VS"
 ################################################################################
 pval <- 0.05
 ################################################################################
+#Function to rbind tables, modified from https://www.pogol.net/rbind-fill-for-1-dimensional-tables-in-r
+rbind1dtable=function(tab1,tab2,tab3,tab4,fail=0){
+  sapply(unique(c(names(tab1),names(tab2),names(tab3),names(tab4))),function(n){
+    t1=tab1[which(names(tab1)==n)]
+    t2=tab2[which(names(tab2)==n)]
+    t3=tab3[which(names(tab3)==n)]
+    t4=tab4[which(names(tab4)==n)]
+    c(ifelse(length(t1)==0,fail,t1),ifelse(length(t2)==0,fail,t2),ifelse(length(t3)==0,fail,t3),ifelse(length(t4)==0,fail,t4))
+  })
+}
 ####FFL prop####################################################################
 non_plast_ffl <- read.csv("scripts/data/nonplast_E_coli_FFL.csv", sep = ",")
 all_plast_ffl <- read.csv("scripts/data/plast_genes_E_coli_FFL.csv", sep = ",")
-theory <- read.csv("scripts/data/full_FFL.csv", sep = ",")[,1:11]
+theory <- read.csv("scripts/data/full_20k_0-01_FFL.csv", sep = ",")[,1:11]
 
 
 df_ffl <- as.data.frame(rbind( colSums(non_plast_ffl[,3:12])*100/nrow(non_plast_ffl), colSums(all_plast_ffl[,3:12])*100/nrow(all_plast_ffl),
@@ -16,15 +26,15 @@ rownames(df_ffl) <- c("Non-Plastic\nE. coli", "Plastic\nE. coli", "Non-plastic\n
 
 pdf(paste0(pdfname,"_prop_FFL",".pdf"), width=5, height=4)
 par(mar = c(5,2, 2,1))
-barplot(t(df_ffl[,1:2]), main = "FFL motif enrichment", col=c("khaki1", "grey"), space=c(0.0,0.1,0.35,0.1), legend.text = c( "at least 1 FFL","No FFL"), 
+barplot(t(df_ffl[,1:2]), main = "FFL motif enrichment", col=c("khaki1", "grey"), space=c(0.0,0.1,0.35,0.1), legend.text = c( "At least 1 FFL","No FFL"), 
         args.legend = list(ncol=2, x = "topright", inset = c(0.2, 1.2)), ylim = c(0,105))
 text(1.05, 103, paste0( ifelse(t.test(non_plast_ffl[,3], all_plast_ffl[,3], var.equal=F)$p.value <=0.01, "***", ""  )), cex=2)
 dev.off() #gold
 
 #Whisker plot###############################
-nbrloop_thpl <- read.csv("scripts/data/full_Pl_nbrFFL.csv", sep = ",")
+nbrloop_thpl <- read.csv("scripts/data/full_20k_0-01_Pl_nbrFFL.csv", sep = ",")
 nbrloop_thpl$Type <- "4thpl"
-nbrloop_thnp <- read.csv("scripts/data/full_NP_nbrFFL.csv", sep = ",")
+nbrloop_thnp <- read.csv("scripts/data/full_20k_0-01_NP_nbrFFL.csv", sep = ",")
 nbrloop_thnp$Type <- "3thnp"
 nbrloop_empl <- read.csv("scripts/data/plast_genes_E_coli_nffl.csv", sep = ",")[,c(1,3,4,5)]
 nbrloop_empl$Type <- "2empl"
@@ -33,6 +43,8 @@ nbrloop_emnp$Type <- "1emnp"
 
 df <- rbind(nbrloop_emnp, nbrloop_empl, nbrloop_thnp, nbrloop_thpl )
 df <- subset(df, Loop_number != 0)
+table(df[,2])
+rbind.fill(table(nbrloop_thpl[,2]), table(nbrloop_thnp[,2]))
 
 pdf(paste0(pdfname,"_wisker_FFL",".pdf"), width=5, height=4)
 par(mgp=c(2.5, 1.2, 0), mar = c(2.9,3.5, 0.1,0.1))
@@ -51,7 +63,7 @@ dev.off()
 ####DMD prop####################################################################
 non_plast_dmd <- read.csv("scripts/data/nonplast_E_coli_diamond.csv", sep = ",")
 all_plast_dmd <- read.csv("scripts/data/plast_genes_E_coli_diamond.csv", sep = ",")
-theory <- read.csv("scripts/data/full_DMD.csv", sep = ",")[,1:13]
+theory <- read.csv("scripts/data/full_20k_0-01_DMD.csv", sep = ",")[,1:13]
 
 df1 <- as.data.frame(rbind(colSums(non_plast_dmd[,3:14])*100/nrow(non_plast_dmd), colSums(all_plast_dmd[,3:14])*100/nrow(all_plast_dmd),
                            theory[2,2:13], theory[1,2:13] ))
@@ -60,16 +72,16 @@ rownames(df1) <- c("Non-Plastic\nE. coli", "Plastic\nE. coli", "Non-plastic\nThe
 
 pdf(paste0(pdfname,"_prop_DMD",".pdf"), width=5, height=4)
 par(mar = c(5,2, 2,1))
-barplot(t(df1[,1:2]), main = "Diamond motif enrichment", col=c("darkseagreen2", "grey"), space=c(0.0,0.1,0.35,0.1), legend.text = c( "at least 1 DMD","No DMD"), 
+barplot(t(df1[,1:2]), main = "Diamond motif enrichment", col=c("darkseagreen2", "grey"), space=c(0.0,0.1,0.35,0.1), legend.text = c( "At least 1 DMD","No DMD"), 
         args.legend = list(ncol=2, x = "topright", inset = c(0.2, 1.2)), ylim = c(0,105))
 text(1.05, 103, paste0( ifelse(t.test(non_plast_dmd[,3], all_plast_dmd[,3], var.equal=F)$p.value <=0.01, "***", ""  )), cex=2)
 dev.off()
 
 
 #Whisker plot#############################
-nbrloop_thpl <- read.csv("scripts/data/full_Pl_nbrDMD.csv", sep = ",")
+nbrloop_thpl <- read.csv("scripts/data/full_20k_0-01_Pl_nbrDMD.csv", sep = ",")
 nbrloop_thpl$Type <- "4thpl"
-nbrloop_thnp <- read.csv("scripts/data/full_NP_nbrDMD.csv", sep = ",")
+nbrloop_thnp <- read.csv("scripts/data/full_20k_0-01_NP_nbrDMD.csv", sep = ",")
 nbrloop_thnp$Type <- "3thnp"
 nbrloop_empl <- read.csv("scripts/data/plast_genes_E_coli_nDMD.csv", sep = ",")[,c(1,3,4,5)]
 nbrloop_empl$Type <- "2empl"
@@ -96,7 +108,7 @@ dev.off()
 ####FBL prop####################################################################
 non_plast <- read.csv("scripts/data/nonplast_E_coli_FBL.csv", sep = ",")
 all_plast <- read.csv("scripts/data/plast_genes_E_coli_FBL.csv", sep = ",")
-theory <- read.csv("scripts/data/full_FBL.csv", sep = ",")[,]
+theory <- read.csv("scripts/data/full_20k_0-01_FBL.csv", sep = ",")[,]
 
 df <- as.data.frame(rbind(colSums(non_plast[,3:6])*100/nrow(non_plast), colSums(all_plast[,3:6])*100/nrow(all_plast),
                           theory[2,2:5], theory[1,2:5] ))
@@ -113,9 +125,9 @@ text(1.35, 103, paste0( ifelse(t.test(non_plast[,3], all_plast[,3], var.equal=F)
 dev.off()
 
 #Whisker plot###########################
-nbrloop_thpl <- read.csv("scripts/data/full_Pl_nbrFBL.csv", sep = ",")
+nbrloop_thpl <- read.csv("scripts/data/full_20k_0-01_Pl_nbrFBL.csv", sep = ",")
 nbrloop_thpl$Type <- "4thpl"
-nbrloop_thnp <- read.csv("scripts/data/full_NP_nbrFBL.csv", sep = ",")
+nbrloop_thnp <- read.csv("scripts/data/full_20k_0-01_NP_nbrFBL.csv", sep = ",")
 nbrloop_thnp$Type <- "3thnp"
 nbrloop_empl <- read.csv("scripts/data/plast_genes_E_coli_nFBL.csv", sep = ",")[,c(1,3,4,5)]
 nbrloop_empl$Type <- "2empl"
