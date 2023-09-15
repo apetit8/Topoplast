@@ -1,5 +1,5 @@
 source("scripts/functions/functions.R")
-pdfname <- "figures/fig_full_20k_nnTF"
+pdfname <- "figures/fig_full_netw"
 #Plot combining both empirical data and theoretical data
 ################################################################################
 pval <- 0.05
@@ -7,7 +7,7 @@ pval <- 0.05
 ##FFL motifs####################################################################
 non_plast <- read.csv("scripts/data/nonplast_E_coli_FFL.csv", sep = ",")
 all_plast <- read.csv("scripts/data/plast_genes_E_coli_FFL.csv", sep = ",")
-theory <- read.csv("scripts/data/full_20k_nnTF_FFL.csv", sep = ",")[,1:11]
+theory <- read.csv("scripts/data/full_netw_FFL.csv", sep = ",")[,1:11]
 
 df_ffl <- as.data.frame(rbind(colSums(non_plast[,5:12])*100/sum(non_plast[,3]), colSums(all_plast[,5:12])*100/sum(all_plast[,3]),
   theory[2,4:11]*100/theory[2,2],theory[1,4:11]*100/theory[1,2]))
@@ -58,7 +58,7 @@ dev.off()
 ##DMD motifs####################################################################
 non_plast <- read.csv("scripts/data/nonplast_E_coli_diamond.csv", sep = ",")
 all_plast <- read.csv("scripts/data/plast_genes_E_coli_diamond.csv", sep = ",")
-theory <- read.csv("scripts/data/full_20k_nnTF_DMD.csv", sep = ",")[,1:13]
+theory <- read.csv("scripts/data/full_netw_DMD.csv", sep = ",")[,1:13]
 
 df1 <- as.data.frame(rbind(colSums(non_plast[,5:14])*100/sum(non_plast[,3]), colSums(all_plast[,5:14])*100/sum(all_plast[,3]),
                            theory[2,4:13]*100/theory[2,2], theory[1,4:13]*100/theory[1,2] ))
@@ -91,7 +91,7 @@ dev.off()
 ##FBL motifs####################################################################
 non_plast <- read.csv("scripts/data/nonplast_E_coli_FBL.csv", sep = ",")
 all_plast <- read.csv("scripts/data/plast_genes_E_coli_FBL.csv", sep = ",")
-theory <- read.csv("scripts/data/full_20k_nnTF_FBL.csv", sep = ",")[,]
+theory <- read.csv("scripts/data/full_netw_FBL.csv", sep = ",")[,]
 
 df <- as.data.frame(rbind(colSums(non_plast[,7:11])*100/sum(non_plast[,3]), colSums(all_plast[,7:11])*100/sum(all_plast[,3]), 
                           theory[2,6:10]*100/theory[2,2], theory[1,6:10]*100/theory[1,2]))

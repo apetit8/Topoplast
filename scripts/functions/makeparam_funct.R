@@ -62,7 +62,8 @@ create.launchfile.alt <- function(prog.path, param.files, output.files, oldpop="
     output.files<- getRelativePath(output.files, launch.dir) 
     compressed.files<- getRelativePath(compressed.files, launch.dir)
   }
-  if(prevpop==TRUE){ command <- paste0( prog.path, " -z ", compressed.files, " -p ", param.files, " -o ", output.files, sampling, " -P ",oldpop, " -Q ", output.files,".pop\n"  )} else command <- paste0( prog.path, " -z ", compressed.files, sampling, " -p ", param.files, " -o ", output.files," -Q ", output.files,".pop\n"  )
+  if(prevpop==TRUE){ command <- paste0( prog.path, " -z ", compressed.files, " -p ", param.files, " -o ", output.files, sampling, " -P ",oldpop, " -Q ", output.files,".pop\n"  )} 
+  else command <- paste0( prog.path, " -z ", compressed.files, sampling, " -p ", param.files, " -o ", output.files, "\n"  ) #" -Q ", output.files,".pop",
  
   cat(command, file=launch.file, append=TRUE)
 }

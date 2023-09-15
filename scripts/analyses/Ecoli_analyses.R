@@ -35,44 +35,6 @@ csvname <- "E_coli_FFL"
 ##
 source("scripts/analyses/E_coli.R")
 #########################################
-#FROM = TRUE ; meaning that the output will be the the FFLS coming from and to plastic genes.
-#########################################
-#Analyses of plastic genes from different sources
-edges1 <- 2
-edges2 <- 1
-from <- TRUE
-all_plast_genes <- data.frame()
-csvname <- "E_coli_FFL_from"
-##
-source("scripts/analyses/E_coli.R")
-from <- all_plast_genes$V1
-#Genes that were not find as responding to the environment in our data corpus
-nonplast_FFL <- e_coli_prep_analyses(nonplast_genes, g, E_coli_mat, fun="FFL", edges1=edges1, edges2=edges2, cores=1, from = from)
-write.csv(nonplast_FFL, paste0("scripts/data/nonplast_",csvname,".csv"))
-print("Non plastic genes done!")
-#########################################
-#FROM = TRUE ; meaning that the output will be the the FFLS coming from and to plastic genes.
-#########################################
-#Analyses of plastic genes from different sources
-edges1 <- 2
-edges2 <- 1
-from <- all_plast_genes$V1
-all_plast_genes <- data.frame()
-csvname <- "E_coli_FFL_from_allplast"
-##
-source("scripts/analyses/E_coli.R")
-#########################################
-#FROM = Non plastic gene names
-#########################################
-#Analyses of plastic genes from different sources
-edges1 <- 2
-edges2 <- 1
-from <- nonplast_genes
-all_plast_genes <- data.frame()
-csvname <- "E_coli_FFL_from_NP"
-##
-source("scripts/analyses/E_coli.R")
-#########################################
 #FROM = FALSE ; Diamond motifs
 #########################################
 #Analyses of plastic genes from different sources
@@ -84,34 +46,7 @@ csvname <- "E_coli_diamond"
 ##
 source("scripts/analyses/E_coli.R")
 #########################################
-#FROM = TRUE ; Diamond motifs
-#########################################
-#Analyses of plastic genes from different sources
-edges1 <- 2
-edges2 <- 2
-from <- TRUE
-all_plast_genes <- data.frame()
-csvname <- "E_coli_diamond"
-##
-source("scripts/analyses/E_coli_diamond_from.R")
-from <- all_plast_genes$V1
-#Genes that were not find as responding to the environment in our data corpus
-nonplast_FFL <- e_coli_prep_analyses(nonplast_genes, g, E_coli_mat, fun="FFL", edges1=edges1, edges2=edges2, cores=1, from = from)
-write.csv(nonplast_FFL, paste0("scripts/data/nonplast_",csvname,".csv"))
-print("Non plastic genes done!")
-#########################################
-#FROM = Non plastic gene names
-#########################################
-#Analyses of plastic genes from different sources
-edges1 <- 2
-edges2 <- 2
-from <- nonplast_genes
-all_plast_genes <- data.frame()
-csvname <- "E_coli_diamond_from_NP"
-##
-source("scripts/analyses/E_coli.R")
-#########################################
-#FROM = FALSE ; meaning that the output will be the the FFLS coming from and to plastic genes.
+#FROM = FALSE ; count FFL
 #########################################
 #Analyses of plastic genes from different sources
 fun <- "FFLcount"
@@ -124,7 +59,7 @@ csvname <- "E_coli_nffl"
 source("scripts/analyses/E_coli.R")
 
 #########################################
-#FROM = FALSE 
+#FROM = FALSE ; count DMD
 #########################################
 #Analyses of plastic genes from different sources
 fun <- "FFLcount"
@@ -141,7 +76,7 @@ source("scripts/analyses/E_coli.R")
 #########################################
 #Analyses of plastic genes from different sources
 fun <- "FBL"
-edges1 <- c(2:6) #More FBL with edges1=3 than=2 ; why ?
+edges1 <- c(2:5) #More FBL with edges1=3 than=2 ; why ?
 edges2 <- 0
 from <- FALSE
 all_plast_genes <- data.frame()
@@ -154,7 +89,7 @@ source("scripts/analyses/E_coli.R")
 #########################################
 #Analyses of plastic genes from different sources
 fun <- "FBLcount"
-edges1 <- c(2:6) #More FBL with edges1=3 than=2 ; why ?
+edges1 <- c(2:5) #More FBL with edges1=3 than=2 ; why ?
 edges2 <- 0
 from <- FALSE
 all_plast_genes <- data.frame()
@@ -163,18 +98,6 @@ csvname <- paste0("E_coli_nFBL")
 source("scripts/analyses/E_coli.R")
 
 #########################################
-#FROM = FALSE
-#########################################
-#Analyses of plastic genes from different sources
-#DOES NOT WORK
-fun <- "FFL"
-edges1 <- c(3:5)
-edges2 <- c(1:5)
-from <- FALSE
-all_plast_genes <- data.frame()
-csvname <- "E_coli_FFL_size10"
-##
-source("scripts/analyses/E_coli.R")
 
 ################################################################################
 phgenes1 <- read.table("e_coli/Plast_genes/Ph/plastic_genes.txt", sep ="\t", header=FALSE)[,1]
@@ -198,4 +121,109 @@ all_plast_genes <- c(phgenes1, phgenes2, stress_genes, medgrowth_genes , mg_c_ge
 length(unique(all_plast_genes))
 #Number of plastic genes in annotation
 length(which(unique(all_plast_genes) %in% colnames(E_coli_mat)))
+
+################################################################################
+################################################################################
+#CONTROL random matrix
+################################################################################
+E_coli_mat_random1 <- E_coli_mat
+for(i in 1:length(E_coli_mat)){
+  if(E_coli_mat[i] != 0){
+    E_coli_mat_random1[i] <- sample(E_coli_mat[E_coli_mat != 0], 1)
+  }
+}
+E_coli_mat <- E_coli_mat_random1
+
+#DOES NOT CHANGE ANYTHING ?
+##############
+#########################################
+#FROM = FALSE
+#########################################
+#Analyses of plastic genes from different sources
+fun <- "FFL"
+edges1 <- 2
+edges2 <- 1
+from <- FALSE
+all_plast_genes <- data.frame()
+csvname <- "E_coli_random1_FFL"
+##
+source("scripts/analyses/E_coli.R")
+#########################################
+#FROM = FALSE ; Diamond motifs
+#########################################
+#Analyses of plastic genes from different sources
+edges1 <- 2
+edges2 <- 2
+from <- FALSE
+all_plast_genes <- data.frame()
+csvname <- "E_coli_random1_diamond"
+##
+source("scripts/analyses/E_coli.R")
+#########################################
+#FROM = FALSE ; count FFL
+#########################################
+#Analyses of plastic genes from different sources
+fun <- "FFLcount"
+edges1 <- 2
+edges2 <- 1
+from <- FALSE
+all_plast_genes <- data.frame()
+csvname <- "E_coli_random1_nffl"
+##
+source("scripts/analyses/E_coli.R")
+
+#########################################
+#FROM = FALSE ; count DMD
+#########################################
+#Analyses of plastic genes from different sources
+fun <- "FFLcount"
+edges1 <- 2
+edges2 <- 2
+from <- FALSE
+all_plast_genes <- data.frame()
+csvname <- "E_coli_random1_nDMD"
+##
+source("scripts/analyses/E_coli.R")
+
+#########################################
+#FBL
+#########################################
+#Analyses of plastic genes from different sources
+fun <- "FBL"
+edges1 <- c(2:5) #More FBL with edges1=3 than=2 ; why ?
+edges2 <- 0
+from <- FALSE
+all_plast_genes <- data.frame()
+csvname <- paste0("E_coli_random1_FBL")
+##
+source("scripts/analyses/E_coli.R")
+
+#########################################
+#FBL count
+#########################################
+#Analyses of plastic genes from different sources
+fun <- "FBLcount"
+edges1 <- c(2:5) #More FBL with edges1=3 than=2 ; why ?
+edges2 <- 0
+from <- FALSE
+all_plast_genes <- data.frame()
+csvname <- paste0("E_coli_random1_nFBL")
+##
+source("scripts/analyses/E_coli.R")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
