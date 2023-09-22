@@ -34,6 +34,11 @@ g1 <- autoplot(pca_rese, data = df.ACPe, colour = 'Genes', label = FALSE, x = 1,
          loadings.label = TRUE, loadings.label.size = 5, loadings.label.colour = "black")+
   ggtitle("E. coli")+theme_bw()+ theme(legend.position = "none")+scale_color_manual(values = c("orange","cyan3"))
 
+g1b <- autoplot(pca_rese, data = df.ACPe, colour = 'Genes', label = FALSE, x = 3, y = 4,
+               loadings = TRUE, loadings.colour = 'grey',alpha=0.7,
+               loadings.label = TRUE, loadings.label.size = 5, loadings.label.colour = "black")+
+  ggtitle("E. coli")+theme_bw()+ theme(legend.position = "none")+scale_color_manual(values = c("orange","cyan3"))
+
 autoplot(pca_rese, data = df.ACPe, colour = 'Genes', label = FALSE, x = 2, y = 3,
          loadings = TRUE, loadings.colour = 'grey',alpha=0.7,
          loadings.label = TRUE, loadings.label.size = 5, loadings.label.colour = "black")+
@@ -67,6 +72,11 @@ g2 <- autoplot(pca_rest, data = df.ACPt, colour = 'Genes', label = FALSE, x = 1,
          loadings.label = TRUE, loadings.label.size = 5, loadings.label.colour = "black")+
   ggtitle("Simulations")+theme_bw() +scale_color_manual(values = c("orange","cyan3"))
 
+g2b <- autoplot(pca_rest, data = df.ACPt, colour = 'Genes', label = FALSE, x = 3, y = 4,
+               loadings = TRUE, loadings.colour = 'grey',alpha=0.7, 
+               loadings.label = TRUE, loadings.label.size = 5, loadings.label.colour = "black")+
+  ggtitle("Simulations")+theme_bw() +scale_color_manual(values = c("orange","cyan3"))
+
 autoplot(pca_rest, data = df.ACPt, colour = 'Genes', label = FALSE, x = 2, y = 3,
          loadings = TRUE, loadings.colour = 'grey',alpha=0.7, 
          loadings.label = TRUE, loadings.label.size = 5, loadings.label.colour = "black")+
@@ -79,12 +89,12 @@ autoplot(pca_rest, data = df.ACPt, colour = 'Genes', label = FALSE, x = 2, y = 3
   
 
 
-pdf(paste0(pdfname,"_ACP_all",".pdf"), width=10, height=5)
+pdf(paste0(pdfname,"_ACP_all",".pdf"), width=10, height=10)
 #layout(matrix(c(1,2,3,4), 2, 2, byrow = TRUE))
 grid.arrange(
-  g1,g2,
+  g1,g2,g1b,g2b,
   ncol = 2,
-  nrow = 1,
+  nrow = 2,
   widths=c(0.8,1),
   clip = FALSE
 )

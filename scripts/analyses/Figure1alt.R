@@ -22,12 +22,11 @@ nbrloop_thnp <- read.csv("scripts/data/full_netw_NP_nbrFFL.csv", sep = ",")
 nbrloop_empl <- read.csv("scripts/data/plast_genes_E_coli_nffl.csv", sep = ",")[,c(1,3,4,5)]
 nbrloop_emnp <- read.csv("scripts/data/nonplast_E_coli_nffl.csv", sep = ",")[,c(1,3,4,5)]
 
-tt <- as.data.frame <- rbind1dtable(table(nbrloop_emnp[,2]), table(nbrloop_empl[,2]), 
-                   table(nbrloop_thnp[,2]), table(nbrloop_thpl[,2]) )
+tt <- as.data.frame(rbind1dtable(table(nbrloop_emnp[,2]), table(nbrloop_empl[,2]), 
+                   table(nbrloop_thnp[,2]), table(nbrloop_thpl[,2]) ))
 rownames(tt) <- c("Non-Plastic\nE. coli", "Plastic\nE. coli", "Non-plastic\nTheory","Plastic\nTheory")
 tt <- tt[,order(as.numeric(colnames(tt)), method="radix")]
 for(i in 1:nrow(tt)) tt[i,] <- tt[i,]*100/sum(tt[i,])
-
 
 pdf(paste0(pdfname,"_alt_FFL",".pdf"), width=5, height=4)
 par(mar=c(3.3,3.3,2,2.8), xpd=TRUE)
@@ -54,8 +53,8 @@ nbrloop_thnp <- read.csv("scripts/data/full_netw_NP_nbrDMD.csv", sep = ",")
 nbrloop_empl <- read.csv("scripts/data/plast_genes_E_coli_nDMD.csv", sep = ",")[,c(1,3,4,5)]
 nbrloop_emnp <- read.csv("scripts/data/nonplast_E_coli_nDMD.csv", sep = ",")[,c(1,3,4,5)]
 
-tt <- as.data.frame <- rbind1dtable(table(nbrloop_emnp[,2]), table(nbrloop_empl[,2]), 
-                                    table(nbrloop_thnp[,2]), table(nbrloop_thpl[,2]) )
+tt <- as.data.frame(rbind1dtable(table(nbrloop_emnp[,2]), table(nbrloop_empl[,2]), 
+                                    table(nbrloop_thnp[,2]), table(nbrloop_thpl[,2]) ))
 rownames(tt) <- c("Non-Plastic\nE. coli", "Plastic\nE. coli", "Non-plastic\nTheory","Plastic\nTheory")
 tt <- tt[,order(as.numeric(colnames(tt)), method="radix")]
 for(i in 1:nrow(tt)) tt[i,] <- tt[i,]*100/sum(tt[i,])
@@ -86,8 +85,8 @@ nbrloop_thnp <- read.csv("scripts/data/full_netw_NP_nbrFBL.csv", sep = ",")
 nbrloop_empl <- read.csv("scripts/data/plast_genes_E_coli_nFBL.csv", sep = ",")[,c(1,3,4,5)]
 nbrloop_emnp <- read.csv("scripts/data/nonplast_E_coli_nFBL.csv", sep = ",")[,c(1,3,4,5)]
 
-tt <- as.data.frame <- rbind1dtable(table(nbrloop_emnp[,2]), table(nbrloop_empl[,2]), 
-                                    table(nbrloop_thnp[,2]), table(nbrloop_thpl[,2]) )
+tt <- as.data.frame(rbind1dtable(table(nbrloop_emnp[,2]), table(nbrloop_empl[,2]), 
+                                    table(nbrloop_thnp[,2]), table(nbrloop_thpl[,2]) ))
 rownames(tt) <- c("Non-Plastic\nE. coli", "Plastic\nE. coli", "Non-plastic\nTheory","Plastic\nTheory")
 tt <- tt[,order(as.numeric(colnames(tt)), method="radix")]
 for(i in 1:nrow(tt)) tt[i,] <- tt[i,]*100/sum(tt[i,])

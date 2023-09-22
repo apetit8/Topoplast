@@ -4,7 +4,7 @@ library(matrixStats)
 ifelse(!dir.exists("figures/supp"), dir.create("figures/supp"), FALSE)
 ################################################################################
 df.nbr.reg <- data.frame()
-for (gen in seq(500, 10000, 500)) {
+for (gen in seq(500, 20000, 500)) {
   ntw <- c(readRDS(paste0("scripts/data/Stab/list_plastic_topo_full_drift_",gen,".Rds")), readRDS(paste0("scripts/data/Stab/list_nnplast_topo_full_drift_",gen,".Rds")))
   df <- data.frame( Nbr_reg = mean(unlist(lapply(ntw, function(i){rowSums2(abs(i))[2]} ))), Gen = gen  )
   df$Gen <- gen
@@ -13,7 +13,7 @@ for (gen in seq(500, 10000, 500)) {
 
 
 df.sign.reg <- data.frame()
-for (gen in seq(500, 10000, 500)) {
+for (gen in seq(500, 20000, 500)) {
   ntw <- c(readRDS(paste0("scripts/data/Stab/list_plastic_topo_full_drift_",gen,".Rds")), readRDS(paste0("scripts/data/Stab/list_nnplast_topo_full_drift_",gen,".Rds")))
   reg_pos <- unlist(lapply(ntw, function(i){ i[(i == -1)] <- 0
   return(rowSums2(abs(i))[2])} )) # [2] : the target of the network is in position #2
@@ -36,7 +36,7 @@ dev.off()
 
 ################################################################################
 df.gen.FFL <- data.frame()
-for (gen in seq(500, 10000, 500)) {
+for (gen in seq(500, 20000, 500)) {
   df <- read.csv(paste0("scripts/data/Stab/full_drift_",gen,"_FFL.csv"))[1,]
   df$Gen <- gen
   df.gen.FFL <- rbind(df.gen.FFL, df)  
@@ -44,7 +44,7 @@ for (gen in seq(500, 10000, 500)) {
 plot(df.gen.FFL$Gen, df.gen.FFL$FFL)
 
 df.gen.DMD <- data.frame()
-for (gen in seq(500, 10000, 500)) {
+for (gen in seq(500, 20000, 500)) {
   df <- read.csv(paste0("scripts/data/Stab/full_drift_",gen,"_DMD.csv"))[1,]
   df$Gen <- gen
   df.gen.DMD <- rbind(df.gen.DMD, df)  
@@ -52,7 +52,7 @@ for (gen in seq(500, 10000, 500)) {
 plot(df.gen.DMD$Gen, df.gen.DMD$FFL)
 
 df.gen.FFL2 <- data.frame()
-for (gen in seq(500, 10000, 500)) {
+for (gen in seq(500, 20000, 500)) {
   df <- read.csv(paste0("scripts/data/Stab/full_drift_",gen,"_FFL.csv"))[2,]
   df$Gen <- gen
   df.gen.FFL2 <- rbind(df.gen.FFL2, df)  
@@ -60,7 +60,7 @@ for (gen in seq(500, 10000, 500)) {
 plot(df.gen.FFL$Gen, df.gen.FFL$FFL)
 
 df.gen.DMD2 <- data.frame()
-for (gen in seq(500, 10000, 500)) {
+for (gen in seq(500, 20000, 500)) {
   df <- read.csv(paste0("scripts/data/Stab/full_drift_",gen,"_DMD.csv"))[2,]
   df$Gen <- gen
   df.gen.DMD2 <- rbind(df.gen.DMD2, df)  

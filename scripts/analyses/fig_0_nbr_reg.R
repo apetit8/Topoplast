@@ -49,6 +49,11 @@ plastmat[(plastmat == 1)] <- 0
 reg_number_neg_np <- rowSums2(abs(plastmat))
 
 #Simulations
+
+#Simulations
+topo_plastic <- readRDS("scripts/data/list_plastic_topo_full_netw.Rds")
+topo_nnplast <- readRDS("scripts/data/list_nnplast_topo_full_netw.Rds")
+
 THreg_sum_pos_plast <- unlist(lapply(topo_plastic, function(i){ i[(i == -1)] <- 0
 return(rowSums2(abs(i))[2])} )) # [2] : the target of the network is in position #2
 THreg_sum_neg_plast <- unlist(lapply(topo_plastic, function(i){ i[(i == 1)] <- 0
@@ -92,19 +97,7 @@ points(reg_number_np, read.csv("scripts/data/nonplast_E_coli_nffl.csv", sep = ",
 abline(lm( read.csv("scripts/data/plast_genes_E_coli_nffl.csv", sep = ",")[,3] ~ reg_number_plast))
 abline(lm( read.csv("scripts/data/nonplast_E_coli_nffl.csv", sep = ",")[,3] ~ reg_number_np))
 
-# 
-# #Simulations
-# topo_plastic <- readRDS("scripts/data/list_plastic_topo_full_netw.Rds")
-# topo_nnplast <- readRDS("scripts/data/list_nnplast_topo_full_netw.Rds")
-#   
-# THreg_sum_plast <- unlist(lapply(topo_plastic, function(i){rowSums2(abs(i))[2]} )) # [2] : the target of the network is in position #2
-# THreg_sum_np <- unlist(lapply(topo_nnplast, function(i){rowSums2(abs(i))[2]} ))
-# #
-# length(reg_number_np) <- max(length(reg_number_np), length(reg_number_plast), length(THreg_sum_np), length(THreg_sum_plast))
-# length(reg_number_plast) <- max(length(reg_number_np), length(reg_number_plast), length(THreg_sum_np), length(THreg_sum_plast))
-# length(THreg_sum_plast) <- max(length(reg_number_np), length(reg_number_plast), length(THreg_sum_np), length(THreg_sum_plast))
-# length(THreg_sum_np) <- max(length(reg_number_np), length(reg_number_plast), length(THreg_sum_np), length(THreg_sum_plast))
-# #
+
 # pdf(paste0(pdfname,".pdf"), width=5, height=4)
 # par(mgp=c(2.5, 1.2, 0), mar = c(2.9,3.5, 0.1,0.1))
 # boxplot(cbind(reg_number_np, reg_number_plast, as.array(THreg_sum_np), as.array(THreg_sum_plast)), at = c(1,1.9,3,3.9), ylab = "Number of regulation per gene",

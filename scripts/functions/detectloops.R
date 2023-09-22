@@ -285,7 +285,7 @@ FBL.type <- function(list.w, edges=c(2:5), target=2, randomFF=FALSE){
 }
 
 
-
+#g_mat is now useless
 e_coli_prep_analyses <- function(genes_list, g, g_mat, fun="FFL", edges1=2, edges2=1, cores=2, from=FALSE){
   stopifnot(fun=="FFL" || fun=="FBL" || fun=="FFLcount"|| fun=="FBLcount" )
   if(length(edges1)==1){stopifnot(edges1 >= edges2)}

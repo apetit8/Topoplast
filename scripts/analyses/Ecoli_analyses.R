@@ -126,15 +126,15 @@ length(which(unique(all_plast_genes) %in% colnames(E_coli_mat)))
 ################################################################################
 #CONTROL random matrix
 ################################################################################
-E_coli_mat_random1 <- E_coli_mat
-for(i in 1:length(E_coli_mat)){
-  if(E_coli_mat[i] != 0){
-    E_coli_mat_random1[i] <- sample(E_coli_mat[E_coli_mat != 0], 1)
-  }
-}
-E_coli_mat <- E_coli_mat_random1
+##########
+ec_reg_full <- rbind(ec_cyc, nr) #TO SHUFFLE
 
-#DOES NOT CHANGE ANYTHING ?
+for (i in 1:nrow(ec_reg_full)) {
+  if(ec_reg_full[i,3] !=0 ) ec_reg_full[i,3] <- sample(subset(ec_reg_full, V3 != 0)[,3], 1)
+}
+
+g <- graph.data.frame(ec_reg_full, directed=TRUE)
+
 ##############
 #########################################
 #FROM = FALSE
@@ -145,7 +145,7 @@ edges1 <- 2
 edges2 <- 1
 from <- FALSE
 all_plast_genes <- data.frame()
-csvname <- "E_coli_random1_FFL"
+csvname <- "E_coli_random2_FFL"
 ##
 source("scripts/analyses/E_coli.R")
 #########################################
@@ -156,7 +156,7 @@ edges1 <- 2
 edges2 <- 2
 from <- FALSE
 all_plast_genes <- data.frame()
-csvname <- "E_coli_random1_diamond"
+csvname <- "E_coli_random2_diamond"
 ##
 source("scripts/analyses/E_coli.R")
 #########################################
@@ -168,7 +168,7 @@ edges1 <- 2
 edges2 <- 1
 from <- FALSE
 all_plast_genes <- data.frame()
-csvname <- "E_coli_random1_nffl"
+csvname <- "E_coli_random2_nffl"
 ##
 source("scripts/analyses/E_coli.R")
 
@@ -181,7 +181,7 @@ edges1 <- 2
 edges2 <- 2
 from <- FALSE
 all_plast_genes <- data.frame()
-csvname <- "E_coli_random1_nDMD"
+csvname <- "E_coli_random2_nDMD"
 ##
 source("scripts/analyses/E_coli.R")
 
@@ -194,7 +194,7 @@ edges1 <- c(2:5) #More FBL with edges1=3 than=2 ; why ?
 edges2 <- 0
 from <- FALSE
 all_plast_genes <- data.frame()
-csvname <- paste0("E_coli_random1_FBL")
+csvname <- paste0("E_coli_random2_FBL")
 ##
 source("scripts/analyses/E_coli.R")
 
@@ -207,17 +207,9 @@ edges1 <- c(2:5) #More FBL with edges1=3 than=2 ; why ?
 edges2 <- 0
 from <- FALSE
 all_plast_genes <- data.frame()
-csvname <- paste0("E_coli_random1_nFBL")
+csvname <- paste0("E_coli_random2_nFBL")
 ##
 source("scripts/analyses/E_coli.R")
-
-
-
-
-
-
-
-
 
 
 
