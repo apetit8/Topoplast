@@ -129,3 +129,55 @@ text(-27,-1.8, substitute(paste(bold("Simulations"))), xpd=TRUE, cex=1.6)
 text(-28,17, substitute(paste(bold("e"))), xpd=TRUE, cex=1.6)
 dev.off()
 
+################################################################################
+################################################################################
+#All regulations
+#E. coli
+plastmat <- E_coli_mat_plast
+plastmat[(plastmat == -1)] <- 1
+reg_number_plast <- as.data.frame(rowSums2(plastmat))
+reg_number_plast$Type <- "2empl"
+colnames(reg_number_plast) <- c("nbr","Type")
+#
+plastmat <- E_coli_mat_np
+plastmat[(plastmat == -1)] <- 1
+reg_number_np <- as.data.frame(rowSums2(plastmat))
+reg_number_np$Type <- "1emnp"
+colnames(reg_number_np) <- c("nbr","Type")
+
+#Simulations
+topo_plastic <- readRDS("scripts/data/list_plastic_topo_full_netw.Rds")
+topo_nnplast <- readRDS("scripts/data/list_nnplast_topo_full_netw.Rds")
+
+THreg_sum_plast <- as.data.frame(unlist(lapply(topo_plastic, function(i){ i[(i == -1)] <- 1
+return(rowSums2(abs(i))[2])} )))
+THreg_sum_plast$Type <- "4thpl"
+colnames(THreg_sum_plast) <- c("nbr","Type")
+
+#
+THreg_sum_np <- as.data.frame(unlist(lapply(topo_nnplast, function(i){ i[(i == -1)] <- 1
+return(rowSums2(abs(i))[2])} )))
+THreg_sum_np$Type <- "3thnp"
+colnames(THreg_sum_np) <- c("nbr","Type")
+
+df <- rbind(reg_number_plast, reg_number_np, THreg_sum_np, THreg_sum_plast )
+
+pdf(paste0("figures/Reg_nbr",".pdf"), width=5, height=4)
+par(mar = c(3.5,3.5, 1,1))
+boxplot(df$nbr ~ df$Type,  main="", col = NA, border = NA, axes = FALSE,
+        yaxt="", space=c(0.3,0.1,0.4,0.1,0.4), ylab = "", xlab = "")
+title(ylab = "Number of regulation toward gene", line=2)
+polygon(x=c(0.35, 0.35, 2.5, 2.5),  y=c(28, -20, -20, 28),  col="honeydew2", border=NA, xpd=TRUE)
+polygon(x=c(2.5, 2.5, 120, 120),  y=c(28, -20, -20, 28),  col="cornsilk", border=NA, xpd=TRUE)
+boxplot(df$nbr ~ df$Type, add=TRUE, col=c("lavender", "lightskyblue"), 
+        names=c("Non plastic","Plastic","Non plastic","Plastic"),
+        space=c(0.3,0.1,0.4,0.1,0.4), frame=FALSE)
+text(1.5, -6.5, substitute(paste(bold("E. coli"))), xpd=TRUE, cex=1)
+text(3.5, -6.5, substitute(paste(bold("Simulations"))), xpd=TRUE, cex=1)
+text(1.5,25, substitute(paste(bold("***"))), xpd=TRUE, cex=1.6)
+dev.off()
+
+mean(reg_number_plast[,1])
+mean(reg_number_np[,1])
+mean(THreg_sum_np[,1])
+mean(THreg_sum_plast[,1])

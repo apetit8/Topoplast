@@ -8,8 +8,8 @@ ec_genes <- read.csv("e_coli/ncbi_dataset_K-12_annotation.csv", sep ="\t") #List
 #Transcriptions factors
 TF_genes <- unique(ec_cyc[,1]) # Here, TF = all regulating genes from Ecocyc reg data
 #Adding non-regulated genes in regulation data
-nonreg_genes <- as.data.frame(ec_genes[!(ec_genes[,2] %in% ec_cyc[,1]),]) #Regulators
-nonreg_genes <- nonreg_genes[!(nonreg_genes[,2] %in% ec_cyc[,2]),] #Regulatees
+nonreg_genes <- as.data.frame(ec_genes[!(ec_genes[,2] %in% ec_cyc[,1]),]) #Genes that are not Regulators
+nonreg_genes <- nonreg_genes[!(nonreg_genes[,2] %in% ec_cyc[,2]),] #Genes that are not Regulatees
 #1639 genes that are non-regulated
 nr <- as.data.frame(cbind(nonreg_genes[,2],nonreg_genes[,2], rep(0, nrow(nonreg_genes)))) #Same file format as ec_cyc
 setnames(nr, 1:3, colnames(ec_cyc))
@@ -120,7 +120,7 @@ all_plast_genes <- c(phgenes1, phgenes2, stress_genes, medgrowth_genes , mg_c_ge
 #Number of plastic genes
 length(unique(all_plast_genes))
 #Number of plastic genes in annotation
-length(which(unique(all_plast_genes) %in% colnames(E_coli_mat)))
+length(e_coli_gene_name(unique(all_plast_genes)))
 
 ################################################################################
 ################################################################################

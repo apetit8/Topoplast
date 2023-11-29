@@ -42,9 +42,9 @@
 #Maurer et al., 2004 ; 
 
 phgenes1 <- read.table("e_coli/Plast_genes/Ph/plastic_genes.txt", sep ="\t", header=FALSE)
-phgenes1 <- phgenes1[(phgenes1[,1] %in% colnames(E_coli_mat)),] 
+phgenes1 <- e_coli_gene_name(phgenes1[,1])
 phgenes2 <- read.table("e_coli/Plast_genes/pH_2/plastic_genes.txt", sep ="\t", header=FALSE)
-phgenes2 <- phgenes2[(phgenes2[,1] %in% colnames(E_coli_mat)),] 
+phgenes2 <- e_coli_gene_name(phgenes2[,1])
 phgenes <- unique(c(phgenes1, phgenes2))
 
 phloops <- e_coli_prep_analyses(phgenes, g, E_coli_mat, fun=fun, edges1=edges1, edges2=edges2, cores=1, from = from)
@@ -61,7 +61,7 @@ stress_genes <- as.data.frame(unique(c(subset(read.csv("e_coli/Plast_genes/Mult_
                                        subset(read.csv("e_coli/Plast_genes/Mult_stress/Table_S7.csv", sep ="\t", header=TRUE), Differential.expression != "ns")[,5],
                                        subset(read.csv("e_coli/Plast_genes/Mult_stress/Table_S8.csv", sep ="\t", header=TRUE), Differential.expression != "ns")[,5],
                                        subset(read.csv("e_coli/Plast_genes/Mult_stress/Table_S9.csv", sep ="\t", header=TRUE), Differential.expression != "ns")[,5])))
-stress_genes <- stress_genes[(stress_genes[,1] %in% colnames(E_coli_mat)),] 
+stress_genes <- e_coli_gene_name(stress_genes[,1])
 stress_genes1 <- stress_genes[!(stress_genes %in% all_plast_genes$V1)] 
 
 plast_stress <- e_coli_prep_analyses(stress_genes1, g, E_coli_mat, fun=fun, edges1=edges1, edges2=edges2, cores=1, from = from)
@@ -73,8 +73,8 @@ print("Stressors done!")
 ##Medium of growth
 #Feugeas et al., 2016 ; DOI : 10.1093/molbev/msw105
 medgrowth_genes <- read.csv("e_coli/Plast_genes/Growth_envir/Supp_tables_S1.csv", sep ="\t", header=TRUE)
-medgrowth_genes <- medgrowth_genes[(medgrowth_genes[,1] %in% colnames(E_coli_mat)),] 
-medgrowth_genes1 <- medgrowth_genes[!(medgrowth_genes[,1] %in% all_plast_genes$V1),1]
+medgrowth_genes <- e_coli_gene_name(medgrowth_genes[,1])
+medgrowth_genes1 <- medgrowth_genes[!(medgrowth_genes %in% all_plast_genes$V1)]
 #
 plast_medgrowthloops <- e_coli_prep_analyses(medgrowth_genes1, g, E_coli_mat, fun=fun, edges1=edges1, edges2=edges2, cores=1, from = from)
 
@@ -85,8 +85,8 @@ print("Medgrowth plastic genes done!")
 
 #Non plastic genes (expression depending on strains and not on tested environment)
 non_envir_genes <- read.csv("e_coli/Plast_genes/Growth_envir/Supp_tables_S3.csv", sep ="\t", header=TRUE)
-non_envir_genes <- non_envir_genes[(non_envir_genes[,1] %in% colnames(E_coli_mat)),] 
-non_envir_genes1 <- non_envir_genes[(non_envir_genes[,1] %in% all_plast_genes$V1),1] 
+non_envir_genes <- e_coli_gene_name(non_envir_genes[,1])
+non_envir_genes1 <- non_envir_genes[(non_envir_genes %in% all_plast_genes$V1)] 
 #
 np_medgrowthloops <- e_coli_prep_analyses(non_envir_genes1, g, E_coli_mat, fun=fun, edges1=edges1, edges2=edges2, cores=1, from = from)
 
@@ -97,7 +97,7 @@ print("Medgrowth non plastic genes done!")
 #10.1038/srep45303
 #List of plastic genes for 3 different conditions: carbone source, Mg stress, Na+ stress
 mg_c_genes <- as.data.frame(unique(subset(read.csv("e_coli/Plast_genes/C_Mg_Na/41598_2017_BFsrep45303_MOESM60_ESM.csv"), dataType=="mrna")[,2]))
-mg_c_genes <- mg_c_genes[(mg_c_genes[,1] %in% colnames(E_coli_mat)),]
+mg_c_genes <- e_coli_gene_name(mg_c_genes[,1]) 
 mg_c_genes1 <- mg_c_genes[!(mg_c_genes %in% all_plast_genes$V1)] 
 
 plast_mg_c  <- e_coli_prep_analyses(mg_c_genes1, g, E_coli_mat, fun=fun, edges1=edges1, edges2=edges2, cores=1, from = from)
@@ -110,7 +110,8 @@ print("Mg C done!")
 #10.1128/AEM.00914-09
 #List of plastic genes oxydative stress
 ox_genes <- read.csv("e_coli/Plast_genes/Oxydative_stress/table_5_genes_updated_names.txt", sep ="\t", header=FALSE)
-ox_genes <- ox_genes[(ox_genes[,1] %in% colnames(E_coli_mat)),] 
+#ox_genes <- ox_genes[(ox_genes[,1] %in% colnames(E_coli_mat)),] 
+ox_genes <- e_coli_gene_name(ox_genes[,1])
 ox_genes1 <- ox_genes[!(ox_genes %in% all_plast_genes$V1)] 
 
 plast_ox <- e_coli_prep_analyses(ox_genes1, g, E_coli_mat, fun=fun, edges1=edges1, edges2=edges2, cores=1, from = from)
@@ -122,7 +123,7 @@ print("Ox done!")
 #10.1007/s00253-018-9083-5
 #List of DEGS between aerozolisation and liquid suspension
 aero_genes <- read.table("e_coli/Plast_genes/Aero_liquid/Table_2_3_4.txt", sep ="\t", header=FALSE)
-aero_genes <- aero_genes[(aero_genes[,1] %in% colnames(E_coli_mat)),] 
+aero_genes <- e_coli_gene_name(aero_genes[,1])
 aero_genes1 <- aero_genes[!(aero_genes %in% all_plast_genes$V1)] 
 
 plast_aero <- e_coli_prep_analyses(aero_genes1, g, E_coli_mat, fun=fun, edges1=edges1, edges2=edges2, cores=1, from = from)
@@ -134,7 +135,7 @@ print("Aero done!")
 #10.1128/AEM.02841-08
 #Apple Juice
 juice_genes <- read.table("e_coli/Plast_genes/apple_juice/Table_1_genes_updated_names.txt", sep ="\t", header=FALSE)
-juice_genes <- juice_genes[(juice_genes[,1] %in% colnames(E_coli_mat)),] 
+juice_genes <- e_coli_gene_name(juice_genes[,1]) 
 juice_genes1 <- juice_genes[!(juice_genes %in% all_plast_genes$V1)] 
 
 
@@ -147,9 +148,9 @@ print("Juice done!")
 #10.1128/JB.01929-06
 #Human body temperature
 temptr_genes <- read.table("e_coli/Plast_genes/human_temp/Table_1_genes_updated_names.txt", sep ="\t", header=FALSE)
-temptr_genes <- temptr_genes[(temptr_genes[,1] %in% colnames(E_coli_mat)),] 
+temptr_genes <- e_coli_gene_name(temptr_genes[,1])
 temptr_genes2 <- read.table("e_coli/Plast_genes/Temperature/plastic_genes.txt", sep ="\t", header=FALSE)
-temptr_genes2 <- temptr_genes2[(temptr_genes2[,1] %in% colnames(E_coli_mat)),]
+temptr_genes2 <- e_coli_gene_name(temptr_genes2[,1])
 
 temptr_genes <- unique(c(temptr_genes, temptr_genes2))
 temptr_genes1 <- temptr_genes[!(temptr_genes %in% all_plast_genes$V1)] 
@@ -163,7 +164,7 @@ print("Temperature done!")
 #10.1128/JB.01092-07
 #stringent response
 stringent_genes <- as.data.frame(unique(read.table("e_coli/Plast_genes/Stringent_response/All_genes.txt", sep ="\t", header=FALSE)[,1]))
-stringent_genes <- stringent_genes[(stringent_genes[,1] %in% colnames(E_coli_mat)),] 
+stringent_genes <- e_coli_gene_name(stringent_genes[,1]) 
 stringent_genes1 <- stringent_genes[!(stringent_genes %in% all_plast_genes$V1)] 
 
 plast_stringent <- e_coli_prep_analyses(stringent_genes1, g, E_coli_mat, fun=fun, edges1=edges1, edges2=edges2, cores=1, from = from)
@@ -175,7 +176,7 @@ print("Stringent response done!")
 #Plastic genes : only genes occuring in at least 2 studies are kept
 ###
 Subplastic_genes <- as.character(subset( as.data.frame(table(c(stringent_genes, temptr_genes, temptr_genes2, juice_genes, aero_genes,
-                                                               ox_genes,mg_c_genes,medgrowth_genes$medium.genes,stress_genes,phgenes1,phgenes2))), Freq >=2)[,1])
+                                                               ox_genes,mg_c_genes,medgrowth_genes,stress_genes,phgenes1,phgenes2))), Freq >=2)[,1])
 
 write.csv(subset(all_plast_genes, V1 %in% Subplastic_genes), paste0("scripts/data/plast_genes_",csvname,".csv"))
 

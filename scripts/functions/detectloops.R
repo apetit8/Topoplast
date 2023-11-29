@@ -285,7 +285,6 @@ FBL.type <- function(list.w, edges=c(2:5), target=2, randomFF=FALSE){
 }
 
 
-#g_mat is now useless
 e_coli_prep_analyses <- function(genes_list, g, g_mat, fun="FFL", edges1=2, edges2=1, cores=2, from=FALSE){
   stopifnot(fun=="FFL" || fun=="FBL" || fun=="FFLcount"|| fun=="FBLcount" )
   if(length(edges1)==1){stopifnot(edges1 >= edges2)}
@@ -310,3 +309,22 @@ e_coli_prep_analyses <- function(genes_list, g, g_mat, fun="FFL", edges1=2, edge
   return(rbindlist(loops))
 }
 
+
+
+
+e_coli_gene_name <- function(genes_list, names=colnames(E_coli_mat)){
+  genes_list_new_names <- c()
+  names_correspondance <- read.csv("e_coli/All-genes-of-E.-coli-K-12-substr.-MG1655.csv", sep="")
+  names_correspondance2 <- read.csv("e_coli/gene-links_tab.csv", sep=",")
+  for (gene in genes_list){
+    if(!(gene %in% names) && gene %in% names_correspondance[,6] ){
+      gene <- names_correspondance[which(names_correspondance[,6] == gene),1]
+    }
+    else if(!(gene %in% names) && gene %in% names_correspondance2[,4] ){
+      gene <- names_correspondance2[which(names_correspondance2[,4] == gene),7]
+    }
+    
+    if(gene[1] %in% names) genes_list_new_names <- c(genes_list_new_names, gene)
+  }
+  return(genes_list_new_names)
+}
