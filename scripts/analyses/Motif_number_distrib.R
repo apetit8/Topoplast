@@ -1,5 +1,4 @@
 source("scripts/functions/functions.R")
-pdfname <- "figures/fig_full_VS"
 #Plot combining both empirical data and theoretical data
 ################################################################################
 #Whisker plot###############################
@@ -48,3 +47,15 @@ dev.off()
 
 mean(subset(df, Type=="3thnp")$Sum) - mean(subset(df, Type=="4thpl")$Sum)
 mean(subset(df, Type=="1emnp")$Sum) - mean(subset(df, Type=="2empl")$Sum)
+
+################################################################################
+#Drift
+
+
+
+
+
+
+
+
+

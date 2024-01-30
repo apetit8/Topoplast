@@ -96,7 +96,6 @@ modulopi <- function(angle) {
 
 #DATA EXTRACTION################################################################
 
-#For 10 genes
 
 df.simul <- function(sims.dir, all.gen=TRUE, size=50000, M=FALSE){
   simul.df <- data.frame()

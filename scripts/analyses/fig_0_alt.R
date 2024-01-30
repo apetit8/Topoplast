@@ -25,114 +25,12 @@ E_coli_mat <- t((get.adjacency(g,sparse=FALSE, attr='V3'))) #t() to have regulat
 E_coli_mat <- matrix(as.numeric(E_coli_mat), ncol = ncol(E_coli_mat), dimnames = dimnames(E_coli_mat)) #convert to numeric matrix
 E_coli_mat[is.na(E_coli_mat)] <- 0 #fill NA to 0, mandatory for later analyses
 ################################################################################
-#E. coli
+##E. coli
 plastgenes <- read.csv("scripts/data/plast_genes_E_coli_FFL.csv", sep = ",")[,2]
 npgenes <- read.csv("scripts/data/nonplast_E_coli_FFL.csv", sep = ",")[,2]
 E_coli_mat_plast <- E_coli_mat[plastgenes, ]
 E_coli_mat_np <- E_coli_mat[npgenes, ]
-
-################################################################################
-#Positive and neg regulations
-#E. coli
-plastmat <- E_coli_mat_plast
-plastmat[(plastmat == -1)] <- 0
-reg_number_pos_plast <- rowSums2(plastmat)
-plastmat <- E_coli_mat_plast
-plastmat[(plastmat == 1)] <- 0
-reg_number_neg_plast <- rowSums2(abs(plastmat))
 #
-plastmat <- E_coli_mat_np
-plastmat[(plastmat == -1)] <- 0
-reg_number_pos_np <- rowSums2(plastmat)
-plastmat <- E_coli_mat_np
-plastmat[(plastmat == 1)] <- 0
-reg_number_neg_np <- rowSums2(abs(plastmat))
-
-#Simulations
-
-#Simulations
-topo_plastic <- readRDS("scripts/data/list_plastic_topo_full_netw.Rds")
-topo_nnplast <- readRDS("scripts/data/list_nnplast_topo_full_netw.Rds")
-
-THreg_sum_pos_plast <- unlist(lapply(topo_plastic, function(i){ i[(i == -1)] <- 0
-return(rowSums2(abs(i))[2])} )) # [2] : the target of the network is in position #2
-THreg_sum_neg_plast <- unlist(lapply(topo_plastic, function(i){ i[(i == 1)] <- 0
-return(rowSums2(abs(i))[2])} ))
-#
-THreg_sum_pos_np <- unlist(lapply(topo_nnplast, function(i){ i[(i == -1)] <- 0
-return(rowSums2(abs(i))[2])} ))
-THreg_sum_neg_np <- unlist(lapply(topo_nnplast, function(i){ i[(i == 1)] <- 0
-return(rowSums2(abs(i))[2])} ))
-
-
-
-pdf(paste0("figures/Fig_histo_pos",".pdf"), width=5, height=4)
-par(mar = c(4,2,1,0.5), mfrow=c(1,4), mgp=c(1,0.5,0))
-barplot(t(as.data.frame(c(0,0,0))), col = NA, border = NA, axes = FALSE, ylim = c(0,17), xlim = c(0,100), xaxt = "n")
-polygon(x=c(-40, -40, 120, 120),  y=c(16, -20, -20, 16),  col="honeydew2", border=NA, xpd=TRUE)
-barplot(as.vector(table(reg_number_pos_np))*100/sum(as.vector(table(reg_number_pos_np))), col="lavender", names.arg=names(table(reg_number_pos_np)), axes = TRUE, space = 0, horiz=TRUE, xlab= "Counts", add=TRUE)
-legend(-25, 15.5, fill=c("lavender", "lightskyblue"), legend = c("Non plastic gene","Plastic gene"), bg='white', xpd=TRUE, cex=1)
-text(119.5,-1.8, substitute(paste(bold("E. coli"))), xpd=TRUE, cex=1.6)
-text(90,12, substitute(paste(bold("***"))), xpd=TRUE, cex=1.6)
-#
-par(mar = c(4,2,1,0.5))
-barplot(t(as.data.frame(c(0,0,0))), col = NA, border = NA, axes = FALSE, ylim = c(0,17), xlim = c(0,100), xaxt = "n")
-polygon(x=c(-40, -40, 120, 120),  y=c(16, -20, -20, 16),  col="honeydew2", border=NA, xpd=TRUE)
-barplot(as.vector(table(reg_number_pos_plast))*100/sum(as.vector(table(reg_number_pos_plast))), col="lightskyblue", names.arg=names(table(reg_number_pos_plast)), axes = TRUE, space = 0, horiz=TRUE, xlab= "Counts", add=TRUE, xpd=TRUE)
-text(-27,-1.8, substitute(paste(bold("E. coli"))), xpd=TRUE, cex=1.6)
-text(119.5,17, substitute(paste(bold("Number of activation per gene"))), xpd=TRUE, cex=1.6)
-#
-par(mar = c(4,2,1,0.5))
-barplot(t(as.data.frame(c(0,0,0))), col = NA, border = NA, axes = FALSE, ylim = c(0,17), xlim = c(0,100), xaxt = "n")
-polygon(x=c(-40, -40, 120, 120),  y=c(16, -20, -20, 16),  col="cornsilk", border=NA, xpd=TRUE)
-barplot(as.vector(table( THreg_sum_pos_np))*100/sum(as.vector(table( THreg_sum_pos_np))), col="lavender", names.arg=names(table( THreg_sum_pos_np)), axes = TRUE, space = 0, horiz=TRUE, xlab= "Counts", add=TRUE, xpd=TRUE)
-text(119.5,-1.8, substitute(paste(bold("Simulations"))), xpd=TRUE, cex=1.6)
-text(-27,17, substitute(paste(bold("Number of activation per gene"))), xpd=TRUE, cex=1.6)
-#
-par(mar = c(4,2,1,0.5))
-barplot(t(as.data.frame(c(0,0,0))), col = NA, border = NA, axes = FALSE, ylim = c(0,17), xlim = c(0,100), xaxt = "n")
-polygon(x=c(-40, -40, 120, 120),  y=c(16, -20, -20, 16),  col="cornsilk", border=NA, xpd=TRUE)
-barplot(as.vector(table(THreg_sum_pos_plast))*100/sum(as.vector(table(THreg_sum_pos_plast))), col="lightskyblue", names.arg=names(table(THreg_sum_pos_plast)), axes = TRUE, space = 0, horiz=TRUE, xlab= "Counts", add=TRUE, xpd=TRUE)
-text(-27,-1.8, substitute(paste(bold("Simulations"))), xpd=TRUE, cex=1.6)
-text(-28,17, substitute(paste(bold("e"))), xpd=TRUE, cex=1.6)
-dev.off()
-
-
-pdf(paste0("figures/Fig_histo_neg",".pdf"), width=5, height=4)
-par(mar = c(4,2,1,0.5), mfrow=c(1,4), mgp=c(1,0.5,0))
-barplot(t(as.data.frame(c(0,0,0))), col = NA, border = NA, axes = FALSE, ylim = c(0,17), xlim = c(0,100), xaxt = "n")
-polygon(x=c(-40, -40, 120, 120),  y=c(16, -20, -20, 16),  col="honeydew2", border=NA, xpd=TRUE)
-barplot(as.vector(table(reg_number_neg_np))*100/sum(as.vector(table(reg_number_neg_np))), col="lavender", names.arg=names(table(reg_number_neg_np)), axes = TRUE, space = 0, horiz=TRUE, xlab= "Counts", add=TRUE)
-legend(-25, 15.5, fill=c("lavender", "lightskyblue"), legend = c("Non plastic gene","Plastic gene"), bg='white', xpd=TRUE, cex=1)
-text(119.5,-1.8, substitute(paste(bold("E. coli"))), xpd=TRUE, cex=1.6)
-text(90,12, substitute(paste(bold("***"))), xpd=TRUE, cex=1.6)
-#
-par(mar = c(4,2,1,0.5))
-barplot(t(as.data.frame(c(0,0,0))), col = NA, border = NA, axes = FALSE, ylim = c(0,17), xlim = c(0,100), xaxt = "n")
-polygon(x=c(-40, -40, 120, 120),  y=c(16, -20, -20, 16),  col="honeydew2", border=NA, xpd=TRUE)
-barplot(as.vector(table(reg_number_neg_plast))*100/sum(as.vector(table(reg_number_neg_plast))), col="lightskyblue", names.arg=names(table(reg_number_neg_plast)), axes = TRUE, space = 0, horiz=TRUE, xlab= "Counts", add=TRUE, xpd=TRUE)
-text(-27,-1.8, substitute(paste(bold("E. coli"))), xpd=TRUE, cex=1.6)
-text(119.5,17, substitute(paste(bold("Number of inhibition per gene"))), xpd=TRUE, cex=1.6)
-#
-par(mar = c(4,2,1,0.5))
-barplot(t(as.data.frame(c(0,0,0))), col = NA, border = NA, axes = FALSE, ylim = c(0,17), xlim = c(0,100), xaxt = "n")
-polygon(x=c(-40, -40, 120, 120),  y=c(16, -20, -20, 16),  col="cornsilk", border=NA, xpd=TRUE)
-barplot(as.vector(table( THreg_sum_neg_np))*100/sum(as.vector(table( THreg_sum_neg_np))), col="lavender", names.arg=names(table( THreg_sum_neg_np)), axes = TRUE, space = 0, horiz=TRUE, xlab= "Counts", add=TRUE, xpd=TRUE)
-text(119.5,-1.8, substitute(paste(bold("Simulations"))), xpd=TRUE, cex=1.6)
-text(-27,17, substitute(paste(bold("Number of inhibition per gene"))), xpd=TRUE, cex=1.6)
-#
-par(mar = c(4,2,1,0.5))
-barplot(t(as.data.frame(c(0,0,0))), col = NA, border = NA, axes = FALSE, ylim = c(0,17), xlim = c(0,100), xaxt = "n")
-polygon(x=c(-40, -40, 120, 120),  y=c(16, -20, -20, 16),  col="cornsilk", border=NA, xpd=TRUE)
-barplot(as.vector(table(THreg_sum_neg_plast))*100/sum(as.vector(table(THreg_sum_neg_plast))), col="lightskyblue", names.arg=names(table(THreg_sum_neg_plast)), axes = TRUE, space = 0, horiz=TRUE, xlab= "Counts", add=TRUE, xpd=TRUE)
-text(-27,-1.8, substitute(paste(bold("Simulations"))), xpd=TRUE, cex=1.6)
-text(-28,17, substitute(paste(bold("e"))), xpd=TRUE, cex=1.6)
-dev.off()
-
-################################################################################
-################################################################################
-#All regulations
-#E. coli
 plastmat <- E_coli_mat_plast
 plastmat[(plastmat == -1)] <- 1
 reg_number_plast <- as.data.frame(rowSums2(plastmat))
@@ -145,7 +43,7 @@ reg_number_np <- as.data.frame(rowSums2(plastmat))
 reg_number_np$Type <- "1emnp"
 colnames(reg_number_np) <- c("nbr","Type")
 
-#Simulations
+##Simulations
 topo_plastic <- readRDS("scripts/data/list_plastic_topo_full_netw.Rds")
 topo_nnplast <- readRDS("scripts/data/list_nnplast_topo_full_netw.Rds")
 
@@ -153,7 +51,6 @@ THreg_sum_plast <- as.data.frame(unlist(lapply(topo_plastic, function(i){ i[(i =
 return(rowSums2(abs(i))[2])} )))
 THreg_sum_plast$Type <- "4thpl"
 colnames(THreg_sum_plast) <- c("nbr","Type")
-
 #
 THreg_sum_np <- as.data.frame(unlist(lapply(topo_nnplast, function(i){ i[(i == -1)] <- 1
 return(rowSums2(abs(i))[2])} )))
@@ -162,18 +59,19 @@ colnames(THreg_sum_np) <- c("nbr","Type")
 
 df <- rbind(reg_number_plast, reg_number_np, THreg_sum_np, THreg_sum_plast )
 
-pdf(paste0("figures/Reg_nbr",".pdf"), width=5, height=4)
-par(mar = c(3.5,3.5, 1,1))
+pdf(paste0("figures/Reg_nbr",".pdf"), width=3.5, height=4)
+par(mar = c(4.8,3.5, 2,0))
 boxplot(df$nbr ~ df$Type,  main="", col = NA, border = NA, axes = FALSE,
         yaxt="", space=c(0.3,0.1,0.4,0.1,0.4), ylab = "", xlab = "")
 title(ylab = "Number of regulation toward gene", line=2)
-polygon(x=c(0.35, 0.35, 2.5, 2.5),  y=c(28, -20, -20, 28),  col="honeydew2", border=NA, xpd=TRUE)
-polygon(x=c(2.5, 2.5, 120, 120),  y=c(28, -20, -20, 28),  col="cornsilk", border=NA, xpd=TRUE)
-boxplot(df$nbr ~ df$Type, add=TRUE, col=c("lavender", "lightskyblue"), 
-        names=c("Non plastic","Plastic","Non plastic","Plastic"),
-        space=c(0.3,0.1,0.4,0.1,0.4), frame=FALSE)
-text(1.5, -6.5, substitute(paste(bold("E. coli"))), xpd=TRUE, cex=1)
-text(3.5, -6.5, substitute(paste(bold("Simulations"))), xpd=TRUE, cex=1)
+polygon(x=c(0.35, 0.35, 2.5, 2.5),  y=c(50, -20, -20, 50),  col="honeydew2", border=NA, xpd=TRUE)
+polygon(x=c(2.5, 2.5, 120, 120),  y=c(50, -20, -20, 50),  col="cornsilk", border=NA, xpd=TRUE)
+boxplot(df$nbr ~ df$Type, add=TRUE, col=c("salmon", "grey"),
+        space=c(0.3,0.1,0.4,0.1,0.4), frame=FALSE, xaxt="n")
+text(x = c(1,2,3,4), y = par("usr")[3] - 0.3,
+     labels = c("Non-Plastic", "Plastic", "Non-Plastic", "Plastic"), xpd = NA, srt = 90, cex = 1, adj=1.0)
+text(1.5, 30, substitute(paste(bold("E. coli"))), xpd=TRUE, cex=1)
+text(3.5, 30, substitute(paste(bold("Simulations"))), xpd=TRUE, cex=1)
 text(1.5,25, substitute(paste(bold("***"))), xpd=TRUE, cex=1.6)
 dev.off()
 
@@ -181,3 +79,240 @@ mean(reg_number_plast[,1])
 mean(reg_number_np[,1])
 mean(THreg_sum_np[,1])
 mean(THreg_sum_plast[,1])
+
+################################################################################
+#Number of motif per gene
+################################################################################
+#Whisker plot###############################
+nbrloop_thpl2 <- as.data.frame( cbind(read.csv("scripts/data/full_netw_Pl_nbrFFL.csv", sep = ",")[,2],
+                                     read.csv("scripts/data/full_netw_Pl_nbrDMD.csv", sep = ",")[,2],
+                                     read.csv("scripts/data/full_netw_Pl_nbrFBL.csv", sep = ",")[,2]))
+nbrloop_thpl2$Type <- "4thpl"
+nbrloop_thpl2$Sum <- rowSums2(as.matrix(nbrloop_thpl2[,1:3]))
+
+nbrloop_thnp2 <- as.data.frame( cbind(read.csv("scripts/data/full_netw_NP_nbrFFL.csv", sep = ",")[,2],
+                                     read.csv("scripts/data/full_netw_NP_nbrDMD.csv", sep = ",")[,2],
+                                     read.csv("scripts/data/full_netw_NP_nbrFBL.csv", sep = ",")[,2]))
+nbrloop_thnp2$Type <- "3thnp"
+nbrloop_thnp2$Sum <- rowSums2(as.matrix(nbrloop_thnp2[,1:3]))
+
+nbrloop_empl2 <- as.data.frame(cbind(read.csv("scripts/data/plast_genes_E_coli_nffl.csv", sep = ",")[,c(2,3)],
+                                    read.csv("scripts/data/plast_genes_E_coli_nDMD.csv", sep = ",")[,c(2,3)],
+                                    read.csv("scripts/data/plast_genes_E_coli_nFBL.csv", sep = ",")[,c(2,3)]))
+nbrloop_empl2$Type <- "2empl"
+nbrloop_empl2$Sum <- rowSums2(as.matrix(nbrloop_empl2[,c(2,4,6)]))
+
+nbrloop_emnp2 <- as.data.frame(cbind(read.csv("scripts/data/nonplast_E_coli_nffl.csv", sep = ",")[,c(2,3)],
+                                    read.csv("scripts/data/nonplast_E_coli_nDMD.csv", sep = ",")[,c(2,3)],
+                                    read.csv("scripts/data/nonplast_E_coli_nFBL.csv", sep = ",")[,c(2,3)]))
+nbrloop_emnp2$Type <- "1emnp"
+nbrloop_emnp2$Sum <- rowSums2(as.matrix(nbrloop_emnp2[,c(2,4,6)]))
+
+df <- rbind(nbrloop_emnp2[,7:8], nbrloop_empl2[,7:8], nbrloop_thnp2[,4:5], nbrloop_thpl2[,4:5] )
+df <- df[(df$Sum !=0),]
+
+
+reg_number_plast <- rowSums2(abs(E_coli_mat_plast))
+E_coli_mat_np <- E_coli_mat[npgenes, ]
+reg_number_np <- rowSums2(abs(E_coli_mat_np))
+
+randomTf <- as.data.frame(cbind(read.csv("scripts/data/plast_genes_E_coli_random3_nffl.csv", sep = ",")[,c(2,3)],
+                                     read.csv("scripts/data/plast_genes_E_coli_random3_nDMD.csv", sep = ",")[,c(2,3)],
+                                     read.csv("scripts/data/plast_genes_E_coli_random3_nFBL.csv", sep = ",")[,c(2,3)]))
+randomTf$Type <- "RandomTF"
+randomTf$Sum <- rowSums2(as.matrix(randomTf[,c(2,4,6)]))
+randomTf <- randomTf[order(as.character(randomTf[,1]), method = c("radix")),c(1,8)]
+reg_number_ranTf <- reg_number_plast[order(names(reg_number_plast), method = c("radix"))] #Put genes of the different dataset in the same order
+
+
+pdf(paste0("figures/Motif_Reg",".pdf"), width=5, height=4)
+par(mar = c(3.5,3.5, 1,1))
+plot(reg_number_ranTf, randomTf[,2], col="darkred", ylab="", xlab="", ylim=c(0,300), xlim=c(0,30))
+title(ylab="Number of Loop", xlab="Number of regulation", line=2)
+points(reg_number_plast, nbrloop_empl2[,8], col="blue")
+points(reg_number_np, nbrloop_emnp2[,8], col="green")
+abline(lm( randomTf[,2] ~ reg_number_ranTf), col="darkred")
+abline(lm( nbrloop_empl2[,8] ~ reg_number_plast), col="blue")
+abline(lm( nbrloop_emnp2[,8] ~ reg_number_np), col="green")
+legend(1, 300, legend=c("Plast genes: reg from random TF", "Plast genes", "Non plast genes"),
+       col=c("darkred", "blue", "green"), lty=1, cex=0.8)
+dev.off()
+
+
+
+#Without the 0 for a log axis
+RTF <- as.data.frame(cbind(reg_number_ranTf, randomTf[,2]))
+PL <- as.data.frame(cbind(reg_number_plast, nbrloop_empl2[,8]))
+NP <- as.data.frame(cbind(reg_number_np, nbrloop_emnp2[,8]))
+
+
+
+
+#FAIRE PAREIL AVEC SIMU
+
+randomTf <- as.data.frame( cbind(read.csv("scripts/data/full_netw_randomTF_Pl_nbrFFL.csv", sep = ",")[,2],
+                                 read.csv("scripts/data/full_netw_randomTF_Pl_nbrDMD.csv", sep = ",")[,2],
+                                 read.csv("scripts/data/full_netw_randomTF_Pl_nbrFBL.csv", sep = ",")[,2]))
+randomTf$Type <- "RandomTF"
+randomTf$Sum <- rowSums2(as.matrix(nbrloop_thpl2[,1:3]))
+
+PL2 <- as.data.frame(cbind(THreg_sum_plast[,1], nbrloop_thpl2[,5]))
+NP2 <- as.data.frame(cbind(THreg_sum_np[,1], nbrloop_thnp2[,5]))
+
+
+
+#####################
+#Both in the same plot
+
+
+pdf(paste0("figures/Motif_Reg_both",".pdf"), width=6, height=4)
+# par(mar = c(3.5,3.5, 1,1))
+#E. coli
+layout(matrix(c(1,2), 1, 2, byrow = TRUE))
+#Plot 1
+par(mar=c(3, 3, 1.5, 0.3), mgp = c(1.75, 0.75, 0), las=0)
+plot(PL2[,1], PL2[,2], col=alpha("darkblue", 0.5), ylab="", xlab="", xlim=c(0,30), pch=19)
+polygon(x=c(-15, -15, 35, 35),  y=c(3000, -200, -200, 3000),  col="honeydew2", border=NA, xpd=TRUE)
+axis(side = 1)
+axis(side = 2)
+points( PL[,1], PL[,2], col=alpha("black", 0.5), pch=19)
+points( NP[,1], NP[,2], col=alpha("tomato", 0.5), pch=19)
+title(ylab="Number of Loop", xlab="Number of regulation", line=2)
+# abline(lm( log10(PL[,2]) ~ PL[,1]), col="black")
+# abline(lm( log10(NP[,2]) ~ NP[,1]), col="tomato")
+text(15, 1500, substitute(paste(bold("E. coli"))), xpd=TRUE, cex=1)
+#Simu
+par(mar=c(3, 0.5, 1.5, 0), mgp = c(1.75, 0.75, 0), las=0)
+plot(PL2[,1], PL2[,2], col=alpha("black", 0.5), ylab="", xlab="", xlim=c(0,30), pch=19, yaxt='n')
+polygon(x=c(-5, -5, 32, 32),  y=c(3000, -200, -200, 3000),  col="cornsilk", border=NA, xpd=TRUE)
+axis(side = 1)
+#axis(side = 2)
+title(ylab="Number of Loop", xlab="Number of regulation", line=2)
+points(PL2[,1], PL2[,2], col=alpha("black", 0.3), pch=19)
+points(NP2[,1], NP2[,2], col=alpha("tomato", 0.5), pch=19)
+# abline(lm(log10(PL2[,2]) ~ PL2[,1]), col="black")
+# abline(lm(log10(NP2[,2]) ~ NP2[,1]), col="tomato")
+#legend(15, 5, legend=c("Plast genes", "Non plast genes"), col=c("blue", "green"), lty=1, cex=0.8)
+text(15, 1500, substitute(paste(bold("Simulations"))), xpd=TRUE, cex=1)
+legend(12, 700, legend=c("Plastic genes", "Non plastic genes"),
+       col=c("black", "tomato"), bty=1, cex=0.8, bg="white", pch = c(19))
+
+dev.off()
+
+
+RTF <- subset(RTF, V2 != 0)
+PL <- subset(PL, V2 != 0)
+NP <- subset(NP, V2 != 0)
+RTF <- subset(RTF, V2 != 0)
+PL2 <- subset(PL2, V2 != 0)
+NP2 <- subset(NP2, V2 != 0)
+
+
+pdf(paste0("figures/Motif_Reg_both_log",".pdf"), width=6, height=4)
+# par(mar = c(3.5,3.5, 1,1))
+#E. coli
+layout(matrix(c(1,2), 1, 2, byrow = TRUE))
+#Plot 1
+par(mar=c(3, 3, 1.5, 0.3), mgp = c(1.75, 0.75, 0), las=0)
+plot(PL2[,1], PL2[,2], log = "y", col=alpha("darkblue", 0.5), ylab="", xlab="", xlim=c(0,30), pch=19)
+polygon(x=c(-15, -15, 35, 35),  y=c(3000, 0.01, 0.01, 3000),  col="honeydew2", border=NA, xpd=TRUE)
+axis(side = 1)
+axis(side = 2)
+points( PL[,1], PL[,2], col=alpha("black", 0.5), pch=19)
+points( NP[,1], NP[,2], col=alpha("tomato", 0.5), pch=19)
+title(ylab="Number of Loop", xlab="Number of regulation", line=2)
+# abline(lm( log10(PL[,2]) ~ PL[,1]), col="black")
+# abline(lm( log10(NP[,2]) ~ NP[,1]), col="tomato")
+text(15, 1500, substitute(paste(bold("E. coli"))), xpd=TRUE, cex=1)
+
+#Simu
+par(mar=c(3, 0.5, 1.5, 0), mgp = c(1.75, 0.75, 0), las=0)
+plot(PL2[,1], PL2[,2], log = "y", col=alpha("black", 0.5), ylab="", xlab="", xlim=c(0,30), pch=19, yaxt='n')
+polygon(x=c(-5, -5, 32, 32),  y=c(3000, 0.01, 0.01, 3000),  col="cornsilk", border=NA, xpd=TRUE)
+axis(side = 1)
+#axis(side = 2)
+title(ylab="Number of Loop", xlab="Number of regulation", line=2)
+points(PL2[,1], PL2[,2], col=alpha("black", 0.3), pch=19)
+points(NP2[,1], NP2[,2], col=alpha("tomato", 0.5), pch=19)
+# abline(lm(log10(PL2[,2]) ~ PL2[,1]), col="black")
+# abline(lm(log10(NP2[,2]) ~ NP2[,1]), col="tomato")
+#legend(15, 5, legend=c("Plast genes", "Non plast genes"), col=c("blue", "green"), lty=1, cex=0.8)
+text(15, 1500, substitute(paste(bold("Simulations"))), xpd=TRUE, cex=1)
+legend(12, 5, legend=c("Plastic genes", "Non plastic genes"),
+       col=c("black", "tomato"), bty=1, cex=0.8, bg="white", pch = c(19))
+
+dev.off()
+
+
+
+
+
+
+# plot(THreg_sum_plast[,1], randomTf[,5], log = "y", col="darkred", ylab="", xlab="", xlim=c(0,30))
+# title(ylab="Number of Loop", xlab="Number of regulation", line=2)
+# points(THreg_sum_plast[,1], nbrloop_thpl2[,5], col="blue")
+# points(THreg_sum_np[,1], nbrloop_thnp2[,5], col="green")
+# abline(lm(log10(nbrloop_thpl2[,5]) ~ THreg_sum_plast[,1]), col="blue")
+# abline(lm(log10(nbrloop_thnp2[,5]) ~ THreg_sum_np[,1]), col="green")
+# legend(1, 300, legend=c("Plast genes: reg from random TF", "Plast genes", "Non plast genes"),
+#        col=c("darkred", "blue", "green"), lty=1, cex=0.8)
+# 
+# 
+# 
+# #DO FFL AND DIAMONDS SEPARATELY
+# 
+# 
+# randomTf <- as.data.frame(cbind(read.csv("scripts/data/plast_genes_E_coli_random3_nffl.csv", sep = ",")[,c(2,3)]))
+# randomTf <- randomTf[order(as.character(randomTf[,1]), method = c("radix")),c(1,2)]
+# reg_number_ranTf <- reg_number_plast[order(names(reg_number_plast), method = c("radix"))] #Put genes of the different dataset in the same order
+# 
+# 
+# #Only FFL, should use all loops
+# par(mar = c(3.5,3.5, 1,1))
+# plot(reg_number_ranTf, randomTf[,2], col="darkred", ylab="", xlab="", ylim=c(0,100), xlim=c(0,30))
+# title(ylab="Number of Loop", xlab="Number of regulation", line=2)
+# points(reg_number_plast, read.csv("scripts/data/plast_genes_E_coli_nffl.csv", sep = ",")[,3], col="blue")
+# points(reg_number_np, read.csv("scripts/data/nonplast_E_coli_nffl.csv", sep = ",")[,3], col="green")
+# abline(lm( randomTf[,2] ~ reg_number_ranTf), col="darkred")
+# abline(lm(read.csv("scripts/data/plast_genes_E_coli_nffl.csv", sep = ",")[,3]  ~ reg_number_plast), col="blue")
+# abline(lm( read.csv("scripts/data/nonplast_E_coli_nffl.csv", sep = ",")[,3] ~ reg_number_np), col="green")
+# legend(1, 300, legend=c("Plast genes: reg from random TF", "Plast genes", "Non plast genes"),
+#        col=c("darkred", "blue", "green"), lty=1, cex=0.8)
+# 
+# 
+# 
+# randomTf <- as.data.frame(cbind(read.csv("scripts/data/plast_genes_E_coli_random3_nDMD.csv", sep = ",")[,c(2,3)]))
+# randomTf <- randomTf[order(as.character(randomTf[,1]), method = c("radix")),c(1,2)]
+# reg_number_ranTf <- reg_number_plast[order(names(reg_number_plast), method = c("radix"))] #Put genes of the different dataset in the same order
+# #Only DMD
+# par(mar = c(3.5,3.5, 1,1))
+# plot(reg_number_ranTf, randomTf[,2], col="darkred", ylab="", xlab="", ylim=c(0,100), xlim=c(0,30))
+# title(ylab="Number of Loop", xlab="Number of regulation", line=2)
+# points(reg_number_plast, read.csv("scripts/data/plast_genes_E_coli_nDMD.csv", sep = ",")[,3], col="blue")
+# points(reg_number_np, read.csv("scripts/data/nonplast_E_coli_nDMD.csv", sep = ",")[,3], col="green")
+# abline(lm( randomTf[,2] ~ reg_number_ranTf), col="darkred")
+# abline(lm(read.csv("scripts/data/plast_genes_E_coli_nDMD.csv", sep = ",")[,3]  ~ reg_number_plast), col="blue")
+# abline(lm( read.csv("scripts/data/nonplast_E_coli_nDMD.csv", sep = ",")[,3] ~ reg_number_np), col="green")
+# legend(1, 300, legend=c("Plast genes: reg from random TF", "Plast genes", "Non plast genes"),
+#        col=c("darkred", "blue", "green"), lty=1, cex=0.8)
+# 
+# 
+# 
+# 
+# pdf(paste0("figures/Distrib_loop_nbr",".pdf"), width=5, height=4)
+# par(mar = c(3.5,3.5, 1,1))
+# boxplot(df$Sum ~ df$Type, log = "y", col = NA, border = NA, axes = FALSE,
+#         yaxt="", space=c(0.3,0.1,0.4,0.1,0.4), ylab = "", xlab = "")
+# title(ylab = "Number of motif", line=2)
+# polygon(x=c(0.35, 0.35, 3, 3),  y=c(1000, 1e-5, 1e-5, 1000),  col="honeydew2", border=NA, xpd=TRUE)
+# polygon(x=c(2.5, 2.5, 4.65, 4.65),  y=c(1000, 1e-5, 1e-5, 1000),  col="cornsilk", border=NA, xpd=TRUE)
+# boxplot(df$Sum ~ df$Type,  log = "y", add=TRUE, col=c("lavender", "lightskyblue"), 
+#         names=c("Non plastic","Plastic","Non plastic","Plastic"),
+#         space=c(0.3,0.1,0.4,0.1,0.4), frame=FALSE)
+# text(1.5, 0.21, substitute(paste(bold("E. coli"))), xpd=TRUE, cex=1)
+# text(3.5,0.21, substitute(paste(bold("Simulations"))), xpd=TRUE, cex=1)
+# text(1.5,500, substitute(paste(bold("***"))), xpd=TRUE, cex=1.6)
+# dev.off()
+# 
+# mean(subset(df, Type=="3thnp")$Sum) - mean(subset(df, Type=="4thpl")$Sum)
+# mean(subset(df, Type=="1emnp")$Sum) - mean(subset(df, Type=="2empl")$Sum)

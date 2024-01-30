@@ -181,14 +181,14 @@ FFL.type2 <- function(list.w, edges1=2, edges2=1, target, from=(1:ncol(list.w[[1
         for(m in ff) {
           if(m[[1]][1] %in% from){ #If the first node is in FROM
           if(length(E(g, path=m[[1]])$sign)>1 && length(E(g, path=m[[2]])$sign)>2) stop("Wrong cut.offs")
-            if(prod(c(E(g, path=m[[1]])$sign,E(g, path=m[[2]])$sign))==1 && E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)]==E(g, path=m[[2]])$sign[length(E(g, path=m[[2]])$sign)] && (E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)])==-1) df[i,3] <- df[i,3] + 1/length(ff)
-            if(prod(c(E(g, path=m[[1]])$sign,E(g, path=m[[2]])$sign))==1 && E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)]==E(g, path=m[[2]])$sign[length(E(g, path=m[[2]])$sign)] && (E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)])==1) df[i,4] <- df[i,4] + 1/length(ff)
-            if(prod(c(E(g, path=m[[1]])$sign,E(g, path=m[[2]])$sign))==1 && E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)]!=E(g, path=m[[2]])$sign[length(E(g, path=m[[2]])$sign)] && (E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)])==-1) df[i,5] <- df[i,5] + 1/length(ff)
-            if(prod(c(E(g, path=m[[1]])$sign,E(g, path=m[[2]])$sign))==1 && E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)]!=E(g, path=m[[2]])$sign[length(E(g, path=m[[2]])$sign)] && (E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)])==1) df[i,6] <- df[i,6] + 1/length(ff)
-            if(prod(c(E(g, path=m[[1]])$sign,E(g, path=m[[2]])$sign))==-1 && E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)]==E(g, path=m[[2]])$sign[length(E(g, path=m[[2]])$sign)] && (E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)])==-1) df[i,7] <- df[i,7] + 1/length(ff)
-            if(prod(c(E(g, path=m[[1]])$sign,E(g, path=m[[2]])$sign))==-1 && E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)]==E(g, path=m[[2]])$sign[length(E(g, path=m[[2]])$sign)] && (E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)])==1) df[i,8] <- df[i,8] + 1/length(ff)
-            if(prod(c(E(g, path=m[[1]])$sign,E(g, path=m[[2]])$sign))==-1 && E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)]!=E(g, path=m[[2]])$sign[length(E(g, path=m[[2]])$sign)] && (E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)])==-1) df[i,9] <- df[i,9] + 1/length(ff)
-            if(prod(c(E(g, path=m[[1]])$sign,E(g, path=m[[2]])$sign))==-1 && E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)]!=E(g, path=m[[2]])$sign[length(E(g, path=m[[2]])$sign)] && (E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)])==1) df[i,10] <- df[i,10] + 1/length(ff)
+            if(prod(c(E(g, path=m[[1]])$sign,E(g, path=m[[2]])$sign))==1 && E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)]==E(g, path=m[[2]])$sign[length(E(g, path=m[[2]])$sign)] && (E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)])==-1) df[i,3] <- df[i,3] + 1/length(ff) #C3 OK
+            if(prod(c(E(g, path=m[[1]])$sign,E(g, path=m[[2]])$sign))==1 && E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)]==E(g, path=m[[2]])$sign[length(E(g, path=m[[2]])$sign)] && (E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)])==1) df[i,4] <- df[i,4] + 1/length(ff) #C1
+            if(prod(c(E(g, path=m[[1]])$sign,E(g, path=m[[2]])$sign))==1 && E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)]!=E(g, path=m[[2]])$sign[length(E(g, path=m[[2]])$sign)] && (E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)])==1) df[i,5] <- df[i,5] + 1/length(ff) #C2
+            if(prod(c(E(g, path=m[[1]])$sign,E(g, path=m[[2]])$sign))==1 && E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)]!=E(g, path=m[[2]])$sign[length(E(g, path=m[[2]])$sign)] && (E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)])==-1) df[i,6] <- df[i,6] + 1/length(ff) #C4
+            if(prod(c(E(g, path=m[[1]])$sign,E(g, path=m[[2]])$sign))==-1 && E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)]==E(g, path=m[[2]])$sign[length(E(g, path=m[[2]])$sign)] && (E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)])==-1) df[i,7] <- df[i,7] + 1/length(ff) #I2
+            if(prod(c(E(g, path=m[[1]])$sign,E(g, path=m[[2]])$sign))==-1 && E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)]==E(g, path=m[[2]])$sign[length(E(g, path=m[[2]])$sign)] && (E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)])==1) df[i,8] <- df[i,8] + 1/length(ff) #I4
+            if(prod(c(E(g, path=m[[1]])$sign,E(g, path=m[[2]])$sign))==-1 && E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)]!=E(g, path=m[[2]])$sign[length(E(g, path=m[[2]])$sign)] && (E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)])==1) df[i,9] <- df[i,9] + 1/length(ff) #I3
+            if(prod(c(E(g, path=m[[1]])$sign,E(g, path=m[[2]])$sign))==-1 && E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)]!=E(g, path=m[[2]])$sign[length(E(g, path=m[[2]])$sign)] && (E(g, path=m[[1]])$sign[length(E(g, path=m[[1]])$sign)])==-1) df[i,10] <- df[i,10] + 1/length(ff) #I1 
           }else{df[i,11] <- df[i,11] + 1/length(ff)}
           }}
         else if(edges1==2 && edges2==2){
@@ -326,5 +326,37 @@ e_coli_gene_name <- function(genes_list, names=colnames(E_coli_mat)){
     
     if(gene[1] %in% names) genes_list_new_names <- c(genes_list_new_names, gene)
   }
-  return(genes_list_new_names)
+  return(unique(genes_list_new_names))
 }
+
+
+
+e_coli_prep_analyses_randomized <- function(genes_list, g, g_mat, fun="FFL", edges1=2, edges2=1, from=FALSE){
+  stopifnot(fun=="FFL" || fun=="FBL" || fun=="FFLcount"|| fun=="FBLcount" )
+  if(length(edges1)==1){stopifnot(edges1 >= edges2)}
+  loops <- mclapply(genes_list, function(gene) {
+    #To avoid igraph::all_simple_paths to take days and weeks, we subset the regulatory networks. Only target genes and connected TFs are kept.
+    gg <- induced.subgraph(g, vids = c(which(colnames(E_coli_mat)==gene), which(colnames(E_coli_mat)%in%TF_genes)) )
+    E_coli_mat2 <- t((get.adjacency(gg, sparse=FALSE, attr='V3')))
+    ggg <- induced.subgraph(gg, vids = as.vector(unlist(neighborhood(gg, max(edges1), nodes = which(colnames(E_coli_mat2)==gene), mode = 'all'))))
+    E_coli_mat3 <- t((get.adjacency(ggg, sparse=FALSE, attr='V3')))
+    E_coli_mat3 <- matrix(as.numeric(E_coli_mat3), ncol = ncol(E_coli_mat3), dimnames = dimnames(E_coli_mat3)) #convert to numeric matrix
+    E_coli_mat3[is.na(E_coli_mat3)] <- 0
+    #Randomize the TFs the regulations are coming from
+    E_coli_mat3[which(colnames(E_coli_mat3)==gene),] <- unname(sample(E_coli_mat3[which(colnames(E_coli_mat3)==gene),])) 
+    if(is.character(from)) envirgenes <- which(colnames(E_coli_mat3)%in%from)
+    else if(from==TRUE) envirgenes <- which(colnames(E_coli_mat3)%in%genes_list) else envirgenes <- 1:ncol(E_coli_mat3)
+    print(paste0(gene," ; network size ", ncol(E_coli_mat3)))
+    if(fun=="FFL") cc <- FFL.type2(list(E_coli_mat3), edges1 = edges1, edges2 = edges2, target = which(colnames(E_coli_mat3)==gene), from=envirgenes)
+    if(fun=="FFLcount") cc <- loops_n.count(list(E_coli_mat3), edges1 = edges1, edges2 = edges2, target = which(colnames(E_coli_mat3)==gene))
+    if(fun=="FBL") cc <- FBL.type(list(E_coli_mat3), edges=edges1, target = which(colnames(E_coli_mat3)==gene))
+    if(fun=="FBLcount") cc <- FBL_n.count(list(E_coli_mat3), edges = edges1, target = which(colnames(E_coli_mat3)==gene))
+    #Here, insert writing c(gene,cc) in a txt file
+    return(c(gene,cc))
+  }, mc.cores = 2)
+  return(rbindlist(loops))
+}
+
+
+
+

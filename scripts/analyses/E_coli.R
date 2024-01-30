@@ -43,16 +43,24 @@
 
 phgenes1 <- read.table("e_coli/Plast_genes/Ph/plastic_genes.txt", sep ="\t", header=FALSE)
 phgenes1 <- e_coli_gene_name(phgenes1[,1])
-phgenes2 <- read.table("e_coli/Plast_genes/pH_2/plastic_genes.txt", sep ="\t", header=FALSE)
-phgenes2 <- e_coli_gene_name(phgenes2[,1])
-phgenes <- unique(c(phgenes1, phgenes2))
 
-phloops <- e_coli_prep_analyses(phgenes, g, E_coli_mat, fun=fun, edges1=edges1, edges2=edges2, cores=1, from = from)
+phloops <- e_coli_prep_analyses(phgenes1, g, E_coli_mat, fun=fun, edges1=edges1, edges2=edges2, cores=1, from = from)
 
-write.csv(rbind(phloops), paste0("scripts/data/ph_plast_",csvname,".csv"))
+write.csv(rbind(phloops), paste0("scripts/data/ph1_plast_",csvname,".csv"))
 all_plast_genes <- rbind(all_plast_genes, as.data.frame(phloops))
 
-print("Ph done!")
+print("Ph1 done!")
+########################################
+#Maurer et al., 2004 ; 
+phgenes2 <- read.table("e_coli/Plast_genes/pH_2/plastic_genes.txt", sep ="\t", header=FALSE)
+phgenes2 <- unique(e_coli_gene_name(phgenes2[,1]))
+phgenes <- phgenes2[!(phgenes2 %in% all_plast_genes$V1)] 
+
+phloops <- e_coli_prep_analyses(phgenes, g, E_coli_mat, fun=fun, edges1=edges1, edges2=edges2, cores=1, from = from)
+write.csv(rbind(phloops), paste0("scripts/data/ph2_plast_",csvname,".csv"))
+all_plast_genes <- rbind(all_plast_genes, as.data.frame(phloops))
+
+print("Ph2 done!")
 ########################################
 #10.1128/JB.01092-07
 #Compendium of stressor
@@ -83,16 +91,6 @@ all_plast_genes <- rbind(all_plast_genes, as.data.frame(plast_medgrowthloops))
 
 print("Medgrowth plastic genes done!")
 
-#Non plastic genes (expression depending on strains and not on tested environment)
-non_envir_genes <- read.csv("e_coli/Plast_genes/Growth_envir/Supp_tables_S3.csv", sep ="\t", header=TRUE)
-non_envir_genes <- e_coli_gene_name(non_envir_genes[,1])
-non_envir_genes1 <- non_envir_genes[(non_envir_genes %in% all_plast_genes$V1)] 
-#
-np_medgrowthloops <- e_coli_prep_analyses(non_envir_genes1, g, E_coli_mat, fun=fun, edges1=edges1, edges2=edges2, cores=1, from = from)
-
-write.csv(rbind(np_medgrowthloops, subset(all_plast_genes, V1 %in% non_envir_genes)), paste0("scripts/data/np_medium_growth_",csvname,".csv"))
-
-print("Medgrowth non plastic genes done!")
 ########################################
 #10.1038/srep45303
 #List of plastic genes for 3 different conditions: carbone source, Mg stress, Na+ stress
@@ -149,17 +147,28 @@ print("Juice done!")
 #Human body temperature
 temptr_genes <- read.table("e_coli/Plast_genes/human_temp/Table_1_genes_updated_names.txt", sep ="\t", header=FALSE)
 temptr_genes <- e_coli_gene_name(temptr_genes[,1])
-temptr_genes2 <- read.table("e_coli/Plast_genes/Temperature/plastic_genes.txt", sep ="\t", header=FALSE)
-temptr_genes2 <- e_coli_gene_name(temptr_genes2[,1])
-
-temptr_genes <- unique(c(temptr_genes, temptr_genes2))
 temptr_genes1 <- temptr_genes[!(temptr_genes %in% all_plast_genes$V1)] 
 
 plast_temptr <- e_coli_prep_analyses(temptr_genes1, g, E_coli_mat, fun=fun, edges1=edges1, edges2=edges2, cores=1, from = from)
-write.csv(rbind(plast_temptr, subset(all_plast_genes, V1 %in% temptr_genes)), paste0("scripts/data/plast_temptr_",csvname,".csv"))
+write.csv(rbind(plast_temptr, subset(all_plast_genes, V1 %in% temptr_genes)), paste0("scripts/data/plast_temptr1_",csvname,".csv"))
 all_plast_genes <- rbind(all_plast_genes, as.data.frame(plast_temptr))
 
 print("Temperature done!")
+########################################
+#
+#Temperature
+temptr_genes2 <- read.table("e_coli/Plast_genes/Temperature/plastic_genes.txt", sep ="\t", header=FALSE)
+temptr_genes2 <- e_coli_gene_name(temptr_genes2[,1])
+
+temptr_genes1 <- temptr_genes2[!(temptr_genes2 %in% all_plast_genes$V1)] 
+
+plast_temptr <- e_coli_prep_analyses(temptr_genes1, g, E_coli_mat, fun=fun, edges1=edges1, edges2=edges2, cores=1, from = from)
+write.csv(rbind(plast_temptr, subset(all_plast_genes, V1 %in% temptr_genes2)), paste0("scripts/data/plast_temptr2_",csvname,".csv"))
+all_plast_genes <- rbind(all_plast_genes, as.data.frame(plast_temptr))
+
+print("Temperature done!")
+
+
 ########################################
 #10.1128/JB.01092-07
 #stringent response
@@ -192,6 +201,6 @@ write.csv(nonplast_FFL, paste0("scripts/data/nonplast_",csvname,".csv"))
 print("Non plastic genes done!")
 
 ########################################
-print(paste0("Plast genes: ", nrow(all_plast_genes), "; Plast genes occuring more than twice: ", nrow(subset(all_plast_genes, V1 %in% Subplastic_genes))))
+print(paste0("Plast genes: ", nrow(all_plast_genes), "; Plast genes occuring more than twice: ", nrow(subset(all_plast_genes, V1 %in% Subplastic_genes)), "; Non-plastic genes : ", nrow(nonplast_FFL)))
 
 length(unique(all_plast_genes[,1]))
