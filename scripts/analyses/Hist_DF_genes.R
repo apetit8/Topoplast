@@ -28,7 +28,8 @@ DF_genes <- as.data.frame(table(c(stringent_genes, temptr_genes, temptr_genes2, 
                                                                ox_genes,mg_c_genes,medgrowth_genes,stress_genes,phgenes1,phgenes2)))
 
 
-pdf(paste0("figures/Hist_DF_genes",".pdf"), width=3, height=4)
+pdf(paste0("figures/Hist_DF_genes",".pdf"), width=12, height=4)
+par(mar = c(5,20, 3,20))
 hist(DF_genes$Freq, breaks = seq(0.5,7.5, 1), xlab="Times being reported as DF", ylab="Number of gene", main="")
 dev.off()
 

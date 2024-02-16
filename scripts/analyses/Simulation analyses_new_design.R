@@ -31,7 +31,7 @@ abline(a = 0.5, b = 0.05, col=3, lwd=5)
 # Rprof()
 topo_all <- mclapply(unique(df.last50[1:(nrow(df.last50)),1]), function(netw){
   df <- subset(df.last50, data.dir==netw)
-  topo <- lapply(1:genes, function(i){ #starts at 12 to not include TFs
+  topo <- lapply(1:genes, function(i){ #start at 12 to not include TFs
     reg50 <- .lm.fit(cbind(rep(1, length(df$Pmean_1)), df$Pmean_1), df[,i+2])$coefficients # x9 times faster than lm()
     output <- essential.topo(df=subset(df.full, data.dir==netw), target=i,
                                                       treshold_coeff=treshold_coeff, treshold_og=treshold_og, genes=genes)

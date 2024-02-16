@@ -6,7 +6,7 @@ library(purrr)
 pdfname <- "figures/fig_supp_reg_nbr"
 #########################################
 #Genetic data
-ec_cyc <- read.csv("e_coli/ECOLI-regulatory-network_cyc_editd.csv") #List of regulations from Ecocyc
+ec_cyc <- read.csv("e_coli/ECOLI-regulatory-network_cyc_editd_2024_01_29.csv") #List of regulations from Ecocyc
 ec_genes <- read.csv("e_coli/ncbi_dataset_K-12_annotation.csv", sep ="\t") #List of E coli genes from Ecocyc
 
 #Transcriptions factors
@@ -124,29 +124,10 @@ randomTf$Sum <- rowSums2(as.matrix(randomTf[,c(2,4,6)]))
 randomTf <- randomTf[order(as.character(randomTf[,1]), method = c("radix")),c(1,8)]
 reg_number_ranTf <- reg_number_plast[order(names(reg_number_plast), method = c("radix"))] #Put genes of the different dataset in the same order
 
-
-pdf(paste0("figures/Motif_Reg",".pdf"), width=5, height=4)
-par(mar = c(3.5,3.5, 1,1))
-plot(reg_number_ranTf, randomTf[,2], col="darkred", ylab="", xlab="", ylim=c(0,300), xlim=c(0,30))
-title(ylab="Number of Loop", xlab="Number of regulation", line=2)
-points(reg_number_plast, nbrloop_empl2[,8], col="blue")
-points(reg_number_np, nbrloop_emnp2[,8], col="green")
-abline(lm( randomTf[,2] ~ reg_number_ranTf), col="darkred")
-abline(lm( nbrloop_empl2[,8] ~ reg_number_plast), col="blue")
-abline(lm( nbrloop_emnp2[,8] ~ reg_number_np), col="green")
-legend(1, 300, legend=c("Plast genes: reg from random TF", "Plast genes", "Non plast genes"),
-       col=c("darkred", "blue", "green"), lty=1, cex=0.8)
-dev.off()
-
-
-
 #Without the 0 for a log axis
 RTF <- as.data.frame(cbind(reg_number_ranTf, randomTf[,2]))
 PL <- as.data.frame(cbind(reg_number_plast, nbrloop_empl2[,8]))
 NP <- as.data.frame(cbind(reg_number_np, nbrloop_emnp2[,8]))
-
-
-
 
 #FAIRE PAREIL AVEC SIMU
 
@@ -207,6 +188,8 @@ RTF <- subset(RTF, V2 != 0)
 PL2 <- subset(PL2, V2 != 0)
 NP2 <- subset(NP2, V2 != 0)
 
+#To display the same number of plastic genes in E coli and simu
+PL2 <- PL2[sample(nrow(PL2), nrow(PL)),]
 
 pdf(paste0("figures/Motif_Reg_both_log",".pdf"), width=6, height=4)
 # par(mar = c(3.5,3.5, 1,1))
@@ -225,6 +208,7 @@ title(ylab="Number of Loop", xlab="Number of regulation", line=2)
 # abline(lm( log10(NP[,2]) ~ NP[,1]), col="tomato")
 text(15, 1500, substitute(paste(bold("E. coli"))), xpd=TRUE, cex=1)
 
+
 #Simu
 par(mar=c(3, 0.5, 1.5, 0), mgp = c(1.75, 0.75, 0), las=0)
 plot(PL2[,1], PL2[,2], log = "y", col=alpha("black", 0.5), ylab="", xlab="", xlim=c(0,30), pch=19, yaxt='n')
@@ -232,7 +216,7 @@ polygon(x=c(-5, -5, 32, 32),  y=c(3000, 0.01, 0.01, 3000),  col="cornsilk", bord
 axis(side = 1)
 #axis(side = 2)
 title(ylab="Number of Loop", xlab="Number of regulation", line=2)
-points(PL2[,1], PL2[,2], col=alpha("black", 0.3), pch=19)
+points(PL2[,1], PL2[,2], col=alpha("black", 0.5), pch=19)
 points(NP2[,1], NP2[,2], col=alpha("tomato", 0.5), pch=19)
 # abline(lm(log10(PL2[,2]) ~ PL2[,1]), col="black")
 # abline(lm(log10(NP2[,2]) ~ NP2[,1]), col="tomato")
@@ -245,8 +229,73 @@ dev.off()
 
 
 
+#Drift
+##Simulations
+topo_plastic <- readRDS("scripts/data/list_plastic_topo_full_netw_drift.Rds")
+topo_nnplast <- readRDS("scripts/data/list_nnplast_topo_full_netw_drift.Rds")
+
+THreg_sum_plast <- as.data.frame(unlist(lapply(topo_plastic, function(i){ i[(i == -1)] <- 1
+return(rowSums2(abs(i))[2])} )))
+THreg_sum_plast$Type <- "4thpl"
+colnames(THreg_sum_plast) <- c("nbr","Type")
+#
+THreg_sum_np <- as.data.frame(unlist(lapply(topo_nnplast, function(i){ i[(i == -1)] <- 1
+return(rowSums2(abs(i))[2])} )))
+THreg_sum_np$Type <- "3thnp"
+colnames(THreg_sum_np) <- c("nbr","Type")
+
+df <- rbind(THreg_sum_np, THreg_sum_plast )
 
 
+
+
+nbrloop_thpl2 <- as.data.frame( cbind(read.csv("scripts/data/full_netw_drift_Pl_nbrFFL.csv", sep = ",")[,2],
+                                      read.csv("scripts/data/full_netw_drift_Pl_nbrDMD.csv", sep = ",")[,2],
+                                      read.csv("scripts/data/full_netw_drift_Pl_nbrFBL.csv", sep = ",")[,2]))
+nbrloop_thpl2$Type <- "4thpl"
+nbrloop_thpl2$Sum <- rowSums2(as.matrix(nbrloop_thpl2[,1:3]))
+
+nbrloop_thnp2 <- as.data.frame( cbind(read.csv("scripts/data/full_netw_drift_NP_nbrFFL.csv", sep = ",")[,2],
+                                      read.csv("scripts/data/full_netw_drift_NP_nbrDMD.csv", sep = ",")[,2],
+                                      read.csv("scripts/data/full_netw_drift_NP_nbrFBL.csv", sep = ",")[,2]))
+nbrloop_thnp2$Type <- "3thnp"
+nbrloop_thnp2$Sum <- rowSums2(as.matrix(nbrloop_thnp2[,1:3]))
+
+PL2 <- as.data.frame(cbind(THreg_sum_plast[,1], nbrloop_thpl2[,5]))
+NP2 <- as.data.frame(cbind(THreg_sum_np[,1], nbrloop_thnp2[,5]))
+
+pdf(paste0("figures/Motif_Reg_log_drift",".pdf"), width=9, height=4)
+# par(mar = c(3.5,3.5, 1,1))
+#E. coli
+layout(matrix(c(1,2,3), 1, 3, byrow = TRUE))
+#par(mar=c(3, 3, 1.5, 0.3), mgp = c(1.75, 0.75, 0), las=0)
+#Plot 1
+par(mar = c(4.8,3.5, 2,0))
+boxplot(df$nbr ~ df$Type,  main="", col = NA, border = NA, axes = FALSE,
+        yaxt="", space=c(0.3,0.1,0.4,0.1,0.4), ylab = "", xlab = "")
+title(ylab = "Number of regulation toward gene", line=2)
+polygon(x=c(-5, -5, 2.5, 2.5),  y=c(50, -20, -20, 50),  col="cornsilk", border=NA, xpd=TRUE)
+boxplot(df$nbr ~ df$Type, add=TRUE, col=c("salmon", "grey"),
+        space=c(0.3,0.1,0.4,0.1,0.4), frame=FALSE, xaxt="n")
+text(x = c(1,2,3,4), y = par("usr")[3] - 0.3,
+     labels = c("Non-Plastic", "Plastic", "Non-Plastic", "Plastic"), xpd = NA, srt = 90, cex = 1, adj=1.0)
+text(1.5, 29, substitute(paste(bold("Simulations: Drift"))), xpd=TRUE, cex=1)
+#Plot 2
+par(mar=c(3, 3, 1.5, 0.3), mgp = c(1.75, 0.75, 0), las=0)
+plot(PL2[,1], PL2[,2], log = "y", col=alpha("black", 0.5), ylab="", xlab="", xlim=c(0,30), pch=19, yaxt='n')
+polygon(x=c(-15, -15, 32, 32),  y=c(50000, 0.01, 0.01, 50000),  col="cornsilk", border=NA, xpd=TRUE)
+axis(side = 1)
+axis(side = 2)
+title(ylab="Number of Loop", xlab="Number of regulation", line=2)
+points(PL2[,1], PL2[,2], col=alpha("black", 0.5), pch=19)
+points(NP2[,1], NP2[,2], col=alpha("tomato", 0.5), pch=19)
+# abline(lm(log10(PL2[,2]) ~ PL2[,1]), col="black")
+# abline(lm(log10(NP2[,2]) ~ NP2[,1]), col="tomato")
+#legend(15, 5, legend=c("Plast genes", "Non plast genes"), col=c("blue", "green"), lty=1, cex=0.8)
+text(15, 9000, substitute(paste(bold("Simulations: Drift"))), xpd=TRUE, cex=1)
+legend(12, 5, legend=c("Plastic genes", "Non plastic genes"),
+       col=c("black", "tomato"), bty=1, cex=0.8, bg="white", pch = c(19))
+dev.off()
 
 # plot(THreg_sum_plast[,1], randomTf[,5], log = "y", col="darkred", ylab="", xlab="", xlim=c(0,30))
 # title(ylab="Number of Loop", xlab="Number of regulation", line=2)

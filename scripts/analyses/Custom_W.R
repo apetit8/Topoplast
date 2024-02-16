@@ -7,7 +7,7 @@ TG <- 10 #Regulated and regulate TF
 Control <- 5 #Regulated
 Total <- Sensor+TF+Plastic+TG+Control
 
-
+################################################################################
 W <- matrix(data=0, nrow=Total, ncol = Total)
 cat(as.character(t(W)), file="templates/Matrix_W.txt", sep=" ", append=FALSE)
 #Columns

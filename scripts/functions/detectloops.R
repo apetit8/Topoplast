@@ -171,7 +171,7 @@ FFL.type2 <- function(list.w, edges1=2, edges2=1, target, from=(1:ncol(list.w[[1
     df <- data.frame(FFL=c(rep(0, length(list.w))), No_FFL=c(rep(0, length(list.w))), NonPl_X=c(rep(0, length(list.w))))  }
   for(i in 1:length(list.w)){
     g <- graph.adjacency(abs(t(list.w[[i]])), mode="directed") 
-    E(g)$sign <- (list.w[[i]])[list.w[[i]] != 0] 
+    E(g)$sign <- (list.w[[i]])[list.w[[i]] != 0] #Checked multiple times; this is working correctly
     if(length(feedforward.to(g, to=target, edges1=edges1, edges2=edges2))==0){
       df[i,2] <- 1 } else{
         df[i,1] <- 1

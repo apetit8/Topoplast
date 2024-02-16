@@ -19,7 +19,7 @@ temptr_genes2 <- e_coli_gene_name(read.table("e_coli/Plast_genes/Temperature/pla
 stringent_genes <- e_coli_gene_name(as.data.frame(unique(read.table("e_coli/Plast_genes/Stringent_response/All_genes.txt", sep ="\t", header=FALSE)[,1]))[,1])
 #########################################
 #Genetic data
-ec_cyc <- read.csv("e_coli/ECOLI-regulatory-network_cyc_editd.csv") #List of regulations from Ecocyc
+ec_cyc <- read.csv("e_coli/ECOLI-regulatory-network_cyc_editd_2024_01_29.csv") #List of regulations from Ecocyc
 ec_cyc <- subset(ec_cyc, V1!=V2)
 ##########
 freq_genes <- as.data.frame(table(c(stringent_genes, temptr_genes, temptr_genes2, juice_genes, aero_genes,
@@ -41,7 +41,11 @@ cairo_pdf("figures/Ecoli_TFs.pdf", width=20, height=20)
 plot(g1, layout=layout_nicely, edge.color=ifelse(E(g1)$V3 == 1, "black",ifelse(E(g1)$V3 == -1, "red","white")),
      vertex.size=5, main="Ecoli_TFs", edge.curved=TRUE,
      vertex.color=ifelse(E(g1)$V4 >= 3, "steelblue",ifelse(E(g1)$V4 >= 2, "lightblue",ifelse(E(g1)$V4 == 1, "white","grey"))))
+legend(0.5, 1, legend=c("Reported as DF\nat least 3 times\n", "Reported as DF\n2 times\n", "Reported as DF\n1 time\n", "Never reported\nas DF\n"),
+       col=c( "steelblue", "lightblue", "black","grey"), bty=1, cex=2, bg="white", pch = c(19,19,21,19))
+legend(0.5, 0.4, legend=c("Activation", "Inhibition"),
+       col=c("black", "tomato"), lty=1, cex=2, bg="white")
 dev.off()
 
 
-hist(freq_genes$Freq)
+

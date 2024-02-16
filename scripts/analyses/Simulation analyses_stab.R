@@ -1,12 +1,12 @@
 source("scripts/functions/functions.R")
 source("scripts/functions/detectloops.R")
 #####################
-sims.dirs1 <- list.dirs("simul/Full_short", recursive = TRUE)
+sims.dirs1 <- list.dirs("simul/Full_netw_stab", recursive = TRUE)
 genes <- 36
 min <- 0.15
 max <- 0.85
-filename <- "full_1k"
-ifelse(!dir.exists("scripts/data/short"), dir.create("scripts/data/short"), FALSE)
+filename <- "full_stab"
+ifelse(!dir.exists("scripts/data/stab"), dir.create("scripts/data/stab"), FALSE)
 ################################################################################
 #Parameters when keeping "essential" connections. Test every connection to see impact on target gene RN, and draw from that.
 #Inspired by Burda et al., 2011
@@ -16,13 +16,6 @@ treshold_og    <- 0.01 # difference accepted in the RN linear regression interce
 #DATA
 #####################
 df.full.gen <- df.simul(sims.dirs1, all.gen = TRUE)
-pdf(paste0("figures/",filename,"_fitness",".pdf"), width=5, height=4)
-plot(df.full.gen$Gen, df.full.gen$Fitness)
-plot(subset(df.full.gen, Gen >=100)$Optimum, subset(df.full.gen, Gen >=100)$Fitness)
-dev.off()
-df.full.gen <- subset(df.full.gen, Gen %in% c(50,250,500,750,1000))
-write.csv(df.full.gen , paste0("scripts/data/short/",filename,"_allgen",".csv"))
-df.full <- df.simul(sims.dirs1, all.gen = FALSE)
 #############
 #############
 #Loop to identify plastic genes
@@ -31,7 +24,7 @@ plot(df.last50$Pmean_1, df.last50$Pmean_26)
 abline(a = 0.5, b = 0.3, col=2, lwd=5) 
 abline(a = 0.5, b = 0.05, col=3, lwd=5) 
 
-for (gen in c(50,250,500,1000)) {
+for (gen in seq(100,8000,200)) {
   print(paste0("Generation", gen, "started !"))
     # Rprof()
     topo_all <- mclapply(unique(df.last50[1:(nrow(df.last50)),1]), function(netw){ 

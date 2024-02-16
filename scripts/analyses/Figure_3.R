@@ -72,8 +72,8 @@ title(ylab = "%", line=2.1)
 text(x = c(0.5,1.2,2.4,3.5,5,6.1,7.3,8,8.9,9.6), y = par("usr")[3] - 0.45,
      labels = c("Non-Plastic", "Plastic", "Non-Plastic", "Plastic", "Non-plastic","Plastic", "Non-plastic","Plastic", "Non-plastic","Plastic"),
      xpd = NA, srt = 90, cex = 1, adj=1.05)
-text(0.9, 105, substitute(paste("Control")), xpd=TRUE, font=3, cex=0.85)
-text(7.7, 105, substitute(paste("Control")), xpd=TRUE, font=3, cex=0.85)
+text(0.9, 105, substitute(paste("Shuffled")), xpd=TRUE, font=3, cex=0.85)
+text(7.7, 105, substitute(paste("Shuffled")), xpd=TRUE, font=3, cex=0.85)
 text(9.2, 105, substitute(paste("Drift")), xpd=TRUE, font=3, cex=0.85)
 text(10.19, 9, substitute(paste("C1")), xpd=TRUE, font=3, col="black", cex=0.7)
 text(10.19, 22, substitute(paste("C2")), xpd=TRUE, font=3, col="black", cex=0.7)
@@ -95,8 +95,8 @@ title(ylab = "%", line=2.1)
 text(x = c(0.5,1.2,2.4,3.5,5,6.1,7.3,8,8.9,9.6), y = par("usr")[3] - 0.45,
      labels = c("Non-Plastic", "Plastic", "Non-Plastic", "Plastic", "Non-plastic","Plastic", "Non-plastic","Plastic", "Non-plastic","Plastic"),
      xpd = NA, srt = 90, cex = 1, adj=1.05)
-text(0.9, 105, substitute(paste("Control")), xpd=TRUE, font=3, cex=0.85)
-text(7.7, 105, substitute(paste("Control")), xpd=TRUE, font=3, cex=0.85)
+text(0.9, 105, substitute(paste("Shuffled")), xpd=TRUE, font=3, cex=0.85)
+text(7.7, 105, substitute(paste("Shuffled")), xpd=TRUE, font=3, cex=0.85)
 text(9.2, 105, substitute(paste("Drift")), xpd=TRUE, font=3, cex=0.85)
 text(10.19, 8, substitute(paste("MM1")), xpd=TRUE, font=3, col="black", cex=0.7)
 text(10.19, 21, substitute(paste("MM2")), xpd=TRUE, font=3, col="black", cex=0.7)

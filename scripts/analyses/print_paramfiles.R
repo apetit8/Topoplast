@@ -84,42 +84,11 @@ for (sim.name in rownames(all.sims)) {
 }
 
 ################################################################################
-param.dir <- file.path("templates/Full_5000")
-directory <- "simul/Full_5000"
+param.dir <- file.path("templates/Full_netw_stab")
+directory <- "simul/Full_netw_stab"
 ifelse(!dir.exists(directory), dir.create(directory), FALSE)
 cache.dir <- normalizePath(file.path(directory))
-launchfilename <- "launchers/Full_5000-launch.sh"
-##########################
-# Generate all simulations
-# A simulation is characterized by a name, a parameter file, and an extended parameter file (used to generate different environmental file each generations).
-# Simulations involve the creation of many small files (new parameters every generation due to plasticity). This is largely
-# sub-optimal, but difficult to change given the way the simulation program works -- we have to deal with it. 
-
-#Delete previous launch file if exist
-ifelse(file.exists(launchfilename), unlink(launchfilename), FALSE)
-
-all.sims <- rbind(
-  pops = c("param1.txt", "extparam1.txt")
-)
-#Positive RN = Correlated
-for (sim.name in rownames(all.sims)) {
-  cat("Setting up simulation", sim.name, "...\n")
-  pars <- create.paramseries(
-    file.path(param.dir, all.sims[sim.name, 1]), 
-    file.path(param.dir, all.sims[sim.name, 2]), 
-    file.path(cache.dir, sim.name), 
-    overwrite=overwrite, verbose=FALSE, sd=sd, min=min, max=max)
-  
-  create.launchfile.alt(prog.path, pars$param, pars$out, pars$compressed, relative.paths=TRUE,
-                        oldpop="none", file.path(launchfilename), prevpop=FALSE, sampling="")
-}
-
-################################################################################
-param.dir <- file.path("templates/Full_5000_control")
-directory <- "simul/Full_5000_control"
-ifelse(!dir.exists(directory), dir.create(directory), FALSE)
-cache.dir <- normalizePath(file.path(directory))
-launchfilename <- "launchers/Full_control-launch.sh"
+launchfilename <- "launchers/Full_netw_stab-launch.sh"
 ##########################
 # Generate all simulations
 # A simulation is characterized by a name, a parameter file, and an extended parameter file (used to generate different environmental file each generations).

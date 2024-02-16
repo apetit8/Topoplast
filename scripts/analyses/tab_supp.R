@@ -2,7 +2,7 @@ source("scripts/functions/functions.R")
 source("scripts/functions/detectloops.R")
 #########################################
 #Genetic data
-ec_cyc <- read.csv("e_coli/ECOLI-regulatory-network_cyc_editd.csv") #List of regulations from Ecocyc
+ec_cyc <- read.csv("e_coli/ECOLI-regulatory-network_cyc_editd_2024_01_29.csv") #List of regulations from Ecocyc
 ec_genes <- read.csv("e_coli/ncbi_dataset_K-12_annotation.csv", sep ="\t") #List of E coli genes from Ecocyc
 
 #Transcriptions factors

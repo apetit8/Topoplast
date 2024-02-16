@@ -27,7 +27,7 @@ for (gen in seq(500, 20000, 500)) {
 
 pdf("figures/supp/Stab_drift_reg10000.pdf", width=10, height=4)
 layout(matrix(c(1,2), 1, 2, byrow = TRUE))
-par(mar = c(5,2, 2,1))
+par(mar = c(5,4.5, 2,1))
 plot(df.nbr.reg$Gen, df.nbr.reg$Nbr_reg, ylab = "Number of regulations", xlab = "Generation")
 abline(v = 4000, col="red", lwd=3, lty=2)
 plot(df.sign.reg$Gen, df.sign.reg$Nbr_reg, ylab = "Pos reg / Neg reg", xlab = "Generation")
@@ -69,7 +69,7 @@ plot(df.gen.DMD2$Gen, df.gen.DMD$FFL)
 
 pdf("figures/supp/Stab_drift_loop10000.pdf", width=8, height=5.5)
 layout(matrix(c(1,2,3,4), 2, 2, byrow = TRUE))
-par(mar = c(5,5, 1,1))
+par(mar = c(5,4.5, 2,1))
 plot(df.gen.FFL$Gen, df.gen.FFL$FFL, ylab = "Plastic genes : Number of FFL", xlab = "Generation")
 abline(v = 4000, col="red", lwd=3, lty=2)
 plot(df.gen.DMD$Gen, df.gen.DMD$FFL, ylab = "Plastic genes : Number of DMD", xlab = "Generation")
