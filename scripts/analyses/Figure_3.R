@@ -56,7 +56,7 @@ rstatix::row_wise_fisher_test(t(df1[c(3,4),]))
 #         space=c(0.3,0.4,0.1,0.4,0.1,0.4,0.1), legend.text = legendtext1, args.legend = list(ncol=4, x = "topright", inset = c(0.01, 1.13)))
 
 ##FIGURE########################################################################
-pdf(paste0("figures/Fig2_motifs_control",".pdf"), width=5, height=8)
+pdf(paste0("figures/Fig3_motifs_control",".pdf"), width=5, height=8)
 par(mar = c(8,3, 2,1), mfrow=c(2,1))
 
 barplot(t(df_ffl), col = NA, border = NA, axes = FALSE, ylim = c(0,100), xaxt = "n", main="FFL motifs", width = c(0.6, 0.6,1.1,1.1,1.1,1.1,0.6,0.6,0.6,0.6))
@@ -209,8 +209,8 @@ df.ACPe <- as.data.frame(rbind(colMeans2(as.matrix(all_plast[,1:22]*100/rowSums2
                                colMeans2(as.matrix(non_plast[,1:22]*100/rowSums2(as.matrix(non_plast[,1:22])))),
                                colMeans2(as.matrix(drift_np[,1:22]*100/rowSums2(as.matrix(drift_np[,1:22])))),
                                colMeans2(as.matrix(drift_pl[,1:22]*100/rowSums2(as.matrix(drift_pl[,1:22]))))))
-row.names(df.ACPe) <- c("EcoPl", "EcoNP", "ControlNP","ContolPl")
-df.ACPe$Genes <- c("Plastic","Non plastic","Control NP","Control Pl")
+row.names(df.ACPe) <- c("EcoPl", "EcoNP", "ShuffledNP","ShuffledPl")
+df.ACPe$Genes <- c("Plastic","Non plastic","Shuffled NP","Shuffled Pl")
 
 
 
@@ -278,7 +278,9 @@ df.ACPt <- as.data.frame(rbind(colMeans2(as.matrix(all_plast[,1:22]*100/rowSums2
                  colMeans2(as.matrix(shuff_np[,1:22]*100/rowSums2(as.matrix(shuff_np[,1:22])))),
                  colMeans2(as.matrix(shuff_pl[,1:22]*100/rowSums2(as.matrix(shuff_pl[,1:22]))))))
 row.names(df.ACPt) <- c("SimuPl", "SimuNP", "DriftNP","DriftPl","ShuffNP","ShuffPL")
-df.ACPt$Genes <- c("Plastic","Non plastic","Drift Non plastic", "Drift Plastic","Control NP","Control Pl")
+df.ACPt$Genes <- c("Plastic","Non plastic","Drift Non plastic", "Drift Plastic","Shuffled NP","Shuffled Pl")
+
+
 
 ########################
 library(FactoMineR)
@@ -289,7 +291,10 @@ library(ggplot2)
 
 df.ACP <- rbind(df.ACPe,df.ACPt)
 df.ACP$Datatype <- c(rep("E.coli",4),rep("simulations",6))
+colnames(df.ACP)[19:22] <- c("FBL2","FBL3","FBL4","FBL5")
 pca_rest <- prcomp(df.ACP[,1:22], scale. = FALSE)
+
+
 
 gg <- autoplot(pca_rest, data = df.ACP, colour = 'Genes', shape="Datatype", size = 4, label = FALSE, x = 1, y = 2,
          loadings = TRUE, loadings.colour = 'lightgrey',alpha=1, cex=.8,
@@ -300,7 +305,7 @@ gg <- autoplot(pca_rest, data = df.ACP, colour = 'Genes', shape="Datatype", size
 
 
 
-pdf(paste0("figures/Figure2B_ACP",".pdf"), width=4, height=5)
+pdf(paste0("figures/Figure3B_ACP",".pdf"), width=4, height=5)
 gg
 dev.off()
 
