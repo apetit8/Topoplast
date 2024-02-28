@@ -1,5 +1,6 @@
-#Nbr de gène x nbr de fois reporté plastique
-#Fig supp
+source("scripts/functions/functions.R")
+source("scripts/functions/detectloops.R")
+library(igraph)
 ################################################################################
 phgenes1 <-e_coli_gene_name(read.table("e_coli/Plast_genes/Ph/plastic_genes.txt", sep ="\t", header=FALSE)[,1])
 phgenes2 <- e_coli_gene_name(read.table("e_coli/Plast_genes/pH_2/plastic_genes.txt", sep ="\t", header=FALSE)[,1])
@@ -16,20 +17,35 @@ juice_genes <- e_coli_gene_name(read.table("e_coli/Plast_genes/apple_juice/Table
 temptr_genes <- e_coli_gene_name(read.table("e_coli/Plast_genes/human_temp/Table_1_genes_updated_names.txt", sep ="\t", header=FALSE)[,1])
 temptr_genes2 <- e_coli_gene_name(read.table("e_coli/Plast_genes/Temperature/plastic_genes.txt", sep ="\t", header=FALSE)[,1])
 stringent_genes <- e_coli_gene_name(as.data.frame(unique(read.table("e_coli/Plast_genes/Stringent_response/All_genes.txt", sep ="\t", header=FALSE)[,1]))[,1])
+#########################################
+#Genetic data
+ec_cyc <- read.csv("e_coli/ECOLI-regulatory-network_cyc_editd_2024_01_29.csv") #List of regulations from Ecocyc
+ec_cyc <- subset(ec_cyc, V1!=V2)
+##########
+freq_genes <- as.data.frame(table(c(stringent_genes, temptr_genes, temptr_genes2, juice_genes, aero_genes,
+                                    ox_genes,mg_c_genes,medgrowth_genes,stress_genes,phgenes1,phgenes2)))
+for (i in 1:nrow(ec_cyc)) {
+  if(ec_cyc[i,1] %in% freq_genes[,1]) ec_cyc[i,4] <- freq_genes[which(freq_genes[,1]==ec_cyc[i,1]),2]
+  else ec_cyc[i,4] <- 0
+}
+##########
+TF_genes <- unique(ec_cyc[,1]) # Here, TF = all regulating genes from Ecocyc reg data
+ec_cyc <- subset(ec_cyc, V2 %in% TF_genes)
+g1 <- graph.data.frame(ec_cyc, directed=TRUE)
+##########
+igraph_options(return.vs.es=F)
+##########
 
 
-all_plast_genes <- c(phgenes1, phgenes2, stress_genes, medgrowth_genes , mg_c_genes, ox_genes, aero_genes, juice_genes, temptr_genes, temptr_genes2, stringent_genes)
-#Number of plastic genes in annotation
-all_plast_genes1 <- e_coli_gene_name(all_plast_genes)
-length(unique(all_plast_genes1))
-
-###
-DF_genes <- as.data.frame(table(c(stringent_genes, temptr_genes, temptr_genes2, juice_genes, aero_genes,
-                                                               ox_genes,mg_c_genes,medgrowth_genes,stress_genes,phgenes1,phgenes2)))
-
-
-pdf(paste0("figures/Hist_DF_genes",".pdf"), width=12, height=4)
-par(mar = c(5,20, 3,20))
-hist(DF_genes$Freq, breaks = seq(0.5,7.5, 1), xlab="Times being reported as DF", ylab="Number of gene", main="")
+cairo_pdf("figures/Ecoli_TFs.pdf", width=20, height=20)
+plot(g1, layout=layout_nicely, edge.color=ifelse(E(g1)$V3 == 1, "black",ifelse(E(g1)$V3 == -1, "red","white")),
+     vertex.size=5, main="Ecoli TFs regulatory network", edge.curved=TRUE,
+     vertex.color=ifelse(E(g1)$V4 >= 3, "steelblue",ifelse(E(g1)$V4 >= 2, "lightblue",ifelse(E(g1)$V4 == 1, "white","grey"))))
+legend(0.5, 1, legend=c("Reported as DE\nat least 3 times\n", "Reported as DE\n2 times\n", "Reported as DE\n1 time\n", "Never reported\nas DE\n"),
+       col=c( "steelblue", "lightblue", "black","grey"), bty=1, cex=2, bg="white", pch = c(19,19,21,19))
+legend(0.5, 0.4, legend=c("Activation", "Inhibition"),
+       col=c("black", "tomato"), lty=1, cex=2, bg="white")
 dev.off()
+
+
 

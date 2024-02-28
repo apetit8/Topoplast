@@ -210,7 +210,7 @@ df.ACPe <- as.data.frame(rbind(colMeans2(as.matrix(all_plast[,1:22]*100/rowSums2
                                colMeans2(as.matrix(drift_np[,1:22]*100/rowSums2(as.matrix(drift_np[,1:22])))),
                                colMeans2(as.matrix(drift_pl[,1:22]*100/rowSums2(as.matrix(drift_pl[,1:22]))))))
 row.names(df.ACPe) <- c("EcoPl", "EcoNP", "ShuffledNP","ShuffledPl")
-df.ACPe$Genes <- c("Plastic","Non plastic","Shuffled NP","Shuffled Pl")
+df.ACPe$Genes <- c("Plastic","Non plastic","Shuffled Non Plastic","Shuffled Plastic")
 
 
 
@@ -278,7 +278,7 @@ df.ACPt <- as.data.frame(rbind(colMeans2(as.matrix(all_plast[,1:22]*100/rowSums2
                  colMeans2(as.matrix(shuff_np[,1:22]*100/rowSums2(as.matrix(shuff_np[,1:22])))),
                  colMeans2(as.matrix(shuff_pl[,1:22]*100/rowSums2(as.matrix(shuff_pl[,1:22]))))))
 row.names(df.ACPt) <- c("SimuPl", "SimuNP", "DriftNP","DriftPl","ShuffNP","ShuffPL")
-df.ACPt$Genes <- c("Plastic","Non plastic","Drift Non plastic", "Drift Plastic","Shuffled NP","Shuffled Pl")
+df.ACPt$Genes <- c("Plastic","Non plastic","Non plastic", "Plastic","Shuffled Non Plastic","Shuffled Plastic")
 
 
 
@@ -290,7 +290,7 @@ library(ggfortify)
 library(ggplot2)
 
 df.ACP <- rbind(df.ACPe,df.ACPt)
-df.ACP$Datatype <- c(rep("E.coli",4),rep("simulations",6))
+df.ACP$Datatype <- c(rep("1E.coli",4),rep("2Simulation",2),rep("3Drift",2),rep("2Simulation",2))
 colnames(df.ACP)[19:22] <- c("FBL2","FBL3","FBL4","FBL5")
 pca_rest <- prcomp(df.ACP[,1:22], scale. = FALSE)
 
@@ -298,10 +298,11 @@ pca_rest <- prcomp(df.ACP[,1:22], scale. = FALSE)
 
 gg <- autoplot(pca_rest, data = df.ACP, colour = 'Genes', shape="Datatype", size = 4, label = FALSE, x = 1, y = 2,
          loadings = TRUE, loadings.colour = 'lightgrey',alpha=1, cex=.8,
-         loadings.label = TRUE, loadings.label.size = 4, loadings.label.colour = "darkgrey")+ 
-  ggtitle("PCA on motif proportions")+theme_bw() + scale_color_manual(values = c("rosybrown1","darkgrey","yellowgreen","lightseagreen","red", "black"))+
-  theme(legend.position = c(0.43,-0.3), legend.direction = "horizontal", plot.margin = unit(c(0,0,3,0), "cm"))+
-  scale_shape_manual(values = c(15, 17))
+         loadings.label = TRUE, loadings.label.size = 4, loadings.label.colour = "darkgrey")+  
+  ggtitle("PCA on motif proportions")+theme_bw() +
+  scale_color_manual(values = c("red", "black","rosybrown1","darkgrey"), guide = guide_legend(title.position = "left", nrow = 2))+
+  theme(legend.position = c(0.43,-0.3), legend.box = "vertical", legend.direction = "horizontal", plot.margin = unit(c(0.1,0.1,3,0.1), "cm"))+
+  scale_shape_manual(labels = c("E.coli", "Simulation","Drift"), values = c(15,17,24), guide = guide_legend(title.position = "left"))
 
 
 
