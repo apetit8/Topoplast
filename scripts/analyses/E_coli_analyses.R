@@ -133,6 +133,7 @@ length(unique(all_plast_genes1))
 Defplastic_genes <- as.character(subset( as.data.frame(table(c(stringent_genes, temptr_genes, temptr_genes2, juice_genes, aero_genes,
                                                                ox_genes,mg_c_genes,medgrowth_genes,stress_genes,phgenes1,phgenes2))), Freq >=2)[,1])
 length(Defplastic_genes)
+#sum(E_coli_mat[(rownames(E_coli_mat) %in% unique(all_plast_genes1)) , ]==1)/(sum(E_coli_mat[(rownames(E_coli_mat) %in% unique(all_plast_genes1)) , ]==1)+sum(E_coli_mat[(rownames(E_coli_mat) %in% unique(all_plast_genes1)) , ]==-1))
 
 ################################################################################
 ################################################################################

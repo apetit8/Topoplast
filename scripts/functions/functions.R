@@ -281,7 +281,14 @@ plasticity <- function(dfplast, genes=51, treshold=0.01, envir1=c(0.15), envir2=
 #Add reaction norm slope by gene category ?
 #Fitness ?
 
-
+getSlope.ALR <- function(W, n.env=21, target.gene=2, min=0.15, max=0.85, giveback=2, a=0.5 ) {
+  #giveback 2 = reg coeff ; 1 = reg origin
+  envs  <- seq(min, max, length.out=n.env)
+  phens <- sapply(envs, function(env) pheno.from.W(W, sensors = env, a=a)$mean[target.gene])
+  # reg   <- lm(phens ~ envs)
+  reg <- .lm.fit(cbind(rep(1, length(envs)), envs), phens)$coefficients  #much faster than lm()
+  return(reg[giveback])  # the first coefficient is the regression intercept, the second is the slope
+}
 
 #TOPOLOGIES#####################################################################
 

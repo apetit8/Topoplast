@@ -47,5 +47,17 @@ legend(0.5, 0.4, legend=c("Activation", "Inhibition"),
        col=c("black", "tomato"), lty=1, cex=2, bg="white")
 dev.off()
 
-
+################################################################################
+ec_cyc <- subset(ec_cyc, V2 %in% TF_genes)
+g1 <- graph.data.frame(ec_cyc, directed=FALSE)
+##########
+igraph_options(return.vs.es=F)
+##########
+##SLideshow defense
+cairo_pdf("figures/Ecoli_TFs_COUVERTURE3.pdf", width=30, height=20)
+plot(g1, layout=layout.fruchterman.reingold, edge.color=ifelse(E(g1)$V3 == 1, "lightseagreen",ifelse(E(g1)$V3 == -1, "darkseagreen","white")),
+     edge.curved=TRUE, vertex.frame.color="steelblue", #vertex.label=NA,
+     vertex.color=ifelse(E(g1)$V4 >= 3, "aquamarine3",ifelse(E(g1)$V4 >= 2, "darkolivegreen2",ifelse(E(g1)$V4 == 1, "white","grey"))),
+     vertex.size=ifelse(E(g1)$V4 >= 3, 4,ifelse(E(g1)$V4 >= 2, 4,ifelse(E(g1)$V4 == 1, 4,4))))
+dev.off()
 

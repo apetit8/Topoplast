@@ -44,8 +44,8 @@ reg_number_np$Type <- "1emnp"
 colnames(reg_number_np) <- c("nbr","Type")
 
 ##Simulations
-topo_plastic <- readRDS("scripts/data/list_plastic_topo_full_netw.Rds")
-topo_nnplast <- readRDS("scripts/data/list_nnplast_topo_full_netw.Rds")
+topo_plastic <- readRDS("scripts/data/list_plastic_topo_full_netw_005.Rds")
+topo_nnplast <- readRDS("scripts/data/list_nnplast_topo_full_netw_005.Rds")
 
 THreg_sum_plast <- as.data.frame(unlist(lapply(topo_plastic, function(i){ i[(i == -1)] <- 1
 return(rowSums2(abs(i))[2])} )))
@@ -68,15 +68,15 @@ mean(THreg_sum_plast[,1])
 #Number of motif per gene
 ################################################################################
 #Whisker plot###############################
-nbrloop_thpl2 <- as.data.frame( cbind(read.csv("scripts/data/full_netw_Pl_nbrFFL.csv", sep = ",")[,2],
-                                     read.csv("scripts/data/full_netw_Pl_nbrDMD.csv", sep = ",")[,2],
-                                     read.csv("scripts/data/full_netw_Pl_nbrFBL.csv", sep = ",")[,2]))
+nbrloop_thpl2 <- as.data.frame( cbind(read.csv("scripts/data/full_netw_005_Pl_nbrFFL.csv", sep = ",")[,2],
+                                     read.csv("scripts/data/full_netw_005_Pl_nbrDMD.csv", sep = ",")[,2],
+                                     read.csv("scripts/data/full_netw_005_Pl_nbrFBL.csv", sep = ",")[,2]))
 nbrloop_thpl2$Type <- "4thpl"
 nbrloop_thpl2$Sum <- rowSums2(as.matrix(nbrloop_thpl2[,1:3]))
 
-nbrloop_thnp2 <- as.data.frame( cbind(read.csv("scripts/data/full_netw_NP_nbrFFL.csv", sep = ",")[,2],
-                                     read.csv("scripts/data/full_netw_NP_nbrDMD.csv", sep = ",")[,2],
-                                     read.csv("scripts/data/full_netw_NP_nbrFBL.csv", sep = ",")[,2]))
+nbrloop_thnp2 <- as.data.frame( cbind(read.csv("scripts/data/full_netw_005_NP_nbrFFL.csv", sep = ",")[,2],
+                                     read.csv("scripts/data/full_netw_005_NP_nbrDMD.csv", sep = ",")[,2],
+                                     read.csv("scripts/data/full_netw_005_NP_nbrFBL.csv", sep = ",")[,2]))
 nbrloop_thnp2$Type <- "3thnp"
 nbrloop_thnp2$Sum <- rowSums2(as.matrix(nbrloop_thnp2[,1:3]))
 
@@ -100,26 +100,26 @@ reg_number_plast <- rowSums2(abs(E_coli_mat_plast))
 E_coli_mat_np <- E_coli_mat[npgenes, ]
 reg_number_np <- rowSums2(abs(E_coli_mat_np))
 
-randomTf <- as.data.frame(cbind(read.csv("scripts/data/plast_genes_E_coli_random3_nffl.csv", sep = ",")[,c(2,3)],
-                                     read.csv("scripts/data/plast_genes_E_coli_random3_nDMD.csv", sep = ",")[,c(2,3)],
-                                     read.csv("scripts/data/plast_genes_E_coli_random3_nFBL.csv", sep = ",")[,c(2,3)]))
-randomTf$Type <- "RandomTF"
-randomTf$Sum <- rowSums2(as.matrix(randomTf[,c(2,4,6)]))
-randomTf <- randomTf[order(as.character(randomTf[,1]), method = c("radix")),c(1,8)]
-reg_number_ranTf <- reg_number_plast[order(names(reg_number_plast), method = c("radix"))] #Put genes of the different dataset in the same order
+# randomTf <- as.data.frame(cbind(read.csv("scripts/data/plast_genes_E_coli_random3_nffl.csv", sep = ",")[,c(2,3)],
+#                                      read.csv("scripts/data/plast_genes_E_coli_random3_nDMD.csv", sep = ",")[,c(2,3)],
+#                                      read.csv("scripts/data/plast_genes_E_coli_random3_nFBL.csv", sep = ",")[,c(2,3)]))
+# randomTf$Type <- "RandomTF"
+# randomTf$Sum <- rowSums2(as.matrix(randomTf[,c(2,4,6)]))
+# randomTf <- randomTf[order(as.character(randomTf[,1]), method = c("radix")),c(1,8)]
+# reg_number_ranTf <- reg_number_plast[order(names(reg_number_plast), method = c("radix"))] #Put genes of the different dataset in the same order
 
 #Without the 0 for a log axis
-RTF <- as.data.frame(cbind(reg_number_ranTf, randomTf[,2]))
+#RTF <- as.data.frame(cbind(reg_number_ranTf, randomTf[,2]))
 PL <- as.data.frame(cbind(reg_number_plast, nbrloop_empl2[,8]))
 NP <- as.data.frame(cbind(reg_number_np, nbrloop_emnp2[,8]))
 
 #FAIRE PAREIL AVEC SIMU
-
-randomTf <- as.data.frame( cbind(read.csv("scripts/data/full_netw_randomTF_Pl_nbrFFL.csv", sep = ",")[,2],
-                                 read.csv("scripts/data/full_netw_randomTF_Pl_nbrDMD.csv", sep = ",")[,2],
-                                 read.csv("scripts/data/full_netw_randomTF_Pl_nbrFBL.csv", sep = ",")[,2]))
-randomTf$Type <- "RandomTF"
-randomTf$Sum <- rowSums2(as.matrix(nbrloop_thpl2[,1:3]))
+# 
+# randomTf <- as.data.frame( cbind(read.csv("scripts/data/full_netw_randomTF_Pl_nbrFFL.csv", sep = ",")[,2],
+#                                  read.csv("scripts/data/full_netw_randomTF_Pl_nbrDMD.csv", sep = ",")[,2],
+#                                  read.csv("scripts/data/full_netw_randomTF_Pl_nbrFBL.csv", sep = ",")[,2]))
+# randomTf$Type <- "RandomTF"
+# randomTf$Sum <- rowSums2(as.matrix(nbrloop_thpl2[,1:3]))
 
 PL2 <- as.data.frame(cbind(THreg_sum_plast[,1], nbrloop_thpl2[,5]))
 NP2 <- as.data.frame(cbind(THreg_sum_np[,1], nbrloop_thnp2[,5]))
@@ -127,19 +127,21 @@ NP2 <- as.data.frame(cbind(THreg_sum_np[,1], nbrloop_thnp2[,5]))
 
 
 #####################
-RTF <- subset(RTF, V2 != 0)
+#RTF <- subset(RTF, V2 != 0)
 PL <- subset(PL, V2 != 0)
 NP <- subset(NP, V2 != 0)
-RTF <- subset(RTF, V2 != 0)
+#RTF <- subset(RTF, V2 != 0)
 PL2 <- subset(PL2, V2 != 0)
 NP2 <- subset(NP2, V2 != 0)
 
 #To display the same number of plastic genes in E coli and simu
 PL2 <- PL2[sample(nrow(PL2), nrow(PL)),]
+NP2 <- NP2[sample(nrow(NP2), nrow(NP)),]
+
 
 #Drift##########
-topo_plasticD <- readRDS("scripts/data/list_plastic_topo_full_netw_drift.Rds")
-topo_nnplastD <- readRDS("scripts/data/list_nnplast_topo_full_netw_drift.Rds")
+topo_plasticD <- readRDS("scripts/data/list_plastic_topo_full_netw_005_drift.Rds")
+topo_nnplastD <- readRDS("scripts/data/list_nnplast_topo_full_netw_005_drift.Rds")
 
 THreg_sum_plastD <- as.data.frame(unlist(lapply(topo_plasticD, function(i){ i[(i == -1)] <- 1
 return(rowSums2(abs(i))[2])} )))
@@ -153,20 +155,24 @@ colnames(THreg_sum_npD) <- c("nbr","Type")
 
 df1 <- rbind(df1, THreg_sum_npD, THreg_sum_plastD )
 
-nbrloop_thplD <- as.data.frame( cbind(read.csv("scripts/data/full_netw_drift_Pl_nbrFFL.csv", sep = ",")[,2],
-                                      read.csv("scripts/data/full_netw_drift_Pl_nbrDMD.csv", sep = ",")[,2],
-                                      read.csv("scripts/data/full_netw_drift_Pl_nbrFBL.csv", sep = ",")[,2]))
+nbrloop_thplD <- as.data.frame( cbind(read.csv("scripts/data/full_netw_005_drift_Pl_nbrFFL.csv", sep = ",")[,2],
+                                      read.csv("scripts/data/full_netw_005_drift_Pl_nbrDMD.csv", sep = ",")[,2],
+                                      read.csv("scripts/data/full_netw_005_drift_Pl_nbrFBL.csv", sep = ",")[,2]))
 nbrloop_thplD$Type <- "4thpl"
 nbrloop_thplD$Sum <- rowSums2(as.matrix(nbrloop_thplD[,1:3]))
 
-nbrloop_thnpD <- as.data.frame( cbind(read.csv("scripts/data/full_netw_drift_NP_nbrFFL.csv", sep = ",")[,2],
-                                      read.csv("scripts/data/full_netw_drift_NP_nbrDMD.csv", sep = ",")[,2],
-                                      read.csv("scripts/data/full_netw_drift_NP_nbrFBL.csv", sep = ",")[,2]))
+nbrloop_thnpD <- as.data.frame( cbind(read.csv("scripts/data/full_netw_005_drift_NP_nbrFFL.csv", sep = ",")[,2],
+                                      read.csv("scripts/data/full_netw_005_drift_NP_nbrDMD.csv", sep = ",")[,2],
+                                      read.csv("scripts/data/full_netw_005_drift_NP_nbrFBL.csv", sep = ",")[,2]))
 nbrloop_thnpD$Type <- "3thnp"
 nbrloop_thnpD$Sum <- rowSums2(as.matrix(nbrloop_thnpD[,1:3]))
 
 PLD <- as.data.frame(cbind(THreg_sum_plastD[,1], nbrloop_thplD[,5]))
 NPD <- as.data.frame(cbind(THreg_sum_npD[,1], nbrloop_thnpD[,5]))
+
+#To display the same number of plastic genes in E coli and simu
+#PLD <- PLD[sample(nrow(PLD), nrow(PL)),]
+NPD <- NPD[sample(nrow(NPD), nrow(NP)),]
 
 
 #FIGURES########################################################################
@@ -177,6 +183,7 @@ boxplot(df1$nbr ~ df1$Type,  main="", col = NA, border = NA, axes = FALSE,
 title(ylab = "Number of regulators", line=2)
 polygon(x=c(0.2, 0.2, 2.75, 2.75),  y=c(50, -20, -20, 50),  col="honeydew2", border=NA, xpd=TRUE)
 polygon(x=c(2.75, 2.75, 120, 120),  y=c(50, -20, -20, 50),  col="cornsilk", border=NA, xpd=TRUE)
+#df1 <- subset(df1, nbr != 0 )
 boxplot(df1$nbr ~ df1$Type, add=TRUE, col=c("salmon", "grey"),
         at=c(1,2, 3.5,4.5,6,7), frame=FALSE, xaxt="n", pch=19, outcol=alpha("black", 0.1))
 text(x = c(1,2, 3.5,4.5,6,7), y = par("usr")[3] - 0.3,
@@ -184,45 +191,45 @@ text(x = c(1,2, 3.5,4.5,6,7), y = par("usr")[3] - 0.3,
 text(1.5, 32.5, substitute(paste(bold("E. coli"))), xpd=TRUE, cex=1)
 text(5.5, 32.5, substitute(paste(bold("Simulations"))), xpd=TRUE, cex=1)
 text(4, 27, substitute(paste("  Under\nSelection")), xpd=TRUE, cex=1)
-text(6.5, 29, substitute(paste("Drift")), xpd=TRUE, cex=1)
-text(1.5,25, substitute(paste(bold("***"))), xpd=TRUE, cex=1.6)
+text(6.5, 28, substitute(paste("Drift")), xpd=TRUE, cex=1)
+#text(1.5,25, substitute(paste(bold("***"))), xpd=TRUE, cex=1.6)
 dev.off()
 
-t.test(reg_number_np, reg_number_plast)
+t.test(reg_number_np[reg_number_np!=0], reg_number_plast[reg_number_plast!=0])
 
 pdf(paste0("figures/Motif_Reg_both_log",".pdf"), width=6, height=3.5)
 #E. coli
 layout(matrix(c(1,2,3), 1,3, byrow = TRUE))
 #Plot 1
 par(mar=c(3, 3, 2, 0.3), mgp = c(1.75, 0.75, 0), las=0)
-plot(PLD[,1], PLD[,2], log = "y", col=alpha("darkblue", 0.5), ylab="", xlab="", xlim=c(0,30), pch=19, frame.plot = FALSE)
-polygon(x=c(-15, -15, 35, 35),  y=c(50000, 0.01, 0.01, 50000),  col="honeydew2", border=NA, xpd=TRUE)
+plot(PLD[,1], PLD[,2], log = "y", col=alpha("darkblue", 0.5), ylab="", xlab="", xlim=c(0,30), ylim=c(1,25000), pch=19, frame.plot = FALSE)
+polygon(x=c(-15, -15, 35, 35),  y=c(150000, 0.01, 0.01, 150000),  col="honeydew2", border=NA, xpd=TRUE)
 axis(side = 1, cex=1.4)
 axis(side = 2, cex=1.4)
 points( PL[,1], PL[,2], col=alpha("black", 0.5), pch=19)
 points( NP[,1], NP[,2], col=alpha("tomato", 0.5), pch=19)
 title(ylab="Number of Loops", line=2, cex.lab=1.4)
-text(15, 11000, substitute(paste(bold("E. coli"))), xpd=TRUE, cex=1.4)
+text(15, 50000, substitute(paste(bold("E. coli"))), xpd=TRUE, cex=1.4)
 #Plot 2
 par(mar=c(3, 0.5, 2, 0), mgp = c(1.75, 0.75, 0), las=0)
-plot(PLD[,1], PLD[,2], log = "y", col=alpha("black", 0.5), ylab="", xlab="", xlim=c(0,30), pch=19, yaxt='n', frame.plot = FALSE)
-polygon(x=c(-5, -5, 35, 35),  y=c(50000, 0.01, 0.01, 50000),  col="cornsilk", border=NA, xpd=TRUE)
+plot(PLD[,1], PLD[,2], log = "y", col=alpha("black", 0.5), ylab="", xlab="", xlim=c(0,30), pch=19, yaxt='n', frame.plot = FALSE, ylim=c(1,25000))
+polygon(x=c(-5, -5, 35, 35),  y=c(150000, 0.01, 0.01, 150000),  col="cornsilk", border=NA, xpd=TRUE)
 axis(side = 1)
 #axis(side = 2)
 title(ylab="Number of Loops", xlab="Number of regulators", line=2, cex.lab=1.4)
 points(PL2[,1], PL2[,2], col=alpha("black", 0.5), pch=19)
 points(NP2[,1], NP2[,2], col=alpha("tomato", 0.5), pch=19)
-text(31.5, 11000, substitute(paste(bold("Simulations"))), xpd=TRUE, cex=1.4)
+text(31.5, 50000, substitute(paste(bold("Simulations"))), xpd=TRUE, cex=1.4)
 legend(12, 5, legend=c("Plastic genes", "Non plastic genes"), col=c("black", "tomato"), bty=1, cex=1, bg="white", pch = c(19))
-text(15, 6500, substitute(paste("Under Selection")), xpd=TRUE, cex=1.4)
+text(15, 20000, substitute(paste("Under Selection")), xpd=TRUE, cex=1.4)
 #Plot 3
-plot(PLD[,1], PLD[,2], log = "y", col=alpha("black", 0.5), ylab="", xlab="", xlim=c(0,30), pch=19, yaxt='n', frame.plot = FALSE)
-polygon(x=c(-15, -15, 32, 32),  y=c(50000, 0.01, 0.01, 50000),  col="cornsilk", border=NA, xpd=TRUE)
+plot(PLD[,1], PLD[,2], log = "y", col=alpha("black", 0.5), ylab="", xlab="", xlim=c(0,30), pch=19, yaxt='n', frame.plot = FALSE, ylim=c(1,25000))
+polygon(x=c(-15, -15, 32, 32),  y=c(150000, 0.01, 0.01, 150000),  col="cornsilk", border=NA, xpd=TRUE)
 axis(side = 1)
 points(PLD[,1], PLD[,2], col=alpha("black", 0.5), pch=19)
 points(NPD[,1], NPD[,2], col=alpha("tomato", 0.5), pch=19)
-text(-2, 11000, substitute(paste(bold("Simulations"))), xpd=TRUE, cex=1.4)
-text(15, 6500, substitute(paste("Drift")), xpd=TRUE, cex=1.4)
+text(-2, 50000, substitute(paste(bold("Simulations"))), xpd=TRUE, cex=1.4)
+text(15, 20000, substitute(paste("Drift")), xpd=TRUE, cex=1.4)
 dev.off()
 
 

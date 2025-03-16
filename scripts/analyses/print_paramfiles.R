@@ -3,20 +3,20 @@ source("scripts/functions/functions.R")
 source("scripts/functions/makeparam_funct.R")
 ################################################################################
 param.dir <- file.path("templates/Full_netw")
-directory <- "simul/Full_netw2"
+directory <- "simul/Full_netw_75"
 ifelse(!dir.exists(directory), dir.create(directory), FALSE)
 cache.dir <- normalizePath(file.path(directory))
 
 overwrite <- FALSE
 # options(warn=1)
-prog.path <- "/shared/projects/evoplanet/Software/simevolv/bin/Release/Simul_Prog"
-# prog.path <- "../../simevolv/bin/Release/Simul_Prog"
+# prog.path <- "/shared/projects/evoplanet/Software/simevolv/bin/Release/Simul_Prog"
+prog.path <- "../../simevolv/bin/Release/Simul_Prog"
 #####
 sd <- 0.25 #0.25
 min <- 0.15#min environment
 max <- 0.85 #max environment
 #
-launchfilename <- "launchers/Full_netw2-launch.sh"
+launchfilename <- "launchers/Full_netw_75-launch.sh"
 ##########################
 # Generate all simulations
 # A simulation is characterized by a name, a parameter file, and an extended parameter file (used to generate different environmental file each generations).

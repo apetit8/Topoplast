@@ -27,9 +27,13 @@ length(unique(all_plast_genes1))
 DF_genes <- as.data.frame(table(c(stringent_genes, temptr_genes, temptr_genes2, juice_genes, aero_genes,
                                                                ox_genes,mg_c_genes,medgrowth_genes,stress_genes,phgenes1,phgenes2)))
 
+ec_genes <- read.csv("e_coli/ncbi_dataset_K-12_annotation.csv", sep ="\t") #List of E coli genes from Ecocyc
+
+df <- data.frame(Var1=ec_genes[!(ec_genes$Symbol %in% DF_genes$Var1),2], Freq=0 )
+DF_genes <- rbind(DF_genes, df)
 
 pdf(paste0("figures/Hist_DF_genes",".pdf"), width=12, height=4)
 par(mar = c(5,20, 3,20))
-hist(DF_genes$Freq, breaks = seq(0.5,7.5, 1), xlab="Times being reported as DE", ylab="Number of gene", main="")
+hist(DF_genes$Freq, breaks = seq(-0.5,7.5, 1), xlab="Times being reported as DE", ylab="Number of gene", main="")
 dev.off()
 
