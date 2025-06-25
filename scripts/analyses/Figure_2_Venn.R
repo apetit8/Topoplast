@@ -175,8 +175,8 @@ plot(vd2, quantities=TRUE)
 pdf(paste0("figures/Loop_Venn_plast_drift",".pdf"), width=4, height=3)
 par(mgp=c(2.5, 1.2, 0), mar = c(0,2, 0,0), mfrow=c(2,1))
 
-plot(vd1, quantities = list(type = c("percent"), round=2), main = "\n\nSimulated plastic genes", lty = 0, fills = c("powderblue", "khaki1", "sienna1", "grey"))
-plot(vd2, quantities = list(type = c("percent"), round=2), main = "Simulated non-plastic genes", lty = 0, fills = c("powderblue", "khaki1", "sienna1", "grey"))
+plot(vd1, quantities = list(type = c("percent"), round=2), main = "\n\nDrift plastic genes", lty = 0, fills = c("powderblue", "khaki1", "sienna1", "grey"))
+plot(vd2, quantities = list(type = c("percent"), round=2), main = "Drift non-plastic genes", lty = 0, fills = c("powderblue", "khaki1", "sienna1", "grey"))
 dev.off()
 
 ################################################################################

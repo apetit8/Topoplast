@@ -131,41 +131,51 @@ cor.test(  unlist(c(df_ffl[4,], df1[4,] )), unlist(c( df_ffl[6,], df1[6,])) )
 #Stat test
 non_plast <- cbind(read.csv("scripts/data/nonplast_E_coli_FFL.csv", sep = ",")[,c(5:12)],  read.csv("scripts/data/nonplast_E_coli_diamond.csv", sep = ",")[,c(5:14)],  read.csv("scripts/data/nonplast_E_coli_FBL.csv", sep = ",")[,c(7:10)])
 all_plast <- cbind(read.csv("scripts/data/plast_genes_E_coli_FFL.csv", sep = ",")[,c(5:12)], read.csv("scripts/data/plast_genes_E_coli_diamond.csv", sep = ",")[,c(5:14)], read.csv("scripts/data/plast_genes_E_coli_FBL.csv", sep = ",")[,c(7:10)])
-drift_np <- cbind(read.csv("scripts/data/nonplast_E_coli_random2_FFL.csv", sep = ",")[,c(5:12)], read.csv("scripts/data/nonplast_E_coli_random2_diamond.csv", sep = ",")[,c(5:14)], read.csv("scripts/data/nonplast_E_coli_random2_FBL.csv", sep = ",")[,c(7:10)])
-drift_pl <- cbind(read.csv("scripts/data/plast_genes_E_coli_random2_FFL.csv", sep = ",")[,c(5:12)], read.csv("scripts/data/plast_genes_E_coli_random2_diamond.csv", sep = ",")[,c(5:14)], read.csv("scripts/data/plast_genes_E_coli_random2_FBL.csv", sep = ",")[,c(7:10)])
+# non_plast[non_plast>0] <- 1
+# all_plast[all_plast>0] <- 1
 
-non_plast[non_plast>0] <- 1
-all_plast[all_plast>0] <- 1
-nbr_plastgenes <- nrow(all_plast[rowSums(all_plast)>0,])
-nbr_nplgenes <- nrow(non_plast[rowSums(non_plast)>0,])
-df.test <- data.frame(Plastic=colSums(as.matrix(all_plast[,1:22])), Nplast=colSums(as.matrix(non_plast[,1:22])))
-m <- chisq.test(round(df.test[1:22,]))
-m
-
-binom_pval <- c()
-for (n in 1:nrow(df.test)) {
-  tt <- binom.test(c(df.test[n,1], nbr_plastgenes-df.test[n,1]), n=nbr_plastgenes, p=(df.test[n,2]/nbr_nplgenes))
-  print(paste0("Binom test ",print(rownames(df.test)[n])," : ",tt$p.value))
-  binom_pval <- c(binom_pval, tt$p.value)
+#FFL
+df.test1 <- df.testT[1:8,]
+nbr_plastgenes <- nrow(all_plast[rowSums(all_plast[,1:8])>0,])
+nbr_nplgenes <- nrow(non_plast[rowSums(non_plast[,1:8])>0,])
+prop_pval <- c()
+for (n in 1:nrow(df.test1)) {
+  tt <- prop.test(c(df.test1[n,1],df.test1[n,2]), c(nbr_plastgenes, nbr_nplgenes))
+  print(paste0("Binom test ",print(rownames(df.test1)[n])," : ",tt$p.value))
+  prop_pval <- c(prop_pval, tt$p.value)
 }
+df.test1$pval <- prop_pval
+#DMD
+df.test2 <- df.testT[9:18,]
+nbr_plastgenes <- nrow(all_plast[rowSums(all_plast[,9:18])>0,])
+nbr_nplgenes <- nrow(non_plast[rowSums(non_plast[,9:18])>0,])
+prop_pval <- c()
+for (n in 1:nrow(df.test2)) {
+  tt <- prop.test(c(df.test2[n,1],df.test2[n,2]), c(nbr_plastgenes, nbr_nplgenes))
+  print(paste0("Binom test ",print(rownames(df.test2)[n])," : ",tt$p.value))
+  prop_pval <- c(prop_pval, tt$p.value)
+}
+df.test2$pval <- prop_pval
+#FBL
+df.test3 <- df.testT[19:22,]
+nbr_plastgenes <- nrow(all_plast[rowSums(all_plast[,19:22])>0,])
+nbr_nplgenes <- nrow(non_plast[rowSums(non_plast[,19:22])>0,])
+prop_pval <- c()
+for (n in 1:nrow(df.test3)) {
+  tt <- prop.test(c(df.test3[n,1],df.test3[n,2]), c(nbr_plastgenes, nbr_nplgenes))
+  print(paste0("Binom test ",print(rownames(df.test2)[n])," : ",tt$p.value))
+  prop_pval <- c(prop_pval, tt$p.value)
+}
+df.test3$pval <- prop_pval
 
-df.test$pval <- binom_pval
-df.test$padj <- p.adjust(binom_pval, method = "bonferroni")
+df.test <- rbind(rbind(df.test1,df.test2), df.test3)
+df.test$padj <- p.adjust(df.test$pval, method = "fdr")
 df.test
 
+df.test[order(rownames(df.test)),]
 
-n <- rstatix::row_wise_fisher_test(df.test[1:22,], p.adjust.method = "fdr") #WRONG TEST ... consider that each obs is unique and non-overlaping. Not true, as each gene can be regulated by more than 1 motif type
-print((n), n=22)
+sum(df.test$Plastic)
 
-df.prct <- data.frame(Plastic=(colSums(as.matrix(all_plast[,1:22]))/nrow(all_plast[!(rowSums(all_plast)==0),]))*100, Nplast=(colSums(as.matrix(non_plast[,1:22]))/nrow(non_plast[!(rowSums(non_plast)==0),]))*100)
-
-
-
-
-# shuffled networks
-df.test <- data.frame(Plastic=colSums(as.matrix(drift_pl[,1:22])), Nplast <- colSums(as.matrix(drift_np[,1:22])))
-m <- chisq.test(round(df.test[1:22,]))
-m
 
 ################################################################################
 #PCA

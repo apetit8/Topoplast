@@ -34,6 +34,6 @@ DF_genes <- rbind(DF_genes, df)
 
 pdf(paste0("figures/Hist_DF_genes",".pdf"), width=12, height=4)
 par(mar = c(5,20, 3,20))
-hist(DF_genes$Freq, breaks = seq(-0.5,7.5, 1), xlab="Times being reported as DE", ylab="Number of gene", main="")
+hist(DF_genes$Freq, breaks = seq(-0.5,7.5, 1), xlab="Times being reported as DE", ylab="Number of genes", main="")
 dev.off()
 
