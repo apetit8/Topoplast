@@ -23,6 +23,7 @@ E_coli_mat <- t((get.adjacency(g,sparse=FALSE, attr='V3'))) #t() to have regulat
 
 E_coli_mat <- matrix(as.numeric(E_coli_mat), ncol = ncol(E_coli_mat), dimnames = dimnames(E_coli_mat)) #convert to numeric matrix
 E_coli_mat[is.na(E_coli_mat)] <- 0 #fill NA to 0, mandatory for later analyses
+sum(E_coli_mat==1)/(sum(E_coli_mat==-1)+sum(E_coli_mat==1))*100
 ##########
 igraph_options(return.vs.es=F)
 #########################################

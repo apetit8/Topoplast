@@ -13,6 +13,9 @@ filename <- "full_netw_005"
 treshold_coeff <- 0.005 # difference accepted in the Reaction Norm linear regression slope
 treshold_og    <- 0.005 # difference accepted in the RN linear regression intercept
 #####################
+slopemin_plast <- 0.65
+slopemax_nnplast <- 0.1
+#####################
 #DATA
 #####################
 # df.full.gen <- df.simul(sims.dirs1, all.gen = TRUE)
@@ -29,10 +32,10 @@ df.full <- df.simul(sims.dirs1, all.gen = FALSE)
 #############
 #Loop to identify plastic genes
 df.last50 <- df.last.gens(sims.dirs1)
-plot(df.last50$Pmean_1, df.last50$Pmean_16)
-abline(a = 0.1, b = 0.5, col=2, lwd=5)
-abline(a = 0.1, b = 0.505, col=2, lwd=5)
-# abline(a = 0.5, b = 0.51, col=2, lwd=5)
+# plot(df.last50$Pmean_1, df.last50$Pmean_16)
+# abline(a = 0.1, b = 0.5, col=2, lwd=5)
+# abline(a = 0.1, b = 0.505, col=2, lwd=5)
+# # abline(a = 0.5, b = 0.51, col=2, lwd=5)
 # abline(a = 0.5, b = 0.52, col=2, lwd=5)
 # abline(a = 0.5, b = 0.05, col=3, lwd=5)
 
@@ -50,13 +53,14 @@ topo_all <- mclapply(unique(df.last50[1:(nrow(df.last50)),1]), function(netw){
     output2 <- output1
     output2[[1]][2,] <- output1[[1]][i,]
     output2[[1]][i,] <- output1[[1]][2,]
-    ifelse(abs(reg50[2])<=0.025, attr(output2, "is.plastic") <- "non_plastic", ifelse(abs(reg50[2])>=0.5, attr(output2, "is.plastic") <- "plastic", attr(output2, "is.plastic") <- "weak_plastic"))
+    ifelse(abs(reg50[2])<=slopemax_nnplast, attr(output2, "is.plastic") <- "non_plastic", ifelse(abs(reg50[2])>=slopemin_plast, attr(output2, "is.plastic") <- "plastic", attr(output2, "is.plastic") <- "weak_plastic"))
     return(output2)
   })
   gc(verbose = FALSE)
   return(topo)
 }, mc.cores = 3)
 # summaryRprof()
+sum(unlist(unlist(topo_all, recursive = FALSE))==1)/(sum(unlist(unlist(topo_all, recursive = FALSE))==-1)+sum(unlist(unlist(topo_all, recursive = FALSE))==1))*100
 
 
 #Saving outputs for plastic and non plastic genes separatly
@@ -165,7 +169,7 @@ topo_all <- mclapply(unique(df.last50[2:(nrow(df.last50)),1]), function(netw){ #
     output2 <- output1
     output2[[1]][2,] <- output1[[1]][i,]
     output2[[1]][i,] <- output1[[1]][2,]
-    ifelse(abs(reg50[2])<=0.025, attr(output2, "is.plastic") <- "non_plastic", ifelse(abs(reg50[2])>=0.5, attr(output2, "is.plastic") <- "plastic", attr(output2, "is.plastic") <- "weak_plastic"))
+    ifelse(abs(reg50[2])<=slopemax_nnplast, attr(output2, "is.plastic") <- "non_plastic", ifelse(abs(reg50[2])>=slopemin_plast, attr(output2, "is.plastic") <- "plastic", attr(output2, "is.plastic") <- "weak_plastic"))
     return(output2)
   })
   gc(verbose = FALSE)
@@ -305,7 +309,7 @@ topo_all <- mclapply(unique(df.last50[1:(nrow(df.last50)),1]), function(netw){
     output2 <- output1
     output2[[1]][2,] <- output1[[1]][i,]
     output2[[1]][i,] <- output1[[1]][2,]
-    ifelse(abs(reg50[2])<=0.025, attr(output2, "is.plastic") <- "non_plastic", ifelse(abs(reg50[2])>=0.5, attr(output2, "is.plastic") <- "plastic", attr(output2, "is.plastic") <- "weak_plastic"))
+    ifelse(abs(reg50[2])<=slopemax_nnplast, attr(output2, "is.plastic") <- "non_plastic", ifelse(abs(reg50[2])>=slopemin_plast, attr(output2, "is.plastic") <- "plastic", attr(output2, "is.plastic") <- "weak_plastic"))
     return(output2)
   })
   gc(verbose = FALSE)

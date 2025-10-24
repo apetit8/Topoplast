@@ -104,7 +104,7 @@ df.simul <- function(sims.dir, all.gen=TRUE, size=50000, M=FALSE){
   files     <- list.files(path = sims.dir, full.names=TRUE, pattern = "\\.txt$")
   files     <- files[grep('out-rep\\d+\\.txt', files)]
   files <- files[sapply(files, file.size) > size]
-  mytopos <- lapply(files, function(ff) {
+  mytopos <- mclapply(files, function(ff) {
     print(ff)
     tt <- fread(ff, data.table=FALSE)
     mygens <-rev(if (all.gen==TRUE) tt[,"Gen"] else tt[nrow(tt),"Gen"])
@@ -122,7 +122,7 @@ df.simul <- function(sims.dir, all.gen=TRUE, size=50000, M=FALSE){
       filedata <- rbind(filedata, data.gen)
     }
     return(filedata)
-  })
+  },mc.cores=4)
   simul.df <- as.data.frame(rbindlist(mytopos, use.names=FALSE))
   nbrc <- ncol(simul.df)-6
   data <- list(let = c("W"), id = c(seq(1,sqrt(nbrc) ,1)), greeting = c(seq(1,sqrt(nbrc),1)), sep = c("_"))
