@@ -31,3 +31,16 @@ pdf("../../figures/Model_SupfigB.pdf", width=7/2.54, height=5/2.54, pointsize=8)
     text(16, 33, "mutable", col="white")
     text(16, 23, "non-mutable", col="darkred")
 dev.off()
+
+rrn <- function() {
+    a <- sign(runif(1, -1, 1)) * runif(1, 0.5718,1.15)
+    b <- if (a > 1) runif(1,1-a,0) else if (a > 0) runif(1, 0, 1-a) else if (a < -1) runif(1, 1, -a) else runif(1, -a, 1)
+    c(a, b)
+}
+
+pdf("../../figures/Model_SupfigC.pdf", width=7/2.54, height=5/2.54, pointsize=8)
+    par(mar=c(5,4,1,1))
+    plot(NULL, xlim=c(0,1), ylim=c(0,1), xlab=expression(E[g]), ylab=expression(theta))
+    invisible(replicate(100, {r <- rrn(); abline(a=r[2], b=r[1], col="darkgray")}))
+    abline(v=c(0.15, 0.85))
+dev.off()
