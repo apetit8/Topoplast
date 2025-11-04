@@ -236,11 +236,8 @@ create.paramseries <- function(param.template.file, extparam.file, simul.dir, ov
     }
     #Draw random RNs for "manual" plasticity
     RN <- lapply(1:length(which(extparam$SCENARIO_PART1==5)), function(i){
-<<<<<<< HEAD
       RNslope <- sample(c(runif(1,0.5718,1.15), runif(1,-1.15,-0.5718)), 1)#(75% chance to have negative correlation)
-=======
       RNslope <- sample(c(runif(1,0.5718,1.15), runif(1,-1.15,-0.5718)), 1) #(75% chance to have negative correlation)
->>>>>>> 31754bf08bd2824a6c1cc40c74f9cf33d8071477
       if(RNslope > 1) RNintercept <- runif(1, 1-RNslope, 0) else if(RNslope > 0) RNintercept <- runif(1, 0, 1-RNslope ) else if(RNslope < -1) RNintercept <- runif(1, 1, -RNslope) else RNintercept <- runif(1, -RNslope, 1)
       return(c(RNslope, RNintercept))
     })
