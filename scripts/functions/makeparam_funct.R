@@ -56,7 +56,7 @@ create.launchfile.alt <- function(prog.path, param.files, output.files, oldpop="
     length(param.files) > 0, 
     length(param.files) == length(output.files),
     all(file.exists(param.files) | file.exists(compressed.files)))
-
+  
   if (relative.paths) {
     launch.dir <- dirname(launch.file)
     param.files <- getRelativePath(param.files, launch.dir)
@@ -65,7 +65,7 @@ create.launchfile.alt <- function(prog.path, param.files, output.files, oldpop="
   }
   if(prevpop==TRUE){ command <- paste0( prog.path, " -z ", compressed.files, " -p ", param.files, " -o ", output.files, sampling, " -P ",oldpop, " -Q ", output.files,".pop\n"  )} 
   else command <- paste0( prog.path, " -z ", compressed.files, sampling, " -p ", param.files, " -o ", output.files, "\n"  ) #" -Q ", output.files,".pop",
- 
+  
   cat(command, file=launch.file, append=TRUE)
 }
 
@@ -169,21 +169,15 @@ create.paramseries <- function(param.template.file, extparam.file, simul.dir, ov
   # Two parameter files are necessary : 
   #  - the parameter template, which is a regular parameter file that will be used for the default settings
   #  - the "extended" parameter file, which provides "meta" information to run the simulation program
-  #    this is specific for the domestication project, and involves three simulation stages:
-  #     . before the bottleneck (burn-in)
-  #     . during the bottleneck
-  #     . after the bottleneck
   # It is expected that the information from the two parameter files match (e.g. number of genes), 
-# consequences of a non-matching pattern are undefined. 
-# The algorithm reads the two parameter files and create the necessary files for simulations
-# For each simulation replicate (REPLICATES variable in the ext.par file), a simulation directory
-# is created, and as many parameter files as generations are created within each directory
+  # consequences of a non-matching pattern are undefined. 
+  # The algorithm reads the two parameter files and create the necessary files for simulations
+  # For each simulation replicate (REPLICATES variable in the ext.par file), a simulation directory
+  # is created, and as many parameter files as generations are created within each directory
 #  Note: this represents a very large number of (small) files, which can represent a burder for 
 #  the system, especially when creating the files or compressing the directory
 # The first parameter file of a simulation is complete, the next ones only change what is necessary:
 #   . every generation: the environmental variable and the fluctuating optima
-#   . before and after the bottleneck: the population size
-#   . at the beginning of the bottleneck: the "domestication" selection pattern
 # The directory and parameter naming pattern is specified in a few internal functions. 
 {
   ndigits.rep <- 4
@@ -212,7 +206,7 @@ create.paramseries <- function(param.template.file, extparam.file, simul.dir, ov
   # Checks for the consistency of both parameter files
   if (!"SIMUL_MAXGEN" %in% names(myparam)) 
     myparam$SIMUL_MAXGEN <- totgen
-
+  
   stopifnot(
     length(extparam$SCENARIO_PART1) == myparam$GENET_NBLOC , 
     length(extparam$SCENARIO_PART1) == length(extparam$SCENARIO_PART2))
@@ -236,8 +230,9 @@ create.paramseries <- function(param.template.file, extparam.file, simul.dir, ov
     }
     #Draw random RNs for "manual" plasticity
     RN <- lapply(1:length(which(extparam$SCENARIO_PART1==5)), function(i){
-      RNslope <- sample(c(runif(1,0.5718,1.15), runif(1,-1.15,-0.5718)), 1)#(75% chance to have negative correlation)
-      RNslope <- sample(c(runif(1,0.5718,1.15), runif(1,-1.15,-0.5718)), 1) #(75% chance to have negative correlation)
+      RNslope <- sample(c(runif(1,0.5714,1.15), runif(1,-1.15,-0.5714)), 1) 
+      # These values were determined for exploring at least 40% of possible phenotype : (0.4/(0.85-0.15) = 0.5714) 
+      #  and at most 80%, so between 0.1 and 0.9 (RN going further than those values are difficult to attain) : (0.9-0.1)/(0.85-0.15) = 1.142857 (rounded to 1.15)
       if(RNslope > 1) RNintercept <- runif(1, 1-RNslope, 0) else if(RNslope > 0) RNintercept <- runif(1, 0, 1-RNslope ) else if(RNslope < -1) RNintercept <- runif(1, 1, -RNslope) else RNintercept <- runif(1, -RNslope, 1)
       return(c(RNslope, RNintercept))
     })
@@ -251,17 +246,17 @@ create.paramseries <- function(param.template.file, extparam.file, simul.dir, ov
     if (!file.exists(par.file.name[1]) || overwrite)
       write.param(par.file.name[1], myparam)
     # From here, just update what is necessary
-      for (gen in 1:(totgen-1)) {
-        par.file.name <- c(par.file.name, file.path(repdir, .repFile(rep, gen)))
-        if (!file.exists(par.file.name[gen+1]) || overwrite) {
-          optim <- make.randopt(optim, extparam$SCENARIO_PART1, oldenv=optim[1], sd=sd, min=min, max=max, random=random, RN=RN) ## Here : give back the prev env.
-          if(gen == totgen-50){ #More outputs before the end of the simulation (to infer reaction norms during results analyses)
-            write.param(par.file.name[gen+1], list(FITNESS_OPTIMUM = optim, 
-                             FILE_NEXTPAR    = suppressWarnings(normalizePath(file.path(repdir, .repFile(rep, gen+1)))),
-                             SIMUL_OUTPUT = 1))    }
-          else write.param(par.file.name[gen+1], list(FITNESS_OPTIMUM = optim, 
-                                FILE_NEXTPAR    = suppressWarnings(normalizePath(file.path(repdir, .repFile(rep, gen+1))))))
-        }}
+    for (gen in 1:(totgen-1)) {
+      par.file.name <- c(par.file.name, file.path(repdir, .repFile(rep, gen)))
+      if (!file.exists(par.file.name[gen+1]) || overwrite) {
+        optim <- make.randopt(optim, extparam$SCENARIO_PART1, oldenv=optim[1], sd=sd, min=min, max=max, random=random, RN=RN) ## Here : give back the prev env.
+        if(gen == totgen-50){ #More outputs before the end of the simulation (to infer reaction norms during results analyses)
+          write.param(par.file.name[gen+1], list(FITNESS_OPTIMUM = optim, 
+                                                 FILE_NEXTPAR    = suppressWarnings(normalizePath(file.path(repdir, .repFile(rep, gen+1)))),
+                                                 SIMUL_OUTPUT = 1))    }
+        else write.param(par.file.name[gen+1], list(FITNESS_OPTIMUM = optim, 
+                                                    FILE_NEXTPAR    = suppressWarnings(normalizePath(file.path(repdir, .repFile(rep, gen+1))))))
+      }}
     extparlast <- extparam$SCENARIO_PART1
     gen <- gen+1
     
